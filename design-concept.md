@@ -91,6 +91,37 @@ pickers go past 24 and label the overflow `01:00 +1`.
 Planning **together** intersects everyone's windows: a plan proposed for hours only one of
 you has free is not a plan. Planning **solo** uses just that person's.
 
+## Sharing, and why import merges
+
+The plan travels between people: you mark your films, send it, your brother fills in his
+half, and sends the whole thing back. That round trip is the entire reason `Person` carries
+an `updatedAt`.
+
+A replace-on-import would be wrong in the exact case the feature exists for. What comes
+back contains *his* copy of *you* — a snapshot from when you sent it. If you carried on
+marking films in the meantime, replacing would silently throw that away. So import merges
+per person:
+
+| Situation | Result |
+|---|---|
+| They have someone you do not | added |
+| Their copy is newer than yours | theirs wins |
+| Your copy is newer | yours is kept, theirs ignored |
+| Same timestamp | yours is kept |
+
+Ties resolve to the local copy because the only thing worse than a stale import is a
+surprising one. The UI then says exactly what happened — *"added Marc; kept your newer
+Thomas"* — rather than claiming success and leaving you to diff it by hand.
+
+The payload rides in the URL **fragment**, so a share link is never sent to a server or
+written into an access log; deflating it keeps a two-person plan around 300 characters,
+short enough to survive any chat app. Everything arriving is untrusted input from a
+messaging app, so it is validated field by field — unknown block ids, impossible windows
+and absurd names are dropped rather than merged into your state.
+
+**Settings are not shared.** Walking speed and buffer are personal, so they travel only in
+an explicit full backup, which replaces rather than merges.
+
 ## What is deliberately not modelled
 
 - **Tickets and sold-out screenings.** The festival does not publish availability, and

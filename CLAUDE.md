@@ -30,7 +30,8 @@ npm run build          # static output in dist/
 scraper/    scrape.ts (fantoche.ch -> data/), verify.ts (CI guard), fetch-cache.ts
 src/model/  types.ts, travel.ts, optimize.ts — pure, no DOM, no storage
 src/store.ts  the only mutable state; everything else is a computed signal
-src/ui/     Programme · Availability · PlanView · SettingsView · PeopleBar
+src/ui/     Programme · Availability · PlanView · Share · SettingsView · PeopleBar
+src/share.ts  export/import: validation, merge, deflate+base64url link encoding
 src/format.ts  all date/time formatting, pinned to Europe/Zurich
 src/ics.ts  calendar export
 data/       fantoche-<year>.json — committed, refreshed daily by CI
@@ -46,6 +47,12 @@ data/       fantoche-<year>.json — committed, refreshed daily by CI
 - **Times are epoch seconds.** Format only through `src/format.ts`, which pins
   `Europe/Zurich`. Never use `toLocaleString` without an explicit `timeZone`, and never
   build a date from a local-time string.
+- **Every mutation of a `Person` must bump `updatedAt`.** Go through `mapPerson` in the
+  store; it stamps for you. Miss it and a merge silently discards that edit when a plan
+  comes back from someone else — the one bug in this app that destroys user data.
+- **Treat an imported payload as hostile input.** It arrives from a chat app. `parsePayload`
+  validates field by field and drops anything unrecognised; extend it when you add a field
+  rather than trusting the shape.
 - **The scraper must fail loudly.** If a selector stops matching, `verify.ts` should catch
   it. When you add a field worth relying on, add a threshold there too.
 - **Optimizer bounds must never undershoot.** Every bound in `optimize.ts` works by

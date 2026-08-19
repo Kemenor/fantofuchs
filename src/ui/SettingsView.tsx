@@ -194,20 +194,11 @@ export function SettingsView() {
           Your wishlists and free time are stored in this browser only — no account,
           no server, nothing leaves the device.
         </p>
+        <p class="small muted">
+          Sending your plan to someone, and backing it up, both live under
+          <strong> Share</strong>.
+        </p>
         <div class="row wrap" style="gap:8px">
-          <button
-            class="btn small"
-            onClick={() => {
-              const blob = new Blob([JSON.stringify(localStorage.getItem('fantofuchs.v1'))], { type: 'application/json' });
-              const a = document.createElement('a');
-              a.href = URL.createObjectURL(blob);
-              a.download = 'fantofuchs-backup.json';
-              a.click();
-              URL.revokeObjectURL(a.href);
-            }}
-          >
-            Export my plan
-          </button>
           <button
             class="btn small ghost"
             onClick={() => setSettings({ ...DEFAULT_SETTINGS, travelOverrides: {} })}

@@ -15,8 +15,9 @@ optimal schedule, export it. Remaining work is polish and the items under *Ideas
 | 2 | Data model, travel matrix, optimizer, tests | ✅ |
 | 3 | Programme browsing, wishlists, availability editor | ✅ |
 | 4 | Plan view, group planning, `.ics` export | ✅ |
-| 5 | Polish: keyboard, empty states, print view | ▫️ |
-| 6 | Ideas below, as they earn their place | ▫️ |
+| 5 | Sharing: link/file/paste, merge-on-import, backup | ✅ |
+| 6 | Polish: keyboard, empty states, print view | ▫️ |
+| 7 | Ideas below, as they earn their place | ▫️ |
 
 ## Architecture
 
@@ -87,6 +88,13 @@ subtly wrong looks exactly like one that is right.
   the festival's timezone so a schedule planned from a train in another country does not
   silently shift by an hour.
 - **Interest on blocks, not showings.** See [`design-concept.md`](./design-concept.md).
+- **Import merges, it does not replace.** The feature exists so two people can pass a plan
+  back and forth, and a returning plan always contains a stale copy of you. Per-person
+  `updatedAt` decides collisions; ties keep the local copy. Full backups are the one
+  replace-shaped operation, and they are labelled as such.
+- **Share payload in the URL fragment.** Never reaches a server, never lands in a log. A
+  two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
+  there for when it does not.
 
 ## Ideas
 

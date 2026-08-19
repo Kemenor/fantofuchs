@@ -148,6 +148,15 @@ export interface Person {
   color: string;
   slots: Slot[];
   interest: Record<string, Interest>;
+  /**
+   * When this person was last edited, in epoch milliseconds.
+   *
+   * The reason plans can be passed back and forth. When a shared file arrives
+   * carrying a copy of someone who already exists here, this decides which copy
+   * survives — so your brother returning the file with his half filled in
+   * cannot overwrite the changes you made to your own half while he had it.
+   */
+  updatedAt: number;
 }
 
 export interface Settings {

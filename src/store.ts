@@ -12,6 +12,7 @@ import type { Festival, Interest, Person, Settings, Slot } from './model/types.t
 import { INTEREST_WEIGHT } from './model/types.ts';
 import { TravelMatrix } from './model/travel.ts';
 import { intersectSlots, mergeSlots, optimize, type Plan } from './model/optimize.ts';
+import { buildPayload, mergePeople, type MergeResult, type SharePayload } from './share.ts';
 import festivalData from '../data/fantoche-2026.json';
 
 export const festival = festivalData as unknown as Festival;
@@ -47,6 +48,7 @@ function freshPerson(name: string, index: number): Person {
     color: PERSON_COLORS[index % PERSON_COLORS.length],
     slots: [],
     interest: {},
+    updatedAt: Date.now(),
   };
 }
 
@@ -65,6 +67,12 @@ function load(): Stored {
     parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
     if (!parsed.people.some((p) => p.id === parsed.activePersonId)) {
       parsed.activePersonId = parsed.people[0].id;
+    }
+    // Saves made before sharing existed have no timestamp. Stamping them *now*
+    // rather than with zero means an incoming copy has to be genuinely newer to
+    // replace them — the safe direction when we cannot know.
+    for (const person of parsed.people) {
+      if (typeof person.updatedAt !== 'number') person.updatedAt = Date.now();
     }
     return parsed;
   } catch {
@@ -88,8 +96,12 @@ export function update(fn: (s: Stored) => Stored): void {
   state.value = fn(state.value);
 }
 
+/** Edit one person, stamping them so a merge can tell whose copy is newer. */
 function mapPerson(id: string, fn: (p: Person) => Person): void {
-  update((s) => ({ ...s, people: s.people.map((p) => (p.id === id ? fn(p) : p)) }));
+  update((s) => ({
+    ...s,
+    people: s.people.map((p) => (p.id === id ? { ...fn(p), updatedAt: Date.now() } : p)),
+  }));
 }
 
 // ------------------------------------------------------------------ people
@@ -169,7 +181,14 @@ export function copySlotsToAll(personId: string): void {
   update((s) => {
     const source = s.people.find((p) => p.id === personId);
     if (!source) return s;
-    return { ...s, people: s.people.map((p) => ({ ...p, slots: source.slots.map((x) => ({ ...x })) })) };
+    return {
+      ...s,
+      people: s.people.map((p) => ({
+        ...p,
+        slots: source.slots.map((x) => ({ ...x })),
+        updatedAt: Date.now(),
+      })),
+    };
   });
 }
 
@@ -181,6 +200,53 @@ export function setSettings(patch: Partial<Settings>): void {
 
 export function resetEverything(): void {
   state.value = initial();
+}
+
+// ------------------------------------------------------------------ share
+
+/**
+ * A plan that arrived by link and is waiting to be looked at.
+ *
+ * Nothing is written until it is accepted: a link can be opened by accident,
+ * or twice, and silently rewriting someone's wishlist because they tapped a
+ * message would be indefensible.
+ */
+export const pendingImport = signal<SharePayload | null>(null);
+
+/** Package the current plan for someone else. */
+export function exportPayload(
+  { onlyActive = false, includeSettings = false } = {},
+): SharePayload {
+  const chosen = onlyActive ? [activePerson.value] : state.value.people;
+  return buildPayload(chosen, {
+    edition: festival.edition.year,
+    exportedBy: activePerson.value.name,
+    ...(includeSettings ? { settings: state.value.settings } : {}),
+  });
+}
+
+/**
+ * Take an incoming plan. `merge` keeps whichever copy of each person is newer
+ * — the mode that makes passing a plan back and forth safe. `replace` is for
+ * restoring your own backup onto a fresh browser.
+ */
+export function applyImport(
+  payload: SharePayload,
+  { replace = false, withSettings = false } = {},
+): MergeResult {
+  const result = replace
+    ? { people: payload.people, added: payload.people, updated: [], kept: [] }
+    : mergePeople(state.value.people, payload.people);
+
+  update((s) => ({
+    ...s,
+    people: result.people,
+    settings: withSettings && payload.settings ? payload.settings : s.settings,
+    activePersonId: result.people.some((p) => p.id === s.activePersonId)
+      ? s.activePersonId
+      : result.people[0].id,
+  }));
+  return result;
 }
 
 // ------------------------------------------------------------------- plan

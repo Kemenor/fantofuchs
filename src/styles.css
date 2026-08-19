@@ -305,6 +305,12 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   .app { padding-inline: 12px; }
 }
 
+/* Five tabs on a narrow phone: tighten the padding rather than wrap the bar. */
+@media (max-width: 430px) {
+  .tabs { gap: 2px; padding: 4px; left: 8px; right: 8px; transform: none; justify-content: space-between; }
+  .tabs button { padding: 0 9px; font-size: 14px; }
+}
+
 .range { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .range select { min-height: 38px; padding: 0 8px; }
 

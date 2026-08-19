@@ -27,6 +27,10 @@ best possible plan — including the walk from the Trafo to the Orient.
 - 👥 **Plan together** — several people, each with their own wishlist and free hours. Plan
   for everyone (only shared hours count, and a film you both want counts double) or for
   one person alone.
+- 📨 **Pass the plan around** — send it as a link or a file, your brother fills in his half
+  and sends the whole thing back. Loading **merges**: for anyone already there, the copy
+  edited most recently wins, so a returning plan never overwrites what you did while it
+  was away.
 - 📅 **Export to your calendar** — an `.ics` with the venue, the film list and how long to
   allow for the walk.
 - 🗓️ **Honest about the gaps** — exhibitions and pop-ups are opening *windows*, not
