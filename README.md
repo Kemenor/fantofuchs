@@ -7,6 +7,8 @@ best possible plan — including the walk from the Trafo to the Orient.
 > Built because planning six festival days by hand, on paper and then in Notion, is a
 > puzzle a computer should be solving.
 
+🌐 [fantofuchs.fuchsnest.ch](https://fantofuchs.fuchsnest.ch)
+
 ## What it does
 
 - 🎬 **The whole programme, browsable** — 91 programme blocks, 209 screenings, six days,
