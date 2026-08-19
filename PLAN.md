@@ -95,9 +95,11 @@ subtly wrong looks exactly like one that is right.
   replace-shaped operation, and they are labelled as such.
 - **Accent fills carry their own foreground.** The Fuchsbau hues are pinned and kept
   exactly, but white text fails WCAG on all three of them (2.05–3.08:1), so `--on-fox` /
-  `--on-indigo` / `--on-emerald` are chosen for contrast — which is what a properly built
-  M3 `ColorScheme` does anyway. Full measurements in `DESIGN_SYSTEM.md`; worth checking
-  against the Flutter apps, which may have inherited the same problem.
+  `--on-indigo` / `--on-emerald` are chosen for contrast. **Checked (2026-08-19): the
+  Flutter `fuchsbau` package already does this correctly** — its `onBrand` token flips per
+  theme and measures 5.50–9.30:1 — so knabberfuchs and checkfuchs are unaffected. The bug
+  was introduced by this app's CSS port hardcoding `#fff`, not inherited. Full
+  measurements in `DESIGN_SYSTEM.md`.
 - **Share payload in the URL fragment.** Never reaches a server, never lands in a log. A
   two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
   there for when it does not.

@@ -32,12 +32,17 @@ three.** Measured:
 | Emerald, dark | 2.05:1 ✗ | **8.57:1** ✓ |
 
 So each accent carries its own foreground token — `--on-fox`, `--on-indigo`,
-`--on-emerald` — chosen for contrast, which is what Material 3 does with `onPrimary`
-anyway. The visible consequence: **the primary button and the *Must* chip have dark text
-on orange, not white.** The hue is untouched.
+`--on-emerald` — chosen for contrast. The visible consequence: **the primary button and
+the *Must* chip have dark text on orange, not white.** The hue is untouched.
 
-In Flutter this falls out of a properly built `ColorScheme`. Any fuchs app that hand-picks
-`Colors.white` for `onPrimary` has the same bug.
+This is not a fix *to* Fuchsbau — it is catching the CSS port up with it. The Flutter
+package already gets this right: `fuchsbauColorScheme` in
+[`lib/src/theme.dart`](https://github.com/Kemenor/fuchsbau/blob/main/lib/src/theme.dart)
+flips `onBrand` per theme (white in light, `#121009` in dark) and uses dark ink on the
+orange and emerald fills, measuring 5.50–9.30:1 across the six combinations. The port to
+CSS simply hardcoded `#fff` and lost that. Worth remembering when porting anything else
+out of the Flutter package: the `ColorScheme` carries decisions that a naive translation
+drops on the floor.
 
 ## Extension: accent-as-text variants
 
