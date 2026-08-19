@@ -213,6 +213,16 @@ export const planWeights = computed(() => {
   return weights;
 });
 
+/**
+ * The schedule. Derived, so there is no "optimize" button and nothing to
+ * invalidate — mark one more film and this has already changed.
+ *
+ * It runs synchronously on the main thread, which is fine because it is fast:
+ * a normal wishlist is proven optimal in about 20 ms. The budget only matters
+ * for a degenerate one (every block marked at the same weight), and there 400 ms
+ * was measured to give exactly the same plan as 2 s — so the longer budget would
+ * buy a five-times-worse hitch and nothing else.
+ */
 export const plan = computed<Plan>(() =>
   optimize({
     festival,
@@ -221,6 +231,7 @@ export const plan = computed<Plan>(() =>
     travel: travelMatrix.value,
     bufferMin: state.value.settings.bufferMin,
     excludeClosed: state.value.settings.excludeClosed,
+    timeLimitMs: 400,
   }),
 );
 
