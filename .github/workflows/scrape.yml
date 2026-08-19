@@ -1,0 +1,49 @@
+name: Scrape programme
+
+# Fantoche moves screenings around in the run-up to the festival, so the
+# programme is re-scraped daily and committed. A commit here triggers the Pages
+# deploy, which is what actually puts the new data in front of you.
+on:
+  schedule:
+    - cron: '17 4 * * *' # 04:17 UTC, before anyone is awake in Baden
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+
+      - name: Scrape
+        env:
+          NO_CACHE: '1'
+        run: npm run scrape
+
+      # A parse regression would otherwise silently commit an empty programme.
+      - name: Sanity-check the result
+        run: node scraper/verify.ts
+
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet -- data/; then
+            echo "Programme unchanged."
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/
+          git commit -m "data: refresh Fantoche programme
+
+          $(node -e "
+            const f = require('./data/fantoche-2026.json');
+            console.log(\`\${f.blocks.length} programmes, \${f.showings.length} screenings.\`);
+          ")"
+          git push

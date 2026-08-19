@@ -1,0 +1,24 @@
+{
+  "name": "fantofuchs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scraper/scrape.ts",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "node --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@types/node": "^26.2.0",
+    "cheerio": "^1.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.1"
+  },
+  "dependencies": {
+    "@preact/signals": "^2.11.1",
+    "preact": "^10.29.8"
+  }
+}

@@ -1,0 +1,316 @@
+/*
+ * Fantofuchs — the Fuchsbau look, ported from Flutter to CSS.
+ *
+ * The palette is pinned by the family (DESIGN.md in Kemenor/fuchsbau): a fox
+ * tangerine with two triadic partners. Kept literally the same here so the web
+ * app reads as one of the fox apps rather than a cousin. Two rules carried over
+ * that matter more than they look:
+ *   - red is for destruction only, never for status;
+ *   - things that did not work out fade, they do not bleed.
+ */
+
+:root {
+  --fox: #ea7a24;
+  --indigo: #8559d0;
+  --emerald: #1fa85d;
+  --amber: #e0a33b;
+  --danger: #c8372b;
+
+  --bg: #fbf8f5;
+  --surface: #ffffff;
+  --surface-2: #f4efe9;
+  --text: #1b1917;
+  --muted: #6f665e;
+  --faded: #a8988c;
+  --line: #e3dbd2;
+
+  --radius-chip: 8px;
+  --radius-btn: 12px;
+  --radius-card: 20px;
+  --radius-sheet: 28px;
+
+  --shadow: 0 1px 2px rgb(27 25 23 / 6%), 0 8px 24px rgb(27 25 23 / 6%);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fox: #f39c4e;
+    --indigo: #a98cee;
+    --emerald: #37ce78;
+    --amber: #edb45a;
+    --danger: #e4695c;
+
+    --bg: #16140f;
+    --surface: #201d18;
+    --surface-2: #2a2620;
+    --text: #f2ece5;
+    --muted: #a89e93;
+    --faded: #6f665e;
+    --line: #35302a;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Figtree, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Times, counts and runtimes line up in columns. */
+.tabular { font-variant-numeric: tabular-nums; }
+
+h1, h2, h3 { line-height: 1.2; margin: 0; font-weight: 600; }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+
+/* ------------------------------------------------------------ app shell */
+
+.app {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0 10px;
+  background: linear-gradient(var(--bg) 76%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.brand { display: flex; align-items: baseline; gap: 8px; font-weight: 700; letter-spacing: -0.01em; }
+.brand .fox { color: var(--fox); }
+.brand small { color: var(--muted); font-weight: 500; font-size: 13px; }
+
+.tabs {
+  position: fixed;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.tabs button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+.tabs button[aria-current='true'] { background: var(--fox); color: #fff; }
+.tabs .badge {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- cards */
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  padding: 16px;
+}
+.card + .card { margin-top: 12px; }
+
+.section-title {
+  margin: 28px 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.muted { color: var(--muted); }
+.faded { color: var(--faded); }
+.small { font-size: 13px; }
+.row { display: flex; align-items: center; gap: 8px; }
+.wrap { flex-wrap: wrap; }
+.spread { justify-content: space-between; }
+.grow { flex: 1; min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* -------------------------------------------------------------- controls */
+
+.btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--fox); }
+.btn.primary { border-color: transparent; background: var(--fox); color: #fff; }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn.danger { border-color: transparent; background: transparent; color: var(--danger); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.small { min-height: 34px; padding: 0 10px; font-size: 13px; }
+
+input[type='text'], input[type='search'], input[type='number'], select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+}
+input:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.chip[aria-pressed='true'] { border-color: var(--fox); background: color-mix(in srgb, var(--fox) 14%, transparent); color: var(--text); }
+.chip.static { cursor: default; }
+
+/* Interest levels. `no` is absence, so it gets no colour at all. */
+.interest { display: inline-flex; gap: 4px; }
+.interest button {
+  min-width: 40px;
+  min-height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+.interest button[aria-pressed='true'][data-level='must'] { border-color: transparent; background: var(--fox); color: #fff; }
+.interest button[aria-pressed='true'][data-level='want'] { border-color: transparent; background: var(--indigo); color: #fff; }
+.interest button[aria-pressed='true'][data-level='maybe'] { border-color: transparent; background: var(--emerald); color: #fff; }
+
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+/* ------------------------------------------------------------- programme */
+
+.block-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.block-row:first-child { border-top: 0; }
+.block-title { font-weight: 600; }
+.block-meta { color: var(--muted); font-size: 13px; }
+.showing-list { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.pill.scheduled { border-color: var(--emerald); color: var(--emerald); }
+.pill.closed { border-style: dashed; color: var(--faded); }
+
+/* ------------------------------------------------------------------ plan */
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+
+.slot {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.slot:first-child { border-top: 0; }
+.slot-time { font-weight: 700; }
+.slot-end { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+.gap {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  color: var(--faded);
+  font-size: 13px;
+}
+.gap .bar {
+  border-left: 2px dashed var(--line);
+  padding-left: 12px;
+  margin-left: 6px;
+}
+
+.warn {
+  border-left: 3px solid var(--amber);
+  padding-left: 12px;
+  color: var(--muted);
+}
+
+/* -------------------------------------------------------------- editors */
+
+.day-grid { display: grid; gap: 8px; }
+.day-row {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+@media (max-width: 560px) {
+  .day-row { grid-template-columns: 1fr; gap: 6px; }
+  .slot, .gap { grid-template-columns: 56px 1fr; }
+  .app { padding-inline: 12px; }
+}
+
+.range { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.range select { min-height: 38px; padding: 0 8px; }
+
+.empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty h3 { margin-bottom: 8px; color: var(--text); }
