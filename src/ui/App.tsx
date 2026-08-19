@@ -46,10 +46,10 @@ export function App() {
   return (
     <div class="app">
       <header class="topbar">
-        <div class="brand grow">
+        <h1 class="brand grow">
           <span>Fanto<span class="fox">fuchs</span></span>
           <small>{festival.edition.title} · Baden</small>
-        </div>
+        </h1>
       </header>
 
       <main>
@@ -71,9 +71,18 @@ export function App() {
           ['share', 'Share'],
           ['settings', 'Setup'],
         ] as [Tab, string][]).map(([id, label]) => (
-          <button key={id} aria-current={tab === id} onClick={() => setTab(id)}>
+          <button
+            key={id}
+            aria-current={tab === id ? 'page' : undefined}
+            onClick={() => setTab(id)}
+          >
             {label}
-            {id === 'plan' && scheduled > 0 && <span class="badge tabular">{scheduled}</span>}
+            {id === 'plan' && scheduled > 0 && (
+              <span class="badge tabular">
+                {scheduled}
+                <span class="sr-only"> programmes scheduled</span>
+              </span>
+            )}
           </button>
         ))}
       </nav>

@@ -21,20 +21,23 @@ const LEVELS: { level: Interest; label: string; hint: string }[] = [
   { level: 'maybe', label: 'Maybe', hint: 'Only if it fits a gap' },
 ];
 
-function InterestPicker({ blockId }: { blockId: string }) {
+function InterestPicker({ blockId, blockTitle }: { blockId: string; blockTitle: string }) {
   const person = activePerson.value;
   const current = person.interest[blockId] ?? 'no';
   return (
-    <div class="interest" role="group" aria-label="How much do you want to see this?">
+    <div class="interest" role="group" aria-label={`How much ${person.name} wants to see ${blockTitle}`}>
       {LEVELS.map(({ level, label, hint }) => (
         <button
           key={level}
           data-level={level}
           title={hint}
           aria-pressed={current === level}
+          // Read out of context — in a list of 91 rows, "Must, pressed" on its
+          // own is useless without saying must-see *what*.
+          aria-label={`${label} — ${blockTitle}`}
           onClick={() => setInterest(person.id, blockId, current === level ? 'no' : level)}
         >
-          {label}
+          <span aria-hidden="true">{label}</span>
         </button>
       ))}
     </div>
@@ -55,16 +58,21 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
     <div class="block-row">
       <div class="grow">
         <div class="row" style="gap:8px">
-          {marks.map(({ person }) => (
-            <span key={person.id} class="dot" style={`background:${person.color}`} title={person.name} />
+          {marks.map(({ person, interest }) => (
+            <span key={person.id} class="row" style="gap:0">
+              <span class="dot" style={`background:${person.color}`} aria-hidden="true" />
+              {/* Colour alone must not be the only carrier of who wants what. */}
+              <span class="sr-only">{person.name}: {interest}. </span>
+            </span>
           ))}
           <button
             class="btn ghost small"
             style="padding:0;min-height:auto;text-align:left"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
+            aria-label={`${block.title} — ${open ? 'hide' : 'show'} details`}
           >
-            <span class="block-title">{block.title}</span>
+            <h3 class="block-title">{block.title}</h3>
           </button>
         </div>
         <div class="block-meta">
@@ -75,27 +83,29 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
         </div>
       </div>
 
-      <InterestPicker blockId={block.id} />
+      <InterestPicker blockId={block.id} blockTitle={block.title} />
 
       <div class="showing-list">
         {showings.map((s) => {
           const venue = venueById.get(s.venueId);
           const isPlanned = s.id === scheduledShowingId;
+          const note = s.closed
+            ? 'closed school screening, not open to the public'
+            : isOpenWindow(s)
+              ? 'drop in any time inside this window'
+              : isPlanned
+                ? 'in your plan'
+                : '';
           return (
             <span
               key={s.id}
               class={`pill tabular${isPlanned ? ' scheduled' : ''}${s.closed ? ' closed' : ''}`}
-              title={
-                s.closed
-                  ? 'Closed school screening — not open to the public'
-                  : isOpenWindow(s)
-                    ? 'Drop in any time inside this window'
-                    : `${venue?.name ?? s.venueId}${isPlanned ? ' — in your plan' : ''}`
-              }
+              title={note}
             >
-              {isPlanned && '✓ '}
+              {isPlanned && <span aria-hidden="true">✓ </span>}
               {shortDay(s.start)} {time(s.start)}
               {isOpenWindow(s) ? `–${time(s.end)}` : ''} · {venue?.name ?? s.venueId}
+              {note && <span class="sr-only"> — {note}</span>}
             </span>
           );
         })}
@@ -172,15 +182,24 @@ export function Programme() {
           <input
             type="search"
             class="grow"
+            aria-label="Search films, directors and sections"
             placeholder="Search films, directors, sections…"
             value={query}
             onInput={(e) => setQuery((e.target as HTMLInputElement).value)}
           />
-          <select value={category} onChange={(e) => setCategory((e.target as HTMLSelectElement).value)}>
+          <select
+            aria-label="Filter by section"
+            value={category}
+            onChange={(e) => setCategory((e.target as HTMLSelectElement).value)}
+          >
             <option value="">All sections</option>
             {categories.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select value={day} onChange={(e) => setDay((e.target as HTMLSelectElement).value)}>
+          <select
+            aria-label="Filter by day"
+            value={day}
+            onChange={(e) => setDay((e.target as HTMLSelectElement).value)}
+          >
             <option value="">All days</option>
             {days.map((d) => <option key={d} value={d}>{shortDay(new Date(`${d}T12:00:00Z`).getTime() / 1000)}</option>)}
           </select>
@@ -190,9 +209,9 @@ export function Programme() {
         </div>
       </div>
 
-      <div class="section-title">
+      <h2 class="section-title" aria-live="polite">
         {visible.length} of {festival.blocks.length} programmes
-      </div>
+      </h2>
 
       <div class="card">
         {visible.length === 0 ? (

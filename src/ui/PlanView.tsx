@@ -36,13 +36,13 @@ function DaySection({ day, items }: { day: string; items: PlanItem[] }) {
 
   return (
     <>
-      <div class="section-title">
+      <h2 class="section-title">
         {weekday(first)} {dayDotMonth(day)} —{' '}
         <span class="tabular">
           {items.length} {items.length === 1 ? 'programme' : 'programmes'} · {time(first)}–{time(last)}
           {walking > 0 ? ` · ${walking}′ walking` : ''}
         </span>
-      </div>
+      </h2>
       <div class="card">
         <div class="timeline">
           {items.map((it, i) => {
@@ -56,7 +56,7 @@ function DaySection({ day, items }: { day: string; items: PlanItem[] }) {
                     <div class="slot-end tabular">{time(it.showing.end)}</div>
                   </div>
                   <div class="grow">
-                    <div class="block-title">{it.block.title}</div>
+                    <h3 class="block-title">{it.block.title}</h3>
                     <div class="block-meta">
                       {venue?.name ?? it.showing.venueId}
                       {it.block.durationMin ? ` · ${duration(it.block.durationMin)}` : ''}
@@ -131,7 +131,7 @@ export function PlanView() {
 
       <div class="card" style="margin-top:12px">
         <div class="row wrap spread" style="gap:12px">
-          <div>
+          <div role="status" aria-live="polite">
             <div style="font-size:26px;font-weight:700" class="tabular">
               {current.items.length} programmes
             </div>
@@ -179,12 +179,12 @@ export function PlanView() {
 
       {current.openWindows.length > 0 && (
         <>
-          <div class="section-title">Drop in any time</div>
+          <h2 class="section-title">Drop in any time</h2>
           <div class="card">
             {current.openWindows.map(({ showing, block }) => (
               <div key={showing.id} class="block-row">
                 <div class="grow">
-                  <div class="block-title">{block.title}</div>
+                  <h3 class="block-title">{block.title}</h3>
                   <div class="block-meta tabular">
                     {weekday(showing.start)} {time(showing.start)}–{time(showing.end)} ·{' '}
                     {venueById.get(showing.venueId)?.name ?? showing.venueId}
@@ -202,12 +202,12 @@ export function PlanView() {
 
       {current.missed.length > 0 && (
         <>
-          <div class="section-title">Did not fit ({current.missed.length})</div>
+          <h2 class="section-title">Did not fit ({current.missed.length})</h2>
           <div class="card">
             {current.missed.map(({ block, reason }) => (
               <div key={block.id} class="block-row">
                 <div class="grow">
-                  <div class="block-title faded">{block.title}</div>
+                  <h3 class="block-title faded">{block.title}</h3>
                   <div class="block-meta">
                     {reason === 'unavailable'
                       ? 'Never screens while you are free'

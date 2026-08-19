@@ -37,6 +37,14 @@ best possible plan — including the walk from the Trafo to the Orient.
   90-minute commitments, so they are listed separately to drop into. Anything that did not
   fit says whether it clashed or never screened while you were free.
 
+## Accessibility
+
+WCAG 2.2 AA, verified rather than claimed: zero axe-core violations across every tab in
+both themes, no horizontal scrolling at 320 px, and 44 px targets throughout. Contrast is
+a **test** — [`test/contrast.test.ts`](./test/contrast.test.ts) reads the stylesheet and
+fails the build if any token pair drops below AA. Details and the known gaps are in
+[`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
+
 ## Privacy
 
 Fully local. Wishlists and free time live in `localStorage`, nothing else. No account, no

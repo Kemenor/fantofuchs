@@ -16,7 +16,7 @@ export function PeopleBar({ showMode = true }: { showMode?: boolean }) {
           onClick={() => setActivePerson(p.id)}
           title={`Edit ${p.name}'s wishlist and free time`}
         >
-          <span class="dot" style={`background:${p.color}`} />
+          <span class="dot" style={`background:${p.color}`} aria-hidden="true" />
           {p.name}
         </button>
       ))}
@@ -28,7 +28,8 @@ export function PeopleBar({ showMode = true }: { showMode?: boolean }) {
         }}
         title="Add another person"
       >
-        +
+        <span aria-hidden="true">+</span>
+        <span class="sr-only">Add another person</span>
       </button>
 
       {showMode && list.length > 1 && (

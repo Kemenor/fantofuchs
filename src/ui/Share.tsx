@@ -54,7 +54,7 @@ export function IncomingPlan() {
   // otherwise the card vanishes on click and never says what it did.
   if (message !== null) {
     return (
-      <div class="card" style="border-color:var(--emerald);margin-bottom:12px">
+      <div class="card" role="status" aria-live="polite" style="border-color:var(--emerald);margin-bottom:12px">
         <div class="row wrap spread" style="gap:8px">
           <span class="grow">{message}</span>
           <button class="btn small ghost" onClick={() => setMessage(null)}>Dismiss</button>
@@ -79,7 +79,7 @@ export function IncomingPlan() {
   };
 
   return (
-    <div class="card" style="border-color:var(--fox);margin-bottom:12px">
+    <div class="card" role="region" aria-label="A shared plan has arrived" style="border-color:var(--fox);margin-bottom:12px">
       <div style="font-weight:700">
         {payload.exportedBy ? `${payload.exportedBy} sent you a plan` : 'A shared plan'}
       </div>
@@ -194,7 +194,7 @@ export function Share() {
 
   return (
     <>
-      <div class="section-title">Send your plan</div>
+      <h2 class="section-title">Send your plan</h2>
       <div class="card">
         <p class="small muted" style="margin-top:0">
           Mark your films and set your free time, then send this to whoever you are going
@@ -217,11 +217,12 @@ export function Share() {
           <button class="btn" onClick={() => download(false)}>Download file</button>
           <button class="btn ghost" onClick={showLink}>Show link</button>
         </div>
-        {linkState && <p class="small" style="margin:10px 0 0">{linkState}</p>}
-        {exportError && <p class="warn small" style="margin:10px 0 0">{exportError}</p>}
+        <p class="small" style="margin:10px 0 0" role="status" aria-live="polite">{linkState}</p>
+        {exportError && <p class="warn small" style="margin:10px 0 0" role="alert">{exportError}</p>}
         {visibleLink && (
           <textarea
             readOnly
+            aria-label="Your share link — select and copy it"
             class="tabular"
             style="width:100%;min-height:76px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--surface-2);font-size:12px;word-break:break-all;resize:vertical"
             value={visibleLink}
@@ -234,15 +235,16 @@ export function Share() {
         </p>
       </div>
 
-      <div class="section-title">Load a plan</div>
+      <h2 class="section-title">Load a plan</h2>
       <div class="card">
         <div class="row wrap" style="gap:8px">
-          <label class="btn" style="display:inline-flex;align-items:center">
+          <label class="btn file-label" style="display:inline-flex;align-items:center">
             Choose file…
             <input
               type="file"
+              class="file-input"
               accept="application/json,.json"
-              style="display:none"
+              aria-label="Load a plan from a file"
               onChange={async (e) => {
                 const input = e.target as HTMLInputElement;
                 const file = input.files?.[0];
@@ -261,6 +263,7 @@ export function Share() {
           <div style="margin-top:12px">
             <textarea
               class="grow"
+              aria-label="Paste a shared link or plan code"
               style="width:100%;min-height:88px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--surface);resize:vertical"
               placeholder="Paste the link or the code your brother sent…"
               value={paste}
@@ -277,8 +280,8 @@ export function Share() {
           </div>
         )}
 
-        {message && <p class="small" style="margin:12px 0 0">{message}</p>}
-        {error && <p class="warn small" style="margin:12px 0 0">{error}</p>}
+        <p class="small" style="margin:12px 0 0" role="status" aria-live="polite">{message}</p>
+        {error && <p class="warn small" style="margin:12px 0 0" role="alert">{error}</p>}
 
         <p class="small faded" style="margin:12px 0 0">
           Loading merges: anyone new is added, and for someone already here the
@@ -287,18 +290,19 @@ export function Share() {
         </p>
       </div>
 
-      <div class="section-title">Backup</div>
+      <h2 class="section-title">Backup</h2>
       <div class="card">
         <div class="row wrap" style="gap:8px">
           <button class="btn small" onClick={() => download(true)}>
             Download full backup
           </button>
-          <label class="btn small" style="display:inline-flex;align-items:center">
+          <label class="btn small file-label" style="display:inline-flex;align-items:center">
             Restore a backup…
             <input
               type="file"
+              class="file-input"
               accept="application/json,.json"
-              style="display:none"
+              aria-label="Restore everything from a backup file"
               onChange={async (e) => {
                 const input = e.target as HTMLInputElement;
                 const file = input.files?.[0];

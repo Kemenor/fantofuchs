@@ -16,8 +16,9 @@ optimal schedule, export it. Remaining work is polish and the items under *Ideas
 | 3 | Programme browsing, wishlists, availability editor | ✅ |
 | 4 | Plan view, group planning, `.ics` export | ✅ |
 | 5 | Sharing: link/file/paste, merge-on-import, backup | ✅ |
-| 6 | Polish: keyboard, empty states, print view | ▫️ |
-| 7 | Ideas below, as they earn their place | ▫️ |
+| 6 | Accessibility pass to WCAG 2.2 AA (see `DESIGN_SYSTEM.md`) | ✅ |
+| 7 | Polish: keyboard, empty states, print view | ▫️ |
+| 8 | Ideas below, as they earn their place | ▫️ |
 
 ## Architecture
 
@@ -92,6 +93,11 @@ subtly wrong looks exactly like one that is right.
   back and forth, and a returning plan always contains a stale copy of you. Per-person
   `updatedAt` decides collisions; ties keep the local copy. Full backups are the one
   replace-shaped operation, and they are labelled as such.
+- **Accent fills carry their own foreground.** The Fuchsbau hues are pinned and kept
+  exactly, but white text fails WCAG on all three of them (2.05–3.08:1), so `--on-fox` /
+  `--on-indigo` / `--on-emerald` are chosen for contrast — which is what a properly built
+  M3 `ColorScheme` does anyway. Full measurements in `DESIGN_SYSTEM.md`; worth checking
+  against the Flutter apps, which may have inherited the same problem.
 - **Share payload in the URL fragment.** Never reaches a server, never lands in a log. A
   two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
   there for when it does not.

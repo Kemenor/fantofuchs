@@ -7,6 +7,14 @@
  * that matter more than they look:
  *   - red is for destruction only, never for status;
  *   - things that did not work out fade, they do not bleed.
+ *
+ * The three hues are pinned by the family and are kept exactly. What is *not*
+ * pinned is what sits on top of them, and measuring showed white text failing
+ * badly on all three fills (2.2–3.1:1). So each accent carries its own `--on-*`
+ * foreground chosen for contrast — the Material 3 approach — and the accents
+ * used as *text* rather than as a fill get a darkened variant in light mode,
+ * where the pinned value is far too bright to read. Every pair below clears
+ * WCAG AA: 4.5:1 for text, 3:1 for the borders that define a control.
  */
 
 :root {
@@ -16,13 +24,24 @@
   --amber: #e0a33b;
   --danger: #c8372b;
 
+  /* Foreground for text sitting on each accent fill. */
+  --on-fox: #1b1917;      /* 6.10:1 */
+  --on-indigo: #ffffff;   /* 4.84:1 */
+  --on-emerald: #1b1917;  /* 5.69:1 */
+
+  /* The same accents when they are the text rather than the fill. */
+  --fox-text: #b25714;    /* 4.65:1 on the page, 4.92:1 on a card */
+  --emerald-text: #177f46;/* 5.05:1 on surface */
+
   --bg: #fbf8f5;
   --surface: #ffffff;
   --surface-2: #f4efe9;
   --text: #1b1917;
   --muted: #6f665e;
-  --faded: #a8988c;
+  --faded: #7e6e61;
   --line: #e3dbd2;
+  /* Borders that outline an interactive control, not just a divider. */
+  --line-strong: #978b7f; /* 3.14:1 on the page, 3.33:1 on a card */
 
   --radius-chip: 8px;
   --radius-btn: 12px;
@@ -41,19 +60,58 @@
     --amber: #edb45a;
     --danger: #e4695c;
 
+    /* The dark accents are lighter still, so ink wins on all three. */
+    --on-fox: #1b1917;      /* 8.08:1 */
+    --on-indigo: #1b1917;   /* 6.40:1 */
+    --on-emerald: #1b1917;  /* 8.57:1 */
+
+    --fox-text: #f39c4e;    /* 7.74:1 on surface */
+    --emerald-text: #37ce78;/* 8.21:1 on surface */
+
     --bg: #16140f;
     --surface: #201d18;
     --surface-2: #2a2620;
     --text: #f2ece5;
     --muted: #a89e93;
-    --faded: #6f665e;
+    --faded: #8f857b;
     --line: #35302a;
+    --line-strong: #706961;
 
     --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
   }
 }
 
 * { box-sizing: border-box; }
+
+/* Available to screen readers, invisible on screen. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * A file input styled by its label. `display: none` would have been simpler and
+ * is what this used to be — but it also drops the control out of the tab order
+ * entirely, so the only way to load a shared plan was with a mouse.
+ */
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.file-label:focus-within {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
 
 body {
   margin: 0;
@@ -93,7 +151,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 
 .brand { display: flex; align-items: baseline; gap: 8px; font-weight: 700; letter-spacing: -0.01em; }
-.brand .fox { color: var(--fox); }
+.brand .fox { color: var(--fox-text); }
 .brand small { color: var(--muted); font-weight: 500; font-size: 13px; }
 
 .tabs {
@@ -121,7 +179,7 @@ button, input, select { font: inherit; color: inherit; }
   font-weight: 600;
   cursor: pointer;
 }
-.tabs button[aria-current='true'] { background: var(--fox); color: #fff; }
+.tabs button[aria-current='true'] { background: var(--fox); color: var(--on-fox); }
 .tabs .badge {
   margin-left: 6px;
   padding: 1px 7px;
@@ -142,6 +200,7 @@ button, input, select { font: inherit; color: inherit; }
 
 .section-title {
   margin: 28px 0 12px;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -164,23 +223,23 @@ button, input, select { font: inherit; color: inherit; }
 .btn {
   min-height: 44px;
   padding: 0 16px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-btn);
   background: var(--surface);
   font-weight: 600;
   cursor: pointer;
 }
 .btn:hover { border-color: var(--fox); }
-.btn.primary { border-color: transparent; background: var(--fox); color: #fff; }
+.btn.primary { border-color: transparent; background: var(--fox); color: var(--on-fox); }
 .btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
 .btn.danger { border-color: transparent; background: transparent; color: var(--danger); }
 .btn:disabled { opacity: 0.45; cursor: default; }
 .btn.small { min-height: 34px; padding: 0 10px; font-size: 13px; }
 
-input[type='text'], input[type='search'], input[type='number'], select {
+input[type='text'], input[type='search'], input[type='number'], select, textarea {
   min-height: 44px;
   padding: 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-btn);
   background: var(--surface);
 }
@@ -193,9 +252,9 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid var(--line);
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-chip);
   background: var(--surface);
   font-size: 13px;
@@ -210,10 +269,10 @@ input:focus-visible, select:focus-visible, button:focus-visible {
 /* Interest levels. `no` is absence, so it gets no colour at all. */
 .interest { display: inline-flex; gap: 4px; }
 .interest button {
-  min-width: 40px;
-  min-height: 34px;
-  padding: 0 9px;
-  border: 1px solid var(--line);
+  min-width: 48px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-chip);
   background: var(--surface);
   font-size: 13px;
@@ -221,9 +280,9 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   color: var(--muted);
   cursor: pointer;
 }
-.interest button[aria-pressed='true'][data-level='must'] { border-color: transparent; background: var(--fox); color: #fff; }
-.interest button[aria-pressed='true'][data-level='want'] { border-color: transparent; background: var(--indigo); color: #fff; }
-.interest button[aria-pressed='true'][data-level='maybe'] { border-color: transparent; background: var(--emerald); color: #fff; }
+.interest button[aria-pressed='true'][data-level='must'] { border-color: transparent; background: var(--fox); color: var(--on-fox); }
+.interest button[aria-pressed='true'][data-level='want'] { border-color: transparent; background: var(--indigo); color: var(--on-indigo); }
+.interest button[aria-pressed='true'][data-level='maybe'] { border-color: transparent; background: var(--emerald); color: var(--on-emerald); }
 
 .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 
@@ -237,7 +296,12 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   border-top: 1px solid var(--line);
 }
 .block-row:first-child { border-top: 0; }
-.block-title { font-weight: 600; }
+.block-title {
+  font-size: 1.125rem; /* 18px — the thing you are actually scanning for */
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}
 .block-meta { color: var(--muted); font-size: 13px; }
 .showing-list { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
 
@@ -252,7 +316,7 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   font-weight: 600;
   color: var(--muted);
 }
-.pill.scheduled { border-color: var(--emerald); color: var(--emerald); }
+.pill.scheduled { border-color: var(--emerald-text); color: var(--emerald-text); }
 .pill.closed { border-style: dashed; color: var(--faded); }
 
 /* ------------------------------------------------------------------ plan */

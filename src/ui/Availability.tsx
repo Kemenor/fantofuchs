@@ -47,6 +47,7 @@ function DayRow({ day }: { day: string }) {
     .filter(({ slot }) => slot.from >= midnight && slot.from < dayEnd)
     .sort((a, b) => a.slot.from - b.slot.from);
 
+  const dayName = weekday(midnight + 12 * 3600);
   const options = hourOptions(
     bounds.fromHour,
     bounds.toHour,
@@ -60,7 +61,7 @@ function DayRow({ day }: { day: string }) {
   return (
     <div class="day-row">
       <div>
-        <strong>{weekday(midnight + 12 * 3600)}</strong>
+        <strong>{dayName}</strong>
         <div class="small muted tabular">{dayDotMonth(day)}</div>
       </div>
 
@@ -70,12 +71,14 @@ function DayRow({ day }: { day: string }) {
             <span class="small faded grow">Not available</span>
             <button
               class="btn small"
+              aria-label={`Free all day on ${dayName}`}
               onClick={() => addSlot(person.id, { from: atHour(day, bounds.fromHour), to: atHour(day, bounds.toHour) })}
             >
               All day
             </button>
             <button
               class="btn small"
+              aria-label={`Free from 16:00 on ${dayName}`}
               onClick={() => addSlot(person.id, { from: atHour(day, 16), to: atHour(day, bounds.toHour) })}
             >
               From 16:00
@@ -89,6 +92,7 @@ function DayRow({ day }: { day: string }) {
           return (
             <div key={index} class="range">
               <select
+                aria-label={`${dayName} — free from`}
                 value={String(fromHour)}
                 onChange={(e) => {
                   const h = Number((e.target as HTMLSelectElement).value);
@@ -99,6 +103,7 @@ function DayRow({ day }: { day: string }) {
               </select>
               <span class="muted">to</span>
               <select
+                aria-label={`${dayName} — free until`}
                 value={String(toHour)}
                 onChange={(e) => {
                   const h = Number((e.target as HTMLSelectElement).value);
@@ -107,13 +112,19 @@ function DayRow({ day }: { day: string }) {
               >
                 {options.map((h) => <option key={h} value={String(h)}>{hourLabel(h)}</option>)}
               </select>
-              <button class="btn ghost small" title="Remove this window" onClick={() => removeSlot(person.id, index)}>
-                ✕
+              <button
+                class="btn ghost small"
+                title="Remove this window"
+                aria-label={`Remove ${dayName} ${hourLabel(fromHour)} to ${hourLabel(toHour)}`}
+                onClick={() => removeSlot(person.id, index)}
+              >
+                <span aria-hidden="true">✕</span>
               </button>
               {windows[windows.length - 1].index === index && (
                 <button
                   class="btn ghost small"
                   title="Add a second window on this day"
+                  aria-label={`Add another free window on ${dayName}`}
                   onClick={() => addSlot(person.id, { from: Math.min(slot.to + 3600, atHour(day, bounds.toHour - 1)), to: atHour(day, bounds.toHour) })}
                 >
                   + window
@@ -135,7 +146,7 @@ export function Availability() {
     <>
       <PeopleBar showMode={false} />
 
-      <div class="section-title">{person.name}'s free time</div>
+      <h2 class="section-title">{person.name}'s free time</h2>
 
       <div class="card">
         <div class="day-grid">
@@ -144,7 +155,7 @@ export function Availability() {
       </div>
 
       <div class="row wrap" style="margin-top:12px;gap:8px">
-        <span class="small muted grow tabular">
+        <span class="small muted grow tabular" aria-live="polite">
           {total > 0 ? `${Math.round(total / 3600)} hours available` : 'No free time set yet'}
         </span>
         {people.value.length > 1 && (

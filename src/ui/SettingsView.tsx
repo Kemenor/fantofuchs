@@ -28,6 +28,7 @@ function NumberSetting(
           type="number"
           class="tabular"
           style="width:88px"
+          aria-label={`${label} in ${unit}`}
           value={value}
           min={min}
           max={max}
@@ -63,14 +64,15 @@ export function SettingsView() {
 
   return (
     <>
-      <div class="section-title">People</div>
+      <h2 class="section-title">People</h2>
       <div class="card">
         {people.value.map((p) => (
           <div key={p.id} class="row wrap" style="gap:8px;padding:8px 0">
-            <span class="dot" style={`background:${p.color}`} />
+            <span class="dot" style={`background:${p.color}`} aria-hidden="true" />
             <input
               type="text"
               class="grow"
+              aria-label={`Name of person ${p.name}`}
               value={p.name}
               onInput={(e) => renamePerson(p.id, (e.target as HTMLInputElement).value)}
             />
@@ -91,7 +93,7 @@ export function SettingsView() {
         ))}
       </div>
 
-      <div class="section-title">Timing</div>
+      <h2 class="section-title">Timing</h2>
       <div class="card">
         <NumberSetting
           label="Buffer between screenings"
@@ -128,7 +130,7 @@ export function SettingsView() {
         </div>
       </div>
 
-      <div class="section-title">Walking times</div>
+      <h2 class="section-title">Walking times</h2>
       <div class="card">
         <div class="row wrap spread">
           <span class="small muted grow">
@@ -151,6 +153,7 @@ export function SettingsView() {
                     type="number"
                     class="tabular"
                     style="width:76px"
+                    aria-label={`Walking minutes between ${a.name} and ${b.name}`}
                     value={override ?? computed}
                     min={0}
                     max={120}
@@ -182,7 +185,7 @@ export function SettingsView() {
         )}
       </div>
 
-      <div class="section-title">Data</div>
+      <h2 class="section-title">Data</h2>
       <div class="card">
         <p class="small muted" style="margin-top:0">
           {festival.blocks.length} programmes · {festival.showings.length} screenings ·{' '}

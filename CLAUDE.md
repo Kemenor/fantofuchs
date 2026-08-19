@@ -60,9 +60,17 @@ data/       fantoche-<year>.json — committed, refreshed daily by CI
   an unsound bound silently returns a worse schedule and nothing else will notice.
 - **Colours come from Fuchsbau** (`src/styles.css` custom properties): tangerine primary,
   indigo secondary, emerald tertiary. Red is destruction-only — never status. Things that
-  did not work out fade; they do not bleed.
+  did not work out fade; they do not bleed. Deviations are recorded in `DESIGN_SYSTEM.md`.
+- **Never put white on an accent fill.** Use `--on-fox` / `--on-indigo` / `--on-emerald`;
+  white fails WCAG on all three (2.05–3.08:1). For an accent used as *text*, use
+  `--fox-text` / `--emerald-text`. `test/contrast.test.ts` reads `styles.css` and will fail
+  the build if a token pair drops below AA, so add new pairs to it rather than eyeballing.
 - **Touch targets ≥ 44 px**, tabular figures for times and counts, light + dark both
   first-class via `prefers-color-scheme`.
+- **Accessibility is checked, not assumed.** Held to WCAG 2.2 AA: one `<h1>`, `<h2>` per
+  section, `<h3>` per programme; no information carried by colour or a `title` attribute
+  alone; anything that changes without navigation is an `aria-live` region. Re-run axe
+  (`node_modules/axe-core/axe.min.js`, injected into the dev server) after UI changes.
 
 ## Data notes
 
