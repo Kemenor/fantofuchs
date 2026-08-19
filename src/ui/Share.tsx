@@ -7,7 +7,7 @@
  */
 import { useState } from 'preact/hooks';
 import {
-  activePerson, applyImport, exportPayload, festival, people, pendingImport,
+  activePerson, applyImport, exportPayload, festival, people, pendingImport, state,
 } from '../store.ts';
 import { decodeShare, shareLink, type SharePayload } from '../share.ts';
 import type { MergeResult } from '../share.ts';
@@ -22,6 +22,19 @@ function describe(result: MergeResult, replaced: boolean): string {
     parts.push(`kept your newer ${result.kept.map((p) => p.name).join(', ')}`);
   }
   return parts.length ? `Done — ${parts.join('; ')}.` : 'Nothing to change; you already had all of it.';
+}
+
+/**
+ * True while this device still has only the untouched starter profile.
+ *
+ * Someone opening a shared link on a fresh browser ends up with a nameless
+ * "Me" sitting next to the person who sent it, and no obvious sign that the
+ * empty one is meant to be them. Worth one sentence.
+ */
+function hasUnnamedSelf(): boolean {
+  return state.value.people.some(
+    (p) => p.name === 'Me' && p.slots.length === 0 && Object.keys(p.interest).length === 0,
+  );
 }
 
 function summarise(payload: SharePayload): string {
@@ -46,6 +59,12 @@ export function IncomingPlan() {
           <span class="grow">{message}</span>
           <button class="btn small ghost" onClick={() => setMessage(null)}>Dismiss</button>
         </div>
+        {hasUnnamedSelf() && (
+          <p class="small muted" style="margin:8px 0 0">
+            You are still called “Me” — rename yourself under <strong>Setup</strong>, then
+            mark your own films and free time and send the whole thing back.
+          </p>
+        )}
       </div>
     );
   }
