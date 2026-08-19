@@ -15,22 +15,22 @@ import { readFileSync } from 'node:fs';
 
 const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
 
-/** Pull the custom properties out of a `:root { … }` block. */
-function tokensOf(blockStart: string): Record<string, string> {
-  const at = css.indexOf(blockStart);
-  assert.notEqual(at, -1, `could not find "${blockStart}" in styles.css`);
-  const open = css.indexOf('{', at);
-  const body = css.slice(open + 1, css.indexOf('}', open));
+/**
+ * Both palettes live in one `:root` block, prefixed `--l-` and `--d-`, with the
+ * active set mapped onto them afterwards. Reading the prefixed values goes
+ * straight to the source of truth rather than to an alias.
+ */
+function paletteOf(prefix: 'l' | 'd'): Record<string, string> {
+  const open = css.indexOf('{', css.indexOf(':root {'));
+  const body = css.slice(open + 1, css.indexOf('\n}', open));
   const out: Record<string, string> = {};
-  for (const [, name, value] of body.matchAll(/--([\w-]+)\s*:\s*(#[0-9a-fA-F]{6})\s*;/g)) {
-    out[name] = value.toLowerCase();
-  }
+  const pattern = new RegExp(`--${prefix}-([\\w-]+)\\s*:\\s*(#[0-9a-fA-F]{6})\\s*;`, 'g');
+  for (const [, name, value] of body.matchAll(pattern)) out[name] = value.toLowerCase();
   return out;
 }
 
-const light = tokensOf(':root {');
-// The dark tokens live in the prefers-color-scheme block, layered over light.
-const dark = { ...light, ...tokensOf('@media (prefers-color-scheme: dark)') };
+const light = paletteOf('l');
+const dark = paletteOf('d');
 
 function luminance(hex: string): number {
   const channels = hex.replace('#', '').match(/../g)!.map((h) => parseInt(h, 16) / 255);

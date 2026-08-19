@@ -9,7 +9,8 @@
  */
 import type { Slot } from '../model/types.ts';
 import { activePerson, addSlot, copySlotsToAll, people, removeSlot, setSlots } from '../store.ts';
-import { atHour, dayBounds, dayDotMonth, festivalDays, midnightOf, weekday } from '../format.ts';
+import { atHour, dayBounds, dayDotMonth, dayNames, festivalDays, midnightOf } from '../format.ts';
+import { t } from '../i18n/index.ts';
 import { PeopleBar } from './PeopleBar.tsx';
 
 /** `16:00`, or `01:00 +1` once a window runs past midnight. */
@@ -35,6 +36,7 @@ function hourOptions(from: number, to: number, mustInclude: number[]): number[] 
 }
 
 function DayRow({ day }: { day: string }) {
+  const s = t.value;
   const person = activePerson.value;
   const bounds = dayBounds[day];
   const midnight = midnightOf(day);
@@ -47,7 +49,7 @@ function DayRow({ day }: { day: string }) {
     .filter(({ slot }) => slot.from >= midnight && slot.from < dayEnd)
     .sort((a, b) => a.slot.from - b.slot.from);
 
-  const dayName = weekday(midnight + 12 * 3600);
+  const dayName = dayNames.value[day];
   const options = hourOptions(
     bounds.fromHour,
     bounds.toHour,
@@ -68,20 +70,20 @@ function DayRow({ day }: { day: string }) {
       <div class="stack" style="gap:8px">
         {windows.length === 0 && (
           <div class="row wrap" style="gap:6px">
-            <span class="small faded grow">Not available</span>
+            <span class="small faded grow">{s.time.unavailable}</span>
             <button
               class="btn small"
-              aria-label={`Free all day on ${dayName}`}
+              aria-label={s.time.allDayLabel(dayName)}
               onClick={() => addSlot(person.id, { from: atHour(day, bounds.fromHour), to: atHour(day, bounds.toHour) })}
             >
-              All day
+              {s.time.allDay}
             </button>
             <button
               class="btn small"
-              aria-label={`Free from 16:00 on ${dayName}`}
+              aria-label={s.time.fromFourLabel(dayName)}
               onClick={() => addSlot(person.id, { from: atHour(day, 16), to: atHour(day, bounds.toHour) })}
             >
-              From 16:00
+              {s.time.fromFour}
             </button>
           </div>
         )}
@@ -92,7 +94,7 @@ function DayRow({ day }: { day: string }) {
           return (
             <div key={index} class="range">
               <select
-                aria-label={`${dayName} — free from`}
+                aria-label={s.time.freeFrom(dayName)}
                 value={String(fromHour)}
                 onChange={(e) => {
                   const h = Number((e.target as HTMLSelectElement).value);
@@ -101,9 +103,9 @@ function DayRow({ day }: { day: string }) {
               >
                 {options.map((h) => <option key={h} value={String(h)}>{hourLabel(h)}</option>)}
               </select>
-              <span class="muted">to</span>
+              <span class="muted">{s.time.to}</span>
               <select
-                aria-label={`${dayName} — free until`}
+                aria-label={s.time.freeUntil(dayName)}
                 value={String(toHour)}
                 onChange={(e) => {
                   const h = Number((e.target as HTMLSelectElement).value);
@@ -114,8 +116,8 @@ function DayRow({ day }: { day: string }) {
               </select>
               <button
                 class="btn ghost small"
-                title="Remove this window"
-                aria-label={`Remove ${dayName} ${hourLabel(fromHour)} to ${hourLabel(toHour)}`}
+                title={s.time.removeWindow}
+                aria-label={s.time.removeWindowLabel(dayName, hourLabel(fromHour), hourLabel(toHour))}
                 onClick={() => removeSlot(person.id, index)}
               >
                 <span aria-hidden="true">✕</span>
@@ -123,11 +125,11 @@ function DayRow({ day }: { day: string }) {
               {windows[windows.length - 1].index === index && (
                 <button
                   class="btn ghost small"
-                  title="Add a second window on this day"
-                  aria-label={`Add another free window on ${dayName}`}
+                  title={s.time.addWindow}
+                  aria-label={s.time.addWindowLabel(dayName)}
                   onClick={() => addSlot(person.id, { from: Math.min(slot.to + 3600, atHour(day, bounds.toHour - 1)), to: atHour(day, bounds.toHour) })}
                 >
-                  + window
+                  {s.time.addWindow}
                 </button>
               )}
             </div>
@@ -139,14 +141,15 @@ function DayRow({ day }: { day: string }) {
 }
 
 export function Availability() {
+  const s = t.value;
   const person = activePerson.value;
-  const total = person.slots.reduce((sum, s) => sum + (s.to - s.from), 0);
+  const total = person.slots.reduce((sum, slot) => sum + (slot.to - slot.from), 0);
 
   return (
     <>
       <PeopleBar showMode={false} />
 
-      <h2 class="section-title">{person.name}'s free time</h2>
+      <h2 class="section-title">{s.time.heading(person.name)}</h2>
 
       <div class="card">
         <div class="day-grid">
@@ -156,15 +159,15 @@ export function Availability() {
 
       <div class="row wrap" style="margin-top:12px;gap:8px">
         <span class="small muted grow tabular" aria-live="polite">
-          {total > 0 ? `${Math.round(total / 3600)} hours available` : 'No free time set yet'}
+          {total > 0 ? s.time.hours(Math.round(total / 3600)) : s.time.none}
         </span>
         {people.value.length > 1 && (
           <button class="btn small" onClick={() => copySlotsToAll(person.id)}>
-            Copy to everyone
+            {s.time.copyToAll}
           </button>
         )}
         <button class="btn small ghost" onClick={() => setSlots(person.id, [])}>
-          Clear all
+          {s.time.clear}
         </button>
       </div>
     </>

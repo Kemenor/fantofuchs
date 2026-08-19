@@ -17,69 +17,139 @@
  * WCAG AA: 4.5:1 for text, 3:1 for the borders that define a control.
  */
 
+/*
+ * Two complete palettes, then a mapping. Each colour is written exactly once;
+ * only the *assignment* is repeated, because a media query and an attribute
+ * selector cannot be combined into one rule.
+ *
+ * Three states, which is what a theme toggle actually needs: no attribute means
+ * follow the system, and an explicit choice must win in *both* directions —
+ * hence `:not([data-theme='light'])` on the media query, so choosing Light on a
+ * device set to dark is honoured.
+ */
 :root {
-  --fox: #ea7a24;
-  --indigo: #8559d0;
-  --emerald: #1fa85d;
-  --amber: #e0a33b;
-  --danger: #c8372b;
+  /* ---- light palette ---- */
+  --l-fox: #ea7a24;
+  --l-indigo: #8559d0;
+  --l-emerald: #1fa85d;
+  --l-amber: #e0a33b;
+  --l-danger: #c8372b;
+  --l-on-fox: #1b1917;      /* 6.10:1 */
+  --l-on-indigo: #ffffff;   /* 4.84:1 */
+  --l-on-emerald: #1b1917;  /* 5.69:1 */
+  --l-fox-text: #b25714;    /* 4.65:1 on the page, 4.92:1 on a card */
+  --l-emerald-text: #177f46;/* 5.05:1 on a card */
+  --l-bg: #fbf8f5;
+  --l-surface: #ffffff;
+  --l-surface-2: #f4efe9;
+  --l-text: #1b1917;
+  --l-muted: #6f665e;
+  --l-faded: #7e6e61;
+  --l-line: #e3dbd2;
+  --l-line-strong: #978b7f; /* 3.14:1 on the page, 3.33:1 on a card */
+  --l-shadow: 0 1px 2px rgb(27 25 23 / 6%), 0 8px 24px rgb(27 25 23 / 6%);
 
-  /* Foreground for text sitting on each accent fill. */
-  --on-fox: #1b1917;      /* 6.10:1 */
-  --on-indigo: #ffffff;   /* 4.84:1 */
-  --on-emerald: #1b1917;  /* 5.69:1 */
+  /* ---- dark palette ---- */
+  --d-fox: #f39c4e;
+  --d-indigo: #a98cee;
+  --d-emerald: #37ce78;
+  --d-amber: #edb45a;
+  --d-danger: #e4695c;
+  --d-on-fox: #1b1917;      /* 8.08:1 */
+  --d-on-indigo: #1b1917;   /* 6.40:1 */
+  --d-on-emerald: #1b1917;  /* 8.57:1 */
+  --d-fox-text: #f39c4e;    /* 7.74:1 on a card */
+  --d-emerald-text: #37ce78;/* 8.21:1 on a card */
+  --d-bg: #16140f;
+  --d-surface: #201d18;
+  --d-surface-2: #2a2620;
+  --d-text: #f2ece5;
+  --d-muted: #a89e93;
+  --d-faded: #8f857b;
+  --d-line: #35302a;
+  --d-line-strong: #706961;
+  --d-shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
 
-  /* The same accents when they are the text rather than the fill. */
-  --fox-text: #b25714;    /* 4.65:1 on the page, 4.92:1 on a card */
-  --emerald-text: #177f46;/* 5.05:1 on surface */
-
-  --bg: #fbf8f5;
-  --surface: #ffffff;
-  --surface-2: #f4efe9;
-  --text: #1b1917;
-  --muted: #6f665e;
-  --faded: #7e6e61;
-  --line: #e3dbd2;
-  /* Borders that outline an interactive control, not just a divider. */
-  --line-strong: #978b7f; /* 3.14:1 on the page, 3.33:1 on a card */
+  /* ---- active: light unless something below says otherwise ---- */
+  --fox: var(--l-fox);
+  --indigo: var(--l-indigo);
+  --emerald: var(--l-emerald);
+  --amber: var(--l-amber);
+  --danger: var(--l-danger);
+  --on-fox: var(--l-on-fox);
+  --on-indigo: var(--l-on-indigo);
+  --on-emerald: var(--l-on-emerald);
+  --fox-text: var(--l-fox-text);
+  --emerald-text: var(--l-emerald-text);
+  --bg: var(--l-bg);
+  --surface: var(--l-surface);
+  --surface-2: var(--l-surface-2);
+  --text: var(--l-text);
+  --muted: var(--l-muted);
+  --faded: var(--l-faded);
+  --line: var(--l-line);
+  --line-strong: var(--l-line-strong);
+  --shadow: var(--l-shadow);
 
   --radius-chip: 8px;
   --radius-btn: 12px;
   --radius-card: 20px;
   --radius-sheet: 28px;
 
-  --shadow: 0 1px 2px rgb(27 25 23 / 6%), 0 8px 24px rgb(27 25 23 / 6%);
   color-scheme: light dark;
 }
 
+/* Following the system, and the system says dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --fox: #f39c4e;
-    --indigo: #a98cee;
-    --emerald: #37ce78;
-    --amber: #edb45a;
-    --danger: #e4695c;
-
-    /* The dark accents are lighter still, so ink wins on all three. */
-    --on-fox: #1b1917;      /* 8.08:1 */
-    --on-indigo: #1b1917;   /* 6.40:1 */
-    --on-emerald: #1b1917;  /* 8.57:1 */
-
-    --fox-text: #f39c4e;    /* 7.74:1 on surface */
-    --emerald-text: #37ce78;/* 8.21:1 on surface */
-
-    --bg: #16140f;
-    --surface: #201d18;
-    --surface-2: #2a2620;
-    --text: #f2ece5;
-    --muted: #a89e93;
-    --faded: #8f857b;
-    --line: #35302a;
-    --line-strong: #706961;
-
-    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+  :root:not([data-theme='light']) {
+    --fox: var(--d-fox);
+    --indigo: var(--d-indigo);
+    --emerald: var(--d-emerald);
+    --amber: var(--d-amber);
+    --danger: var(--d-danger);
+    --on-fox: var(--d-on-fox);
+    --on-indigo: var(--d-on-indigo);
+    --on-emerald: var(--d-on-emerald);
+    --fox-text: var(--d-fox-text);
+    --emerald-text: var(--d-emerald-text);
+    --bg: var(--d-bg);
+    --surface: var(--d-surface);
+    --surface-2: var(--d-surface-2);
+    --text: var(--d-text);
+    --muted: var(--d-muted);
+    --faded: var(--d-faded);
+    --line: var(--d-line);
+    --line-strong: var(--d-line-strong);
+    --shadow: var(--d-shadow);
   }
 }
+
+/* Explicitly chosen dark, whatever the system says. */
+:root[data-theme='dark'] {
+  --fox: var(--d-fox);
+  --indigo: var(--d-indigo);
+  --emerald: var(--d-emerald);
+  --amber: var(--d-amber);
+  --danger: var(--d-danger);
+  --on-fox: var(--d-on-fox);
+  --on-indigo: var(--d-on-indigo);
+  --on-emerald: var(--d-on-emerald);
+  --fox-text: var(--d-fox-text);
+  --emerald-text: var(--d-emerald-text);
+  --bg: var(--d-bg);
+  --surface: var(--d-surface);
+  --surface-2: var(--d-surface-2);
+  --text: var(--d-text);
+  --muted: var(--d-muted);
+  --faded: var(--d-faded);
+  --line: var(--d-line);
+  --line-strong: var(--d-line-strong);
+  --shadow: var(--d-shadow);
+}
+
+/* So form controls and scrollbars match the chosen theme, not just the OS. */
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark'] { color-scheme: dark; }
 
 * { box-sizing: border-box; }
 
@@ -150,6 +220,30 @@ button, input, select { font: inherit; color: inherit; }
   backdrop-filter: blur(6px);
 }
 
+/* Header controls: a compact language picker and a square icon toggle. */
+.lang-select {
+  min-height: 40px;
+  min-width: 62px;
+  padding: 0 6px 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--fox); }
+
 .brand { display: flex; align-items: baseline; gap: 8px; font-weight: 700; letter-spacing: -0.01em; }
 .brand .fox { color: var(--fox-text); }
 .brand small { color: var(--muted); font-weight: 500; font-size: 13px; }
@@ -211,7 +305,7 @@ button, input, select { font: inherit; color: inherit; }
 .muted { color: var(--muted); }
 .faded { color: var(--faded); }
 .small { font-size: 13px; }
-.row { display: flex; align-items: center; gap: 8px; }
+.row { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .wrap { flex-wrap: wrap; }
 .spread { justify-content: space-between; }
 .grow { flex: 1; min-width: 0; }
@@ -239,6 +333,13 @@ button, input, select { font: inherit; color: inherit; }
 input[type='text'], input[type='search'], input[type='number'], select, textarea {
   min-height: 44px;
   padding: 0 12px;
+  /*
+   * A <select> sizes itself to its longest <option>, and the section filter
+   * holds "Compétition des films pour enfants 2026". Without this it pushes the
+   * page 50px wider than a phone on the French programme.
+   */
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-btn);
   background: var(--surface);
@@ -369,10 +470,25 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   .app { padding-inline: 12px; }
 }
 
-/* Five tabs on a narrow phone: tighten the padding rather than wrap the bar. */
+/*
+ * Five tabs on a narrow phone: tighten rather than wrap the bar. German and
+ * French labels ("Horaires", "Partager", "Réglages") are half again as long as
+ * the English, so the tightening has to go further than English alone suggests.
+ */
 @media (max-width: 430px) {
-  .tabs { gap: 2px; padding: 4px; left: 8px; right: 8px; transform: none; justify-content: space-between; }
-  .tabs button { padding: 0 9px; font-size: 14px; }
+  .tabs {
+    gap: 2px;
+    padding: 4px;
+    left: 8px;
+    right: 8px;
+    transform: none;
+    justify-content: space-between;
+  }
+  .tabs button { min-width: 0; padding: 0 8px; font-size: 13px; }
+}
+
+@media (max-width: 360px) {
+  .tabs button { padding: 0 5px; font-size: 12px; }
 }
 
 .range { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

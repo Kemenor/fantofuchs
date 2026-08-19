@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'preact/hooks';
 import { festival, pendingImport, plan } from '../store.ts';
 import { decodeShare } from '../share.ts';
+import { t } from '../i18n/index.ts';
 import { Programme } from './Programme.tsx';
 import { Availability } from './Availability.tsx';
 import { PlanView } from './PlanView.tsx';
 import { Share, IncomingPlan } from './Share.tsx';
 import { SettingsView } from './SettingsView.tsx';
+import { TopControls } from './TopControls.tsx';
 
 type Tab = 'programme' | 'time' | 'plan' | 'share' | 'settings';
 
@@ -41,6 +43,7 @@ function useSharedLink(): void {
 export function App() {
   const [tab, setTab] = useState<Tab>('programme');
   useSharedLink();
+  const s = t.value;
   const scheduled = plan.value.items.length;
 
   return (
@@ -48,8 +51,9 @@ export function App() {
       <header class="topbar">
         <h1 class="brand grow">
           <span>Fanto<span class="fox">fuchs</span></span>
-          <small>{festival.edition.title} · Baden</small>
+          <small>{festival.value.edition.title} · Baden</small>
         </h1>
+        <TopControls />
       </header>
 
       <main>
@@ -63,13 +67,13 @@ export function App() {
         {tab === 'settings' && <SettingsView />}
       </main>
 
-      <nav class="tabs" aria-label="Sections">
+      <nav class="tabs" aria-label={s.nav.sections}>
         {([
-          ['programme', 'Films'],
-          ['time', 'Time'],
-          ['plan', 'Plan'],
-          ['share', 'Share'],
-          ['settings', 'Setup'],
+          ['programme', s.tabs.films],
+          ['time', s.tabs.time],
+          ['plan', s.tabs.plan],
+          ['share', s.tabs.share],
+          ['settings', s.tabs.setup],
         ] as [Tab, string][]).map(([id, label]) => (
           <button
             key={id}
@@ -80,7 +84,7 @@ export function App() {
             {id === 'plan' && scheduled > 0 && (
               <span class="badge tabular">
                 {scheduled}
-                <span class="sr-only"> programmes scheduled</span>
+                <span class="sr-only"> {s.nav.scheduled(scheduled)}</span>
               </span>
             )}
           </button>

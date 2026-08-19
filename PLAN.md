@@ -17,8 +17,9 @@ optimal schedule, export it. Remaining work is polish and the items under *Ideas
 | 4 | Plan view, group planning, `.ics` export | ✅ |
 | 5 | Sharing: link/file/paste, merge-on-import, backup | ✅ |
 | 6 | Accessibility pass to WCAG 2.2 AA (see `DESIGN_SYSTEM.md`) | ✅ |
-| 7 | Polish: keyboard, empty states, print view | ▫️ |
-| 8 | Ideas below, as they earn their place | ▫️ |
+| 7 | English / German / French, content included; light-dark toggle | ✅ |
+| 8 | Polish: keyboard, empty states, print view | ▫️ |
+| 9 | Ideas below, as they earn their place | ▫️ |
 
 ## Architecture
 
@@ -100,6 +101,17 @@ subtly wrong looks exactly like one that is right.
   theme and measures 5.50–9.30:1 — so knabberfuchs and checkfuchs are unaffected. The bug
   was introduced by this app's CSS port hardcoding `#fff`, not inherited. Full
   measurements in `DESIGN_SYSTEM.md`.
+- **Structure is scraped once; only the words are per language.** Fantoche publishes the
+  programme in en/de/fr with identical block and screening ids but translated text —
+  including venue names. Scraping each language end to end would derive venue ids from
+  translated names, so the travel matrix and therefore the *schedule* could differ by
+  language. `FestivalCore` + `TextPack` makes that impossible, and the schedule is
+  verified identical across the three.
+- **Language packs are lazy chunks.** English ships in the bundle so the app renders at
+  once; German and French are ~52 KB gzipped each and fetched only when chosen.
+- **Three-state theme.** `system` (no attribute) / `light` / `dark`, so an explicit choice
+  wins in *both* directions. The header toggle is deliberately two-state — it should show
+  what pressing it gives you — and "follow the system" lives in Setup.
 - **Share payload in the URL fragment.** Never reaches a server, never lands in a log. A
   two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
   there for when it does not.
@@ -115,5 +127,6 @@ Not committed to; each needs to earn its place.
 - **Print view** — one page per day for a pocket.
 - **Other festivals** — the model is not Fantoche-specific; only the scraper is. Would
   mean a source-per-festival plugin and a festival picker.
-- **German UI** — the family is en/de/fr/it. This one is English-only for now, on purpose:
-  it is a personal tool and the programme itself is English.
+- **Italian** — the Flutter family does en/de/fr/it. Fantoche publishes only en/de/fr, so
+  an Italian UI would sit on top of German content. Not worth it unless the festival adds
+  it.

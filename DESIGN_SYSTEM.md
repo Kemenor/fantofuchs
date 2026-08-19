@@ -61,6 +61,23 @@ Fuchsbau asks for hairline `outlineVariant` borders. A hairline is fine as a *di
 - `--line-strong` — the outline of buttons, chips, inputs and selects. 3.14:1 light /
   3.40:1 dark.
 
+## Theme switching
+
+Three states, not two: no `data-theme` attribute means follow the system, and an explicit
+choice must win in **both** directions — hence `:root:not([data-theme='light'])` guarding
+the `prefers-color-scheme: dark` block, so choosing Light on a device set to dark is
+honoured. `color-scheme` is set per state as well, so native controls and scrollbars
+follow the choice rather than the OS.
+
+Both palettes are declared once in `:root` as `--l-*` and `--d-*`, with only the
+*assignment* repeated. Each colour therefore has exactly one definition, which is what
+`test/contrast.test.ts` reads.
+
+The header control is a **two-state toggle** — it shows the appearance you would get by
+pressing it, which is what a header button should do. "Follow the system" is still the
+default and still where an untouched install sits; it lives in Setup, since it is a
+preference you set once rather than something you flip while reading a schedule.
+
 ## Typography
 
 Figtree throughout, with a system fallback. No typeface picker yet — the Flutter apps
@@ -100,8 +117,17 @@ Held to **WCAG 2.2 AA**, and checked rather than asserted:
 - **File inputs are visually hidden but focusable** — `display: none` would drop them out
   of the tab order and make loading a shared plan mouse-only.
 
+### Language
+
+English, German and French — the three Fantoche publishes in — covering the interface
+*and* the programme content. `html lang` follows the choice (WCAG 3.1.1), weekday names
+come from `Intl` in the matching Swiss locale, and the layout was re-checked at 320 px in
+every language: French needed a wider `select` fix and a tighter tab bar, because
+"Réglages" and "Compétition des films pour enfants 2026" are considerably longer than
+their English equivalents.
+
 ### Known gaps
 
 - No typeface picker (OpenDyslexic / Atkinson Hyperlegible), unlike the Flutter apps.
-- No manual light/dark override; it follows the OS.
-- English only. The family standard is en/de/fr/it.
+- No Italian: Fantoche does not publish one, so it would mean an Italian shell around
+  German content.

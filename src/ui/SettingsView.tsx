@@ -8,10 +8,13 @@
  */
 import { useState } from 'preact/hooks';
 import {
-  DEFAULT_SETTINGS, activePerson, festival, people, placeById, removePerson,
-  renamePerson, resetEverything, setSettings, settings, travelMatrix, venueById,
+  DEFAULT_SETTINGS, festival, festivalCore, people, placeById, removePerson,
+  renamePerson, resetEverything, setSettings, settings, travelMatrix,
 } from '../store.ts';
 import { pairKey } from '../model/travel.ts';
+import { date } from '../format.ts';
+import { t } from '../i18n/index.ts';
+import { LanguageChoiceRow, ThemeChoiceRow } from './TopControls.tsx';
 
 function NumberSetting(
   { label, hint, value, min, max, step, unit, onChange }:
@@ -45,12 +48,13 @@ function NumberSetting(
 }
 
 export function SettingsView() {
-  const s = settings.value;
+  const s = t.value;
+  const cfg = settings.value;
   const [showTravel, setShowTravel] = useState(false);
-  const active = activePerson.value;
+  const venues = festival.value.venues;
 
   // Only places that actually host something, paired once each.
-  const usedPlaces = [...new Set(festival.venues.map((v) => v.placeId))]
+  const usedPlaces = [...new Set(venues.map((v) => v.placeId))]
     .map((id) => placeById.get(id))
     .filter((p): p is NonNullable<typeof p> => Boolean(p))
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -60,11 +64,24 @@ export function SettingsView() {
   );
 
   const venueOf = (placeId: string) =>
-    festival.venues.find((v) => v.placeId === placeId)?.id ?? '';
+    venues.find((v) => v.placeId === placeId)?.id ?? '';
 
   return (
     <>
-      <h2 class="section-title">People</h2>
+      <h2 class="section-title">{s.nav.language}</h2>
+      <div class="card">
+        <LanguageChoiceRow />
+        <p class="small faded" style="margin:10px 0 0">
+          {s.settings.langNote}
+        </p>
+      </div>
+
+      <h2 class="section-title">{s.nav.theme}</h2>
+      <div class="card">
+        <ThemeChoiceRow />
+      </div>
+
+      <h2 class="section-title">{s.settings.people}</h2>
       <div class="card">
         {people.value.map((p) => (
           <div key={p.id} class="row wrap" style="gap:8px;padding:8px 0">
@@ -72,72 +89,76 @@ export function SettingsView() {
             <input
               type="text"
               class="grow"
-              aria-label={`Name of person ${p.name}`}
+              aria-label={s.people.nameOf(p.name)}
               value={p.name}
               onInput={(e) => renamePerson(p.id, (e.target as HTMLInputElement).value)}
             />
             <span class="small muted tabular">
-              {Object.keys(p.interest).length} marked · {p.slots.length} windows
+              {s.people.marked(Object.keys(p.interest).length, p.slots.length)}
             </span>
             {people.value.length > 1 && (
               <button
                 class="btn danger small"
                 onClick={() => {
-                  if (confirm(`Remove ${p.name} and their wishlist?`)) removePerson(p.id);
+                  if (confirm(s.people.removeConfirm(p.name))) removePerson(p.id);
                 }}
               >
-                Remove
+                {s.people.remove}
               </button>
             )}
           </div>
         ))}
       </div>
 
-      <h2 class="section-title">Timing</h2>
+      <h2 class="section-title">{s.settings.timing}</h2>
       <div class="card">
         <NumberSetting
-          label="Buffer between screenings"
-          hint="Slack on top of the walk — queueing, finding a seat, a coffee."
-          value={s.bufferMin} min={0} max={60} step={5} unit="min"
+          label={s.settings.buffer}
+          hint={s.settings.bufferHint}
+          value={cfg.bufferMin} min={0} max={60} step={5} unit={s.settings.minutes}
           onChange={(bufferMin) => setSettings({ bufferMin })}
         />
         <NumberSetting
-          label="Changing hall in the same building"
-          hint="Trafo 1 → Trafo 2, for instance. Counted instead of a walk."
-          value={s.samePlaceMin} min={0} max={20} step={1} unit="min"
+          label={s.settings.samePlace}
+          hint={s.settings.samePlaceHint}
+          value={cfg.samePlaceMin} min={0} max={20} step={1} unit={s.settings.minutes}
           onChange={(samePlaceMin) => setSettings({ samePlaceMin })}
         />
         <NumberSetting
-          label="Walking speed"
-          hint="Used with the distance between venues to work out the walk."
-          value={s.walkKmh} min={2} max={8} step={0.5} unit="km/h"
+          label={s.settings.walkSpeed}
+          hint={s.settings.walkSpeedHint}
+          value={cfg.walkKmh} min={2} max={8} step={0.5} unit={s.settings.kmh}
           onChange={(walkKmh) => setSettings({ walkKmh })}
         />
         <NumberSetting
-          label="Detour factor"
-          hint="Streets are not straight lines. 1.35 is a reasonable town centre."
-          value={s.detourFactor} min={1} max={2} step={0.05} unit="×"
+          label={s.settings.detour}
+          hint={s.settings.detourHint}
+          value={cfg.detourFactor} min={1} max={2} step={0.05} unit={s.settings.times}
           onChange={(detourFactor) => setSettings({ detourFactor })}
         />
         <div class="row wrap spread" style="gap:8px;padding:10px 0;border-top:1px solid var(--line)">
           <div class="grow" style="min-width:220px">
-            <div style="font-weight:600">Skip closed school screenings</div>
-            <div class="small muted">Some slots are reserved for school classes and not open to the public.</div>
+            <div style="font-weight:600">{s.settings.excludeClosed}</div>
+            <div class="small muted">{s.settings.excludeClosedHint}</div>
           </div>
-          <button class="chip" aria-pressed={s.excludeClosed} onClick={() => setSettings({ excludeClosed: !s.excludeClosed })}>
-            {s.excludeClosed ? 'Skipping' : 'Including'}
+          <button
+            class="chip"
+            aria-pressed={cfg.excludeClosed}
+            onClick={() => setSettings({ excludeClosed: !cfg.excludeClosed })}
+          >
+            {cfg.excludeClosed ? s.settings.skipping : s.settings.including}
           </button>
         </div>
       </div>
 
-      <h2 class="section-title">Walking times</h2>
+      <h2 class="section-title">{s.settings.walkingTitle}</h2>
       <div class="card">
         <div class="row wrap spread">
           <span class="small muted grow">
-            Estimated from the venues' own coordinates. Override any that you know better.
+            {s.settings.walkingBlurb}
           </span>
           <button class="btn small" onClick={() => setShowTravel(!showTravel)}>
-            {showTravel ? 'Hide' : `Show ${pairs.length} pairs`}
+            {showTravel ? s.settings.hide : s.settings.showPairs(pairs.length)}
           </button>
         </div>
 
@@ -145,7 +166,7 @@ export function SettingsView() {
           <div style="margin-top:12px">
             {pairs.map(({ a, b, key }) => {
               const computed = travelMatrix.value.between(venueOf(a.id), venueOf(b.id));
-              const override = s.travelOverrides[key];
+              const override = cfg.travelOverrides[key];
               return (
                 <div key={key} class="row wrap" style="gap:8px;padding:7px 0;border-top:1px solid var(--line)">
                   <span class="grow small truncate">{a.name} ↔ {b.name}</span>
@@ -153,29 +174,29 @@ export function SettingsView() {
                     type="number"
                     class="tabular"
                     style="width:76px"
-                    aria-label={`Walking minutes between ${a.name} and ${b.name}`}
+                    aria-label={s.settings.pairLabel(a.name, b.name)}
                     value={override ?? computed}
                     min={0}
                     max={120}
                     onInput={(e) => {
                       const n = Number((e.target as HTMLInputElement).value);
                       setSettings({
-                        travelOverrides: { ...s.travelOverrides, [key]: Math.max(0, n) },
+                        travelOverrides: { ...cfg.travelOverrides, [key]: Math.max(0, n) },
                       });
                     }}
                   />
-                  <span class="small muted">min</span>
+                  <span class="small muted">{s.settings.minutes}</span>
                   {override !== undefined && (
                     <button
                       class="btn ghost small"
-                      title={`Back to the estimated ${computed} min`}
+                      title={s.settings.resetPair(computed)}
                       onClick={() => {
-                        const next = { ...s.travelOverrides };
+                        const next = { ...cfg.travelOverrides };
                         delete next[key];
                         setSettings({ travelOverrides: next });
                       }}
                     >
-                      reset
+                      {s.settings.reset}
                     </button>
                   )}
                 </div>
@@ -185,46 +206,40 @@ export function SettingsView() {
         )}
       </div>
 
-      <h2 class="section-title">Data</h2>
+      <h2 class="section-title">{s.settings.data}</h2>
       <div class="card">
         <p class="small muted" style="margin-top:0">
-          {festival.blocks.length} programmes · {festival.showings.length} screenings ·{' '}
-          {festival.venues.length} venues in {usedPlaces.length} buildings.
-          Scraped from <a href={festival.source} target="_blank" rel="noopener">fantoche.ch</a>{' '}
-          on {new Date(festival.scrapedAt).toLocaleDateString('en-GB')}.
+          {s.settings.dataSummary(
+            festivalCore.blocks.length,
+            festivalCore.showings.length,
+            venues.length,
+            usedPlaces.length,
+          )}{' '}
+          <a href={festival.value.source} target="_blank" rel="noopener">
+            {s.settings.scrapedOn(date(festivalCore.scrapedAt))}
+          </a>
         </p>
-        <p class="small muted">
-          Your wishlists and free time are stored in this browser only — no account,
-          no server, nothing leaves the device.
-        </p>
-        <p class="small muted">
-          Sending your plan to someone, and backing it up, both live under
-          <strong> Share</strong>.
-        </p>
+        <p class="small muted">{s.settings.privacy}</p>
+        <p class="small muted">{s.settings.shareLives}</p>
         <div class="row wrap" style="gap:8px">
           <button
             class="btn small ghost"
             onClick={() => setSettings({ ...DEFAULT_SETTINGS, travelOverrides: {} })}
           >
-            Reset timing to defaults
+            {s.settings.resetTiming}
           </button>
           <button
             class="btn danger small"
             onClick={() => {
-              if (confirm('Delete every person, wishlist and free-time window? This cannot be undone.')) {
-                resetEverything();
-              }
+              if (confirm(s.settings.deleteConfirm)) resetEverything();
             }}
           >
-            Delete everything
+            {s.settings.deleteAll}
           </button>
         </div>
       </div>
 
-      <p class="small faded" style="margin-top:16px">
-        Editing {active.name}. Venue names come straight from the festival:{' '}
-        {[...new Set(festival.venues.map((v) => venueById.get(v.id)?.name))].slice(0, 4).join(', ')}…
-      </p>
+
     </>
   );
 }

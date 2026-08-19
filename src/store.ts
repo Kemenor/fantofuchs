@@ -8,14 +8,84 @@
  * on every change.
  */
 import { computed, effect, signal } from '@preact/signals';
-import type { Festival, Interest, Person, Settings, Slot } from './model/types.ts';
-import { INTEREST_WEIGHT } from './model/types.ts';
+import type {
+  Block, Festival, FestivalCore, Interest, Lang, Person, Settings, Slot, TextPack, Venue,
+} from './model/types.ts';
+import { INTEREST_WEIGHT, LANGS } from './model/types.ts';
 import { TravelMatrix } from './model/travel.ts';
 import { intersectSlots, mergeSlots, optimize, type Plan } from './model/optimize.ts';
 import { buildPayload, mergePeople, type MergeResult, type SharePayload } from './share.ts';
-import festivalData from '../data/fantoche-2026.json';
+import { detectLang, lang } from './i18n/index.ts';
+import core from '../data/fantoche-2026.json';
+import enPack from '../data/fantoche-2026.en.json';
 
-export const festival = festivalData as unknown as Festival;
+const festivalCore = core as unknown as FestivalCore;
+
+/**
+ * The words, per language.
+ *
+ * English ships in the bundle so the app renders immediately; German and French
+ * are separate chunks fetched the first time they are chosen. Each pack is
+ * ~150 KB of synopses, and there is no reason to make everyone download all
+ * three to read one.
+ */
+const PACK_LOADERS: Record<Lang, () => Promise<TextPack>> = {
+  en: async () => enPack as unknown as TextPack,
+  de: async () => (await import('../data/fantoche-2026.de.json')).default as unknown as TextPack,
+  fr: async () => (await import('../data/fantoche-2026.fr.json')).default as unknown as TextPack,
+};
+
+const packs = signal<Partial<Record<Lang, TextPack>>>({ en: enPack as unknown as TextPack });
+
+/** Fetch a language pack if it is not already here. */
+async function ensurePack(which: Lang): Promise<void> {
+  if (packs.value[which]) return;
+  const pack = await PACK_LOADERS[which]();
+  packs.value = { ...packs.value, [which]: pack };
+}
+
+/**
+ * Core plus the active language pack. Falls back to English until the chosen
+ * pack has arrived, so a language switch never blanks the screen.
+ */
+export const festival = computed<Festival>(() => {
+  const pack = packs.value[lang.value] ?? packs.value.en!;
+
+  const venues: Venue[] = festivalCore.venues.map((v) => ({
+    ...v,
+    name: pack.venues[v.id] ?? v.id,
+  }));
+
+  const blocks: Block[] = festivalCore.blocks.map((b) => {
+    const text = pack.blocks[b.id];
+    return {
+      ...b,
+      title: text?.title ?? b.id,
+      category: text?.category ?? '',
+      synopsis: text?.synopsis,
+      url: text?.url ?? '',
+      director: text?.director,
+      country: text?.country,
+      badges: text?.badges ?? [],
+      films: text?.films ?? [],
+    };
+  });
+  blocks.sort((a, b) => a.title.localeCompare(b.title, pack.lang));
+
+  return {
+    edition: festivalCore.edition,
+    scrapedAt: festivalCore.scrapedAt,
+    source: pack.source,
+    lang: pack.lang,
+    places: festivalCore.places,
+    venues,
+    blocks,
+    showings: festivalCore.showings,
+  };
+});
+
+/** Structure only — safe to read at module load, never changes with language. */
+export { festivalCore };
 
 const STORAGE_KEY = 'fantofuchs.v1';
 
@@ -32,6 +102,9 @@ export const DEFAULT_SETTINGS: Settings = {
   excludeClosed: true,
 };
 
+/** `system` follows the OS; the other two override it in both directions. */
+export type ThemeChoice = 'system' | 'light' | 'dark';
+
 export interface Stored {
   version: 1;
   people: Person[];
@@ -39,6 +112,8 @@ export interface Stored {
   /** `together` plans what everyone can attend; `solo` plans for one person. */
   mode: 'together' | 'solo';
   activePersonId: string;
+  lang: Lang;
+  theme: ThemeChoice;
 }
 
 function freshPerson(name: string, index: number): Person {
@@ -54,7 +129,15 @@ function freshPerson(name: string, index: number): Person {
 
 function initial(): Stored {
   const me = freshPerson('Me', 0);
-  return { version: 1, people: [me], settings: { ...DEFAULT_SETTINGS }, mode: 'together', activePersonId: me.id };
+  return {
+    version: 1,
+    people: [me],
+    settings: { ...DEFAULT_SETTINGS },
+    mode: 'together',
+    activePersonId: me.id,
+    lang: detectLang(),
+    theme: 'system',
+  };
 }
 
 function load(): Stored {
@@ -74,6 +157,9 @@ function load(): Stored {
     for (const person of parsed.people) {
       if (typeof person.updatedAt !== 'number') person.updatedAt = Date.now();
     }
+    // Saves from before the language and theme controls existed.
+    if (!LANGS.includes(parsed.lang)) parsed.lang = detectLang();
+    if (!['system', 'light', 'dark'].includes(parsed.theme)) parsed.theme = 'system';
     return parsed;
   } catch {
     return initial();
@@ -139,6 +225,35 @@ export function setActivePerson(id: string): void {
 export function setMode(next: Stored['mode']): void {
   update((s) => ({ ...s, mode: next }));
 }
+
+// --------------------------------------------------- language & appearance
+
+export const theme = computed(() => state.value.theme);
+
+export function setLang(next: Lang): void {
+  update((s) => ({ ...s, lang: next }));
+}
+
+export function setTheme(next: ThemeChoice): void {
+  update((s) => ({ ...s, theme: next }));
+}
+
+// Keep the i18n signal and the stored choice in step, and fetch the pack the
+// moment a language is picked. The pack arriving swaps `festival` over; until
+// then the English one is shown rather than a blank screen.
+effect(() => {
+  const chosen = state.value.lang;
+  lang.value = chosen;
+  void ensurePack(chosen);
+  document.documentElement.lang = chosen;
+});
+
+// `system` means no attribute at all, so the media query decides.
+effect(() => {
+  const chosen = state.value.theme;
+  if (chosen === 'system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', chosen);
+});
 
 // --------------------------------------------------------------- interest
 
@@ -219,7 +334,7 @@ export function exportPayload(
 ): SharePayload {
   const chosen = onlyActive ? [activePerson.value] : state.value.people;
   return buildPayload(chosen, {
-    edition: festival.edition.year,
+    edition: festivalCore.edition.year,
     exportedBy: activePerson.value.name,
     ...(includeSettings ? { settings: state.value.settings } : {}),
   });
@@ -251,7 +366,7 @@ export function applyImport(
 
 // ------------------------------------------------------------------- plan
 
-export const travelMatrix = computed(() => new TravelMatrix(festival, state.value.settings));
+export const travelMatrix = computed(() => new TravelMatrix(festival.value, state.value.settings));
 
 /** Who the current plan is for: everyone, or just the selected person. */
 export const planningFor = computed(() =>
@@ -291,7 +406,7 @@ export const planWeights = computed(() => {
  */
 export const plan = computed<Plan>(() =>
   optimize({
-    festival,
+    festival: festival.value,
     slots: planSlots.value,
     weights: planWeights.value,
     travel: travelMatrix.value,
@@ -303,13 +418,14 @@ export const plan = computed<Plan>(() =>
 
 // --------------------------------------------------------------- lookups
 
-export const blockById = new Map(festival.blocks.map((b) => [b.id, b]));
-export const venueById = new Map(festival.venues.map((v) => [v.id, v]));
-export const placeById = new Map(festival.places.map((p) => [p.id, p]));
+// Text-bearing lookups follow the language; the structural one does not.
+export const blockById = computed(() => new Map(festival.value.blocks.map((b) => [b.id, b])));
+export const venueById = computed(() => new Map(festival.value.venues.map((v) => [v.id, v])));
+export const placeById = new Map(festivalCore.places.map((p) => [p.id, p]));
 
 export const showingsByBlock = (() => {
-  const out = new Map<string, typeof festival.showings>();
-  for (const s of festival.showings) {
+  const out = new Map<string, typeof festivalCore.showings>();
+  for (const s of festivalCore.showings) {
     const list = out.get(s.blockId) ?? [];
     list.push(s);
     out.set(s.blockId, list);

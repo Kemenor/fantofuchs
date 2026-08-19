@@ -7,21 +7,22 @@
  */
 import { useState } from 'preact/hooks';
 import {
-  activePerson, applyImport, exportPayload, festival, people, pendingImport, state,
+  activePerson, applyImport, exportPayload, festivalCore, people, pendingImport, state,
 } from '../store.ts';
+import { t } from '../i18n/index.ts';
 import { decodeShare, shareLink, type SharePayload } from '../share.ts';
 import type { MergeResult } from '../share.ts';
 
 /** Plain-language account of what an import actually did. */
 function describe(result: MergeResult, replaced: boolean): string {
-  if (replaced) return `Replaced everything with ${result.people.length} people from the file.`;
+  const s = t.value;
+  if (replaced) return s.share.doneReplaced(result.people.length);
+  const names = (list: { name: string }[]) => list.map((p) => p.name).join(', ');
   const parts: string[] = [];
-  if (result.added.length) parts.push(`added ${result.added.map((p) => p.name).join(', ')}`);
-  if (result.updated.length) parts.push(`updated ${result.updated.map((p) => p.name).join(', ')}`);
-  if (result.kept.length) {
-    parts.push(`kept your newer ${result.kept.map((p) => p.name).join(', ')}`);
-  }
-  return parts.length ? `Done — ${parts.join('; ')}.` : 'Nothing to change; you already had all of it.';
+  if (result.added.length) parts.push(s.share.doneAdded(names(result.added)));
+  if (result.updated.length) parts.push(s.share.doneUpdated(names(result.updated)));
+  if (result.kept.length) parts.push(s.share.doneKept(names(result.kept)));
+  return parts.length ? s.share.done(parts.join('; ')) : s.share.doneNothing;
 }
 
 /**
@@ -38,15 +39,15 @@ function hasUnnamedSelf(): boolean {
 }
 
 function summarise(payload: SharePayload): string {
-  const names = payload.people.map((p) => {
-    const marks = Object.keys(p.interest).length;
-    return `${p.name} (${marks} marked, ${p.slots.length} free ${p.slots.length === 1 ? 'window' : 'windows'})`;
-  });
-  return names.join(' · ');
+  const s = t.value;
+  return payload.people
+    .map((p) => s.share.person(p.name, Object.keys(p.interest).length, p.slots.length))
+    .join(' · ');
 }
 
 /** The card shown when the app is opened via a shared link. */
 export function IncomingPlan() {
+  const s = t.value;
   const payload = pendingImport.value;
   const [message, setMessage] = useState<string | null>(null);
 
@@ -57,20 +58,17 @@ export function IncomingPlan() {
       <div class="card" role="status" aria-live="polite" style="border-color:var(--emerald);margin-bottom:12px">
         <div class="row wrap spread" style="gap:8px">
           <span class="grow">{message}</span>
-          <button class="btn small ghost" onClick={() => setMessage(null)}>Dismiss</button>
+          <button class="btn small ghost" onClick={() => setMessage(null)}>{s.share.dismiss}</button>
         </div>
         {hasUnnamedSelf() && (
-          <p class="small muted" style="margin:8px 0 0">
-            You are still called “Me” — rename yourself under <strong>Setup</strong>, then
-            mark your own films and free time and send the whole thing back.
-          </p>
+          <p class="small muted" style="margin:8px 0 0">{s.share.unnamedSelf}</p>
         )}
       </div>
     );
   }
   if (!payload) return null;
 
-  const wrongEdition = payload.edition !== 0 && payload.edition !== festival.edition.year;
+  const wrongEdition = payload.edition !== 0 && payload.edition !== festivalCore.edition.year;
 
   const accept = (replace: boolean) => {
     const result = applyImport(payload, { replace });
@@ -79,44 +77,39 @@ export function IncomingPlan() {
   };
 
   return (
-    <div class="card" role="region" aria-label="A shared plan has arrived" style="border-color:var(--fox);margin-bottom:12px">
+    <div class="card" role="region" aria-label={s.share.incomingRegion} style="border-color:var(--fox);margin-bottom:12px">
       <div style="font-weight:700">
-        {payload.exportedBy ? `${payload.exportedBy} sent you a plan` : 'A shared plan'}
+        {payload.exportedBy ? s.share.incomingFrom(payload.exportedBy) : s.share.incoming}
       </div>
       <p class="small muted" style="margin:6px 0 12px">{summarise(payload)}</p>
 
       {wrongEdition && (
         <p class="warn small" style="margin:0 0 12px">
-          This plan is for Fantoche {payload.edition || 'an unknown year'}, but this app has{' '}
-          {festival.edition.year}. The films marked in it will not match.
+          {s.share.wrongEdition(String(payload.edition || '?'), festivalCore.edition.year)}
         </p>
       )}
 
       <div class="row wrap" style="gap:8px">
-        <button class="btn primary" onClick={() => accept(false)}>
-          Merge into mine
-        </button>
+        <button class="btn primary" onClick={() => accept(false)}>{s.share.mergeIntoMine}</button>
         <button
           class="btn"
           onClick={() => {
-            if (confirm('Throw away everything here and use only what is in this plan?')) accept(true);
+            if (confirm(s.share.replaceConfirm)) accept(true);
           }}
         >
-          Replace everything
+          {s.share.replaceAll}
         </button>
         <button class="btn ghost" onClick={() => (pendingImport.value = null)}>
-          Not now
+          {s.share.notNow}
         </button>
       </div>
-      <p class="small faded" style="margin:10px 0 0">
-        Merging keeps whichever copy of each person was edited most recently, so
-        sending a plan back and forth never overwrites what you did in the meantime.
-      </p>
+      <p class="small faded" style="margin:10px 0 0">{s.share.mergeExplain}</p>
     </div>
   );
 }
 
 export function Share() {
+  const s = t.value;
   const [onlyMe, setOnlyMe] = useState(false);
   const [linkState, setLinkState] = useState<string | null>(null);
   // The link itself, shown when copying is not available — or on request.
@@ -153,17 +146,13 @@ export function Share() {
     const link = await buildLink();
     try {
       await navigator.clipboard.writeText(link);
-      setLinkState(
-        link.length > 1800
-          ? `Copied, but it is a long link (${link.length} characters) — if it gets cut off in the chat, send the file instead.`
-          : 'Link copied — paste it into a message.',
-      );
+      setLinkState(link.length > 1800 ? s.share.linkCopiedLong(link.length) : s.share.linkCopied);
     } catch {
       // Some in-app browsers refuse clipboard access outright. Falling back to
       // the file would be a dead end for anyone who just wants to paste a link,
       // so show it instead and let them copy it by hand.
       setLinkState(null);
-      setExportError('This browser would not let the page use the clipboard, so here is the link to copy yourself:');
+      setExportError(s.share.clipboardBlocked);
       setVisibleLink(link);
     }
   };
@@ -179,8 +168,8 @@ export function Share() {
     setMessage(null);
     try {
       const payload = await decodeShare(text);
-      if (payload.edition !== 0 && payload.edition !== festival.edition.year) {
-        setError(`That plan is for Fantoche ${payload.edition}, not ${festival.edition.year}.`);
+      if (payload.edition !== 0 && payload.edition !== festivalCore.edition.year) {
+        setError(s.share.wrongEditionShort(payload.edition, festivalCore.edition.year));
         return;
       }
       const result = applyImport(payload, { replace, withSettings: replace && Boolean(payload.settings) });
@@ -188,63 +177,57 @@ export function Share() {
       setPaste('');
       setShowPaste(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'That file could not be read.');
+      setError(e instanceof Error ? e.message : s.share.unreadable);
     }
   };
 
   return (
     <>
-      <h2 class="section-title">Send your plan</h2>
+      <h2 class="section-title">{s.share.sendTitle}</h2>
       <div class="card">
-        <p class="small muted" style="margin-top:0">
-          Mark your films and set your free time, then send this to whoever you are going
-          with. They load it, fill in their half, and send the whole thing back.
-        </p>
+        <p class="small muted" style="margin-top:0">{s.share.sendBlurb}</p>
 
         {everyone.length > 1 && (
           <div class="row wrap" style="gap:6px;margin-bottom:12px">
             <button class="chip" aria-pressed={!onlyMe} onClick={() => setOnlyMe(false)}>
-              Everyone ({everyone.length})
+              {s.share.everyoneCount(everyone.length)}
             </button>
             <button class="chip" aria-pressed={onlyMe} onClick={() => setOnlyMe(true)}>
-              Only {me.name}
+              {s.share.onlyMe(me.name)}
             </button>
           </div>
         )}
 
         <div class="row wrap" style="gap:8px">
-          <button class="btn primary" onClick={copyLink}>Copy share link</button>
-          <button class="btn" onClick={() => download(false)}>Download file</button>
-          <button class="btn ghost" onClick={showLink}>Show link</button>
+          <button class="btn primary" onClick={copyLink}>{s.share.copyLink}</button>
+          <button class="btn" onClick={() => download(false)}>{s.share.downloadFile}</button>
+          <button class="btn ghost" onClick={showLink}>{s.share.showLink}</button>
         </div>
         <p class="small" style="margin:10px 0 0" role="status" aria-live="polite">{linkState}</p>
         {exportError && <p class="warn small" style="margin:10px 0 0" role="alert">{exportError}</p>}
         {visibleLink && (
           <textarea
             readOnly
-            aria-label="Your share link — select and copy it"
+            aria-label={s.share.linkBoxLabel}
             class="tabular"
             style="width:100%;min-height:76px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--surface-2);font-size:12px;word-break:break-all;resize:vertical"
             value={visibleLink}
             onFocus={(e) => (e.target as HTMLTextAreaElement).select()}
           />
         )}
-        <p class="small faded" style="margin:10px 0 0">
-          The link carries the plan in its own text — nothing is uploaded anywhere, and
-          there is no server to lose it.
-        </p>
+        <p class="small faded" style="margin:10px 0 0">{s.share.fragmentNote}</p>
       </div>
 
-      <h2 class="section-title">Load a plan</h2>
+      <h2 class="section-title">{s.share.loadTitle}</h2>
       <div class="card">
         <div class="row wrap" style="gap:8px">
           <label class="btn file-label" style="display:inline-flex;align-items:center">
-            Choose file…
+            {s.share.chooseFile}
             <input
               type="file"
               class="file-input"
               accept="application/json,.json"
-              aria-label="Load a plan from a file"
+              aria-label={s.share.chooseFileLabel}
               onChange={async (e) => {
                 const input = e.target as HTMLInputElement;
                 const file = input.files?.[0];
@@ -255,7 +238,7 @@ export function Share() {
             />
           </label>
           <button class="btn" onClick={() => setShowPaste(!showPaste)}>
-            Paste a link or code
+            {s.share.pasteToggle}
           </button>
         </div>
 
@@ -263,9 +246,9 @@ export function Share() {
           <div style="margin-top:12px">
             <textarea
               class="grow"
-              aria-label="Paste a shared link or plan code"
+              aria-label={s.share.pasteLabel}
               style="width:100%;min-height:88px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--surface);resize:vertical"
-              placeholder="Paste the link or the code your brother sent…"
+              placeholder={s.share.pastePlaceholder}
               value={paste}
               onInput={(e) => setPaste((e.target as HTMLTextAreaElement).value)}
             />
@@ -275,7 +258,7 @@ export function Share() {
               disabled={!paste.trim()}
               onClick={() => load(paste, false)}
             >
-              Merge it in
+              {s.share.mergeIt}
             </button>
           </div>
         )}
@@ -283,31 +266,27 @@ export function Share() {
         <p class="small" style="margin:12px 0 0" role="status" aria-live="polite">{message}</p>
         {error && <p class="warn small" style="margin:12px 0 0" role="alert">{error}</p>}
 
-        <p class="small faded" style="margin:12px 0 0">
-          Loading merges: anyone new is added, and for someone already here the
-          more recently edited copy wins. Your own work is never overwritten by
-          an older copy of it.
-        </p>
+        <p class="small faded" style="margin:12px 0 0">{s.share.mergeNote}</p>
       </div>
 
-      <h2 class="section-title">Backup</h2>
+      <h2 class="section-title">{s.share.backupTitle}</h2>
       <div class="card">
         <div class="row wrap" style="gap:8px">
           <button class="btn small" onClick={() => download(true)}>
-            Download full backup
+            {s.share.downloadBackup}
           </button>
           <label class="btn small file-label" style="display:inline-flex;align-items:center">
-            Restore a backup…
+            {s.share.restoreBackup}
             <input
               type="file"
               class="file-input"
               accept="application/json,.json"
-              aria-label="Restore everything from a backup file"
+              aria-label={s.share.restoreLabel}
               onChange={async (e) => {
                 const input = e.target as HTMLInputElement;
                 const file = input.files?.[0];
                 if (!file) return;
-                if (confirm('Replace everything here with the contents of this backup?')) {
+                if (confirm(s.share.restoreConfirm)) {
                   await load(await file.text(), true);
                 }
                 input.value = '';
@@ -315,11 +294,7 @@ export function Share() {
             />
           </label>
         </div>
-        <p class="small faded" style="margin:10px 0 0">
-          A backup also carries your timing settings, and restoring one replaces
-          everything rather than merging — for moving to a new browser, not for
-          swapping plans with someone.
-        </p>
+        <p class="small faded" style="margin:10px 0 0">{s.share.backupNote}</p>
       </div>
     </>
   );

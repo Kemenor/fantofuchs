@@ -32,9 +32,11 @@ src/model/  types.ts, travel.ts, optimize.ts — pure, no DOM, no storage
 src/store.ts  the only mutable state; everything else is a computed signal
 src/ui/     Programme · Availability · PlanView · Share · SettingsView · PeopleBar
 src/share.ts  export/import: validation, merge, deflate+base64url link encoding
-src/format.ts  all date/time formatting, pinned to Europe/Zurich
+src/i18n/    strings.ts (English + the Catalogue type) · de.ts · fr.ts · index.ts
+src/format.ts  all date/time formatting: timezone pinned, locale follows the language
 src/ics.ts  calendar export
-data/       fantoche-<year>.json — committed, refreshed daily by CI
+data/       fantoche-<year>.json (structure) + .<lang>.json (words) — committed,
+            refreshed daily by CI
 ```
 
 ## Conventions
@@ -47,6 +49,16 @@ data/       fantoche-<year>.json — committed, refreshed daily by CI
 - **Times are epoch seconds.** Format only through `src/format.ts`, which pins
   `Europe/Zurich`. Never use `toLocaleString` without an explicit `timeZone`, and never
   build a date from a local-time string.
+- **Never scrape structure from a non-canonical language.** Fantoche translates venue
+  names, so venue ids must always come from `CANONICAL_LANG`. `FestivalCore` holds the
+  structure, `TextPack` the words, and the store merges them — the schedule must be
+  identical whichever language is selected.
+- **Add UI strings to `src/i18n/strings.ts` first.** `de.ts` and `fr.ts` are typed against
+  it, so the compiler will point at the missing translations. `test/i18n.test.ts` also
+  fails on empty strings and on a translation that drops an interpolated value.
+- **Format through `src/format.ts` only.** It pins `Europe/Zurich` and takes the locale
+  from the active language; `dayKey` is deliberately locale-independent because it is a
+  key, not a label.
 - **Every mutation of a `Person` must bump `updatedAt`.** Go through `mapPerson` in the
   store; it stamps for you. Miss it and a merge silently discards that edit when a plan
   comes back from someone else — the one bug in this app that destroys user data.

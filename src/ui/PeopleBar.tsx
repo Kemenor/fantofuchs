@@ -1,7 +1,9 @@
 /** Who is being planned for — shown above every screen that depends on it. */
 import { activePerson, addPerson, mode, people, setActivePerson, setMode } from '../store.ts';
+import { t } from '../i18n/index.ts';
 
 export function PeopleBar({ showMode = true }: { showMode?: boolean }) {
+  const s = t.value;
   const list = people.value;
   const active = activePerson.value;
   const together = mode.value === 'together';
@@ -14,7 +16,7 @@ export function PeopleBar({ showMode = true }: { showMode?: boolean }) {
           class="chip"
           aria-pressed={p.id === active.id}
           onClick={() => setActivePerson(p.id)}
-          title={`Edit ${p.name}'s wishlist and free time`}
+          title={s.people.edit(p.name)}
         >
           <span class="dot" style={`background:${p.color}`} aria-hidden="true" />
           {p.name}
@@ -23,23 +25,23 @@ export function PeopleBar({ showMode = true }: { showMode?: boolean }) {
       <button
         class="chip"
         onClick={() => {
-          const name = prompt('Who else is coming?');
+          const name = prompt(s.people.addPrompt);
           if (name !== null) addPerson(name);
         }}
-        title="Add another person"
+        title={s.people.add}
       >
         <span aria-hidden="true">+</span>
-        <span class="sr-only">Add another person</span>
+        <span class="sr-only">{s.people.add}</span>
       </button>
 
       {showMode && list.length > 1 && (
         <div class="row" style="margin-left:auto;gap:6px">
-          <span class="small muted">Plan for</span>
+          <span class="small muted">{s.people.planFor}</span>
           <button class="chip" aria-pressed={together} onClick={() => setMode('together')}>
-            Everyone
+            {s.people.everyone}
           </button>
           <button class="chip" aria-pressed={!together} onClick={() => setMode('solo')}>
-            {active.name} alone
+            {s.people.alone(active.name)}
           </button>
         </div>
       )}

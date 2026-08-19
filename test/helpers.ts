@@ -35,6 +35,7 @@ export function festivalOf(
     edition: { year: 2026, title: 'Test', firstDay: '2026-09-03', lastDay: '2026-09-03', tz: 'Europe/Zurich' },
     scrapedAt: '2026-08-19T00:00:00Z',
     source: 'test',
+    lang: 'en',
     places: PLACES,
     venues: VENUES,
     blocks: blockIds.map((id) => ({ id, title: id, category: 'Test', badges: [], films: [], url: '' })),

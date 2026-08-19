@@ -9,11 +9,15 @@
  * broke, not a festival that changed its line-up.
  */
 import { readFileSync } from 'node:fs';
-import type { Festival } from '../src/model/types.ts';
+import type { FestivalCore, TextPack } from '../src/model/types.ts';
+import { LANGS } from '../src/model/types.ts';
 
 const YEAR = Number(process.env.FANTOCHE_YEAR ?? 2026);
 const path = `data/fantoche-${YEAR}.json`;
-const festival = JSON.parse(readFileSync(path, 'utf8')) as Festival;
+const festival = JSON.parse(readFileSync(path, 'utf8')) as FestivalCore;
+const packs = LANGS.map(
+  (lang) => [lang, JSON.parse(readFileSync(`data/fantoche-${YEAR}.${lang}.json`, 'utf8')) as TextPack] as const,
+);
 
 const problems: string[] = [];
 const check = (ok: boolean, message: string): void => {
@@ -47,18 +51,52 @@ check(
 
 check(new Set(showings.map((s) => s.id)).size === showings.length, 'duplicate screening ids');
 check(showings.every((s) => s.end > s.start), 'a screening ends before it starts');
-check(blocks.every((b) => b.title.length > 0), 'a block has no title');
 
 // Titles and runtimes are what the app is actually made of; if the selectors
 // silently stopped matching, these are the numbers that collapse first.
 const withRuntime = blocks.filter((b) => b.durationMin !== undefined).length;
 check(withRuntime >= blocks.length * 0.4, `only ${withRuntime}/${blocks.length} blocks have a runtime`);
 
-const withFilmsOrCredits = blocks.filter((b) => b.films.length > 0 || b.director).length;
-check(
-  withFilmsOrCredits >= blocks.length * 0.4,
-  `only ${withFilmsOrCredits}/${blocks.length} blocks have films or credits`,
-);
+// --------------------------------------------------------- language packs
+
+const blockIdSet = new Set(blocks.map((b) => b.id));
+const venueIdSet = new Set(venues.map((v) => v.id));
+
+for (const [lang, pack] of packs) {
+  check(pack.lang === lang, `${lang} pack is labelled "${pack.lang}"`);
+
+  // A pack that has drifted from the structure is the failure mode that
+  // matters: a missing block renders as a blank row, and a venue the structure
+  // does not know about would silently never be scheduled.
+  const missingBlocks = [...blockIdSet].filter((id) => !pack.blocks[id]);
+  const extraBlocks = Object.keys(pack.blocks).filter((id) => !blockIdSet.has(id));
+  check(missingBlocks.length === 0, `${lang} pack is missing ${missingBlocks.length} blocks`);
+  check(extraBlocks.length === 0, `${lang} pack has ${extraBlocks.length} blocks the structure lacks`);
+
+  const missingVenues = [...venueIdSet].filter((id) => !pack.venues[id]);
+  check(missingVenues.length === 0, `${lang} pack is missing ${missingVenues.length} venue names`);
+
+  const texts = Object.values(pack.blocks);
+  check(texts.every((b) => b.title.length > 0), `a ${lang} block has no title`);
+  check(texts.every((b) => b.category.length > 0), `a ${lang} block has no section`);
+  check(texts.every((b) => b.url.startsWith('http')), `a ${lang} block has no detail URL`);
+
+  const withFilmsOrCredits = texts.filter((b) => b.films.length > 0 || b.director).length;
+  check(
+    withFilmsOrCredits >= texts.length * 0.4,
+    `only ${withFilmsOrCredits}/${texts.length} ${lang} blocks have films or credits`,
+  );
+}
+
+// The point of scraping three languages is that they differ. If a path change
+// quietly served the same page three times, that is worth failing on.
+const categoriesOf = (pack: TextPack) =>
+  [...new Set(Object.values(pack.blocks).map((b) => b.category))].sort().join('|');
+const en = packs.find(([l]) => l === 'en')?.[1];
+for (const [lang, pack] of packs) {
+  if (lang === 'en' || !en) continue;
+  check(categoriesOf(pack) !== categoriesOf(en), `the ${lang} pack is identical to English — wrong URL?`);
+}
 
 const days = new Set(showings.map((s) => new Date(s.start * 1000).toISOString().slice(0, 10)));
 check(days.size >= 4, `only ${days.size} festival days (expected 4+)`);
@@ -73,3 +111,4 @@ console.log(
   `✓ ${path}: ${blocks.length} blocks, ${showings.length} screenings, ` +
     `${venues.length} venues, ${days.size} days.`,
 );
+console.log(`✓ language packs: ${packs.map(([l, p]) => `${l} (${Object.keys(p.blocks).length})`).join(', ')}`);

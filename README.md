@@ -31,6 +31,10 @@ best possible plan — including the walk from the Trafo to the Orient.
   and sends the whole thing back. Loading **merges**: for anyone already there, the copy
   edited most recently wins, so a returning plan never overwrites what you did while it
   was away.
+- 🌍 **English, German, French** — the three languages Fantoche publishes in, and not
+  just the buttons: sections, synopses, credits and venue names all come from the
+  festival in the language you pick.
+- 🌗 **Light and dark** — follows your system by default, with a toggle in the header.
 - 📅 **Export to your calendar** — an `.ics` with the venue, the film list and how long to
   allow for the walk.
 - 🗓️ **Honest about the gaps** — exhibitions and pop-ups are opening *windows*, not
@@ -56,10 +60,17 @@ server, no analytics — the page is static and the festival data ships with it.
 exact start is baked into its favourite button (`favorite('3565_1788246000')`), each block
 detail page carries the runtime and film list, and the locations page carries lat/lon per
 venue. [`scraper/scrape.ts`](./scraper/scrape.ts) turns that into
-[`data/fantoche-2026.json`](./data/), which is committed to this repo and refreshed daily
-by [a workflow](./.github/workflows/scrape.yml) — with
+[`data/`](./data/), committed to this repo and refreshed daily by
+[a workflow](./.github/workflows/scrape.yml) — with
 [`scraper/verify.ts`](./scraper/verify.ts) standing between a broken selector and an empty
 programme.
+
+The data is split **structure / words**: `fantoche-2026.json` holds times, venues and
+coordinates, and `fantoche-2026.{en,de,fr}.json` hold the text. That is a correctness
+requirement rather than a size trick — Fantoche translates its venue names ("Orient
+Cinema" / "Kino Orient" / "Cinéma Orient"), so scraping each language end to end would
+derive different venue ids and could produce a *different schedule* depending on which
+language you read the site in.
 
 ## Stack
 

@@ -1,5 +1,6 @@
 /**
- * Scrapes the Fantoche programme into `data/fantoche-<year>.json`.
+ * Scrapes the Fantoche programme into `data/fantoche-<year>.json` (the
+ * structure) plus `data/fantoche-<year>.<lang>.json` (the words, per language).
  *
  * The festival site is server-rendered Pimcore, so everything we need is in
  * the HTML. Two pages carry the whole thing:
@@ -9,14 +10,51 @@
  *                 in its Google Maps link.
  * Then one detail page per block for runtime and the film list.
  *
+ * Fantoche publishes all of it in German, English and French. Block ids,
+ * screening ids and times are identical across the three; the text is not, and
+ * that includes venue names ("Orient Cinema" / "Kino Orient" / "Cinéma
+ * Orient"). So the structure is taken from one canonical language and only the
+ * words are scraped per language — otherwise venue ids would be derived from
+ * translated names and the computed travel times, and therefore the schedule,
+ * could differ depending on which language you read the site in.
+ *
  * Run: npm run scrape        (NO_CACHE=1 to bypass the on-disk HTTP cache)
  */
 import * as cheerio from 'cheerio';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { get, pool } from './fetch-cache.ts';
-import type { Block, Festival, Film, Place, Showing, Venue } from '../src/model/types.ts';
+import type {
+  BlockCore, BlockText, FestivalCore, Film, Lang, Place, Showing, TextPack, VenueCore,
+} from '../src/model/types.ts';
+import { CANONICAL_LANG, LANGS } from '../src/model/types.ts';
 
 const ORIGIN = 'https://fantoche.ch';
+
+/**
+ * Where each language's programme listing lives. The paths are not a pattern —
+ * the site simply spells them differently — so they are listed rather than
+ * derived. Detail-page URLs come from the listing itself and are already in the
+ * right language, so they never need rewriting.
+ */
+const LISTING_PATH: Record<Lang, string> = {
+  en: '/programme',
+  de: '/programm',
+  fr: '/fr/festival/programme',
+};
+
+/**
+ * The field labels the site prints beside a film's credits, per language.
+ * These are matched lower-cased because French prints some of them in lower
+ * case ("langue", "pays", "année") and the others capitalised.
+ *
+ * Getting this wrong is quiet rather than loud: the credits simply come back
+ * empty for that language, which is exactly what `verify.ts` now fails on.
+ */
+const FIELD_LABELS: Record<Lang, Record<string, 'director' | 'duration' | 'language' | 'country' | 'year'>> = {
+  en: { direction: 'director', duration: 'duration', language: 'language', country: 'country', year: 'year' },
+  de: { regie: 'director', dauer: 'duration', sprache: 'language', land: 'country', jahr: 'year' },
+  fr: { 'mise en scène': 'director', durée: 'duration', langue: 'language', pays: 'country', année: 'year' },
+};
 const YEAR = Number(process.env.FANTOCHE_YEAR ?? 2026);
 /** Fallback when a block has no printed runtime, so it still occupies time. */
 const DEFAULT_DURATION_MIN = 90;
@@ -132,15 +170,17 @@ function scrapeListing(html: string): RawItem[] {
  * pairs, falling back to the parent's own text for the film-card variant where
  * the value is a bare text node.
  */
-function readLabels($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>): Map<string, string> {
+function readLabels($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, lang: Lang): Map<string, string> {
+  const vocabulary = FIELD_LABELS[lang];
   const out = new Map<string, string>();
   $scope.find('span.fw-bold').each((_, lab) => {
-    const key = clean($(lab).text()).toLowerCase();
-    if (!key) return;
+    const printed = clean($(lab).text()).toLowerCase().replace(/:$/, '');
+    const field = vocabulary[printed];
+    if (!field) return; // Screenplay, Production, Music… not modelled.
     const sibling = clean($(lab).next('span.fw-light').text());
     const own = clean($(lab).parent().clone().children().remove().end().text());
     const value = sibling || own;
-    if (value && !out.has(key)) out.set(key, value);
+    if (value && !out.has(field)) out.set(field, value);
   });
   return out;
 }
@@ -156,7 +196,6 @@ interface Detail {
   durationMin?: number;
   synopsis?: string;
   imageUrl?: string;
-  synopsisHtml?: string;
   director?: string;
   country?: string;
   year?: number;
@@ -167,24 +206,34 @@ interface Detail {
   apptByShowing: Map<string, { venue: string; timeText: string }>;
 }
 
-function scrapeDetail(html: string): Detail {
+function scrapeDetail(html: string, lang: Lang): Detail {
   const $ = cheerio.load(html);
 
   // The festival prints a row of bordered badges: language version, subtitles,
-  // age rating, runtime. Only the runtime is structured; keep the rest verbatim.
+  // age rating, runtime. Only the runtime and the age rating are structured;
+  // the rest is kept verbatim, deduplicated — a block that screens three times
+  // renders its badge row three times, and the age rating is surfaced as a
+  // number so repeating it as a badge would just show "12+" twice in the UI.
   let durationMin: number | undefined;
   let ageRating: number | undefined;
   const badges: string[] = [];
+  const seenBadges = new Set<string>();
   $('span.border').each((_, el) => {
     const text = clean($(el).text());
     if (!text) return;
+
     const mins = parseMinutes(text);
     if (mins !== undefined && durationMin === undefined) {
       durationMin = mins;
       return;
     }
     const age = text.match(/^(\d+)\+$/);
-    if (age) ageRating ??= Number(age[1]);
+    if (age) {
+      ageRating ??= Number(age[1]);
+      return;
+    }
+    if (seenBadges.has(text)) return;
+    seenBadges.add(text);
     badges.push(text);
   });
 
@@ -211,8 +260,8 @@ function scrapeDetail(html: string): Detail {
     const film: Film = { title };
     film.credit = clean($c.find('.copyright-div').first().text()) || undefined;
 
-    const labels = readLabels($, $c);
-    film.director = labels.get('direction');
+    const labels = readLabels($, $c, lang);
+    film.director = labels.get('director');
     film.durationMin = parseMinutes(labels.get('duration') ?? '');
     film.language = labels.get('language');
     const cy = splitCountryYear(labels.get('country') ?? '');
@@ -229,12 +278,12 @@ function scrapeDetail(html: string): Detail {
   // A feature film has no film card — its credits sit in the "Info" block.
   const $blockScope = $('body').clone();
   $blockScope.find('div.card').remove();
-  const info = readLabels($, $blockScope);
+  const info = readLabels($, $blockScope, lang);
   const cy = splitCountryYear(info.get('country') ?? '');
 
   return {
     durationMin: durationMin ?? parseMinutes(info.get('duration') ?? ''),
-    director: info.get('direction'),
+    director: info.get('director'),
     country: cy.country,
     year: cy.year,
     ageRating,
@@ -293,81 +342,91 @@ function startMinutesOfDay(epoch: number): number {
 
 // -------------------------------------------------------------------- main
 
-async function main(): Promise<void> {
-  console.log('Fetching locations…');
-  const places = await scrapePlaces();
-  console.log(`  ${places.length} places`);
+/** Everything one language's pass over the site yields. */
+interface LanguagePass {
+  items: RawItem[];
+  details: Detail[];
+  /** showingId -> the venue name as spelled in this language. */
+  venueNameByShowing: Map<string, string>;
+}
 
-  console.log('Fetching programme…');
-  const items = scrapeListing(await get(`${ORIGIN}/programme`));
-  console.log(`  ${items.length} listing rows`);
+async function scrapeLanguage(lang: Lang): Promise<LanguagePass> {
+  const items = scrapeListing(await get(ORIGIN + LISTING_PATH[lang]));
 
-  // One row per showing; collapse to one entry per block, keeping every URL.
+  // One entry per block, keeping every showing id the listing mentioned.
   const byBlock = new Map<string, RawItem>();
   for (const it of items) {
     const prev = byBlock.get(it.blockId);
     if (prev) prev.showingIds.push(...it.showingIds);
     else byBlock.set(it.blockId, { ...it });
   }
-  console.log(`  ${byBlock.size} blocks`);
-
   const list = [...byBlock.values()];
-  console.log('Fetching block details…');
-  const details = await pool(list, 4, async (it, i) => {
-    if (i % 20 === 0) process.stdout.write(`  ${i}/${list.length}\r`);
-    return scrapeDetail(await get(it.url));
-  });
-  console.log(`  ${list.length}/${list.length} done`);
 
-  // Venue and time come from the listing row and from each block's appointment
-  // list; the latter is per-showing, so prefer it.
-  const apptFor = new Map<string, { venue: string; timeText: string }>();
+  const details = await pool(list, 4, async (it, i) => {
+    if (i % 20 === 0) process.stdout.write(`  ${lang}: ${i}/${list.length}\r`);
+    return scrapeDetail(await get(it.url), lang);
+  });
+  console.log(`  ${lang}: ${list.length}/${list.length} blocks`);
+
+  const venueNameByShowing = new Map<string, string>();
   list.forEach((it, i) => {
     for (const sid of new Set(it.showingIds)) {
-      const a = details[i].apptByShowing.get(sid);
-      apptFor.set(sid, { venue: a?.venue || it.venueName, timeText: a?.timeText ?? '' });
+      venueNameByShowing.set(sid, details[i].apptByShowing.get(sid)?.venue || it.venueName);
     }
   });
 
-  const venues = new Map<string, Venue>();
+  return { items: list, details, venueNameByShowing };
+}
+
+async function main(): Promise<void> {
+  console.log('Fetching locations…');
+  const places = await scrapePlaces();
+  console.log(`  ${places.length} places`);
+
+  console.log('Fetching programme in every language…');
+  const passes = new Map<Lang, LanguagePass>();
+  for (const lang of LANGS) passes.set(lang, await scrapeLanguage(lang));
+
+  const canonical = passes.get(CANONICAL_LANG)!;
+
+  // ---------------------------------------------------------- structure
+
+  const venues = new Map<string, VenueCore>();
+  /** showingId -> canonical venue id, so packs can be keyed by it. */
+  const venueIdByShowing = new Map<string, string>();
   const showings: Showing[] = [];
-  const blocks: Block[] = [];
+  const blocksCore: BlockCore[] = [];
 
-  list.forEach((it, i) => {
-    const d = details[i];
+  canonical.items.forEach((it, i) => {
+    const d = canonical.details[i];
 
-    blocks.push({
+    blocksCore.push({
       id: it.blockId,
-      title: it.title,
-      category: it.category,
       durationMin: d.durationMin,
-      synopsis: d.synopsis,
-      url: it.url,
-      imageUrl: d.imageUrl ? (d.imageUrl.startsWith('http') ? d.imageUrl : ORIGIN + d.imageUrl) : undefined,
-      director: d.director,
-      country: d.country,
-      year: d.year,
       ageRating: d.ageRating,
-      badges: d.badges,
-      films: d.films,
+      year: d.year,
+      imageUrl: d.imageUrl
+        ? (d.imageUrl.startsWith('http') ? d.imageUrl : ORIGIN + d.imageUrl)
+        : undefined,
     });
 
     for (const sid of new Set(it.showingIds)) {
       const epoch = Number(sid.split('_')[1]);
       if (!Number.isFinite(epoch)) continue;
 
-      const appt = apptFor.get(sid);
+      const appt = d.apptByShowing.get(sid);
       const { name, closed } = parseVenueName(appt?.venue ?? it.venueName);
       const { placeId, hall } = resolvePlace(name, places);
       const venueId = slug(name);
-      if (!venues.has(venueId)) venues.set(venueId, { id: venueId, name, placeId, hall });
+      if (!venues.has(venueId)) venues.set(venueId, { id: venueId, placeId, hall });
+      venueIdByShowing.set(sid, venueId);
 
       // Prefer a printed closing time, then the printed runtime, then a guess.
       const endMin = parseEndOfDayMinutes(appt?.timeText ?? '');
       let end: number;
       let endSource: Showing['endSource'];
       if (endMin !== undefined) {
-        const startOfDay = epoch - (startMinutesOfDay(epoch) * 60);
+        const startOfDay = epoch - startMinutesOfDay(epoch) * 60;
         end = startOfDay + endMin * 60;
         if (end <= epoch) end += 24 * 3600; // range crossing midnight
         endSource = 'published';
@@ -392,13 +451,14 @@ async function main(): Promise<void> {
   });
 
   showings.sort((a, b) => a.start - b.start || a.venueId.localeCompare(b.venueId));
-  blocks.sort((a, b) => a.title.localeCompare(b.title));
+  blocksCore.sort((a, b) => a.id.localeCompare(b.id));
 
   const dayOf = (epoch: number) =>
     new Intl.DateTimeFormat('en-CA', { timeZone: TZ, dateStyle: 'short' }).format(new Date(epoch * 1000));
   const days = [...new Set(showings.map((s) => dayOf(s.start)))].sort();
+  const scrapedAt = new Date().toISOString();
 
-  const festival: Festival = {
+  const core: FestivalCore = {
     edition: {
       year: YEAR,
       title: `Fantoche ${YEAR}`,
@@ -406,24 +466,69 @@ async function main(): Promise<void> {
       lastDay: days[days.length - 1],
       tz: TZ,
     },
-    scrapedAt: new Date().toISOString(),
-    source: `${ORIGIN}/programme`,
+    scrapedAt,
+    source: ORIGIN + LISTING_PATH[CANONICAL_LANG],
     places,
-    venues: [...venues.values()].sort((a, b) => a.name.localeCompare(b.name)),
-    blocks,
+    venues: [...venues.values()].sort((a, b) => a.id.localeCompare(b.id)),
+    blocks: blocksCore,
     showings,
   };
 
   mkdirSync('data', { recursive: true });
-  const out = `data/fantoche-${YEAR}.json`;
-  writeFileSync(out, JSON.stringify(festival, null, 2) + '\n');
+  const corePath = `data/fantoche-${YEAR}.json`;
+  writeFileSync(corePath, JSON.stringify(core, null, 2) + '\n');
+
+  // ------------------------------------------------------- language packs
+
+  const written: string[] = [];
+  for (const lang of LANGS) {
+    const pass = passes.get(lang)!;
+
+    // Venue names, keyed by the *canonical* id so a pack can never introduce
+    // a venue the structure does not know about.
+    const venueNames: Record<string, string> = {};
+    for (const [sid, canonicalVenueId] of venueIdByShowing) {
+      if (venueNames[canonicalVenueId]) continue;
+      const localized = pass.venueNameByShowing.get(sid);
+      if (localized) venueNames[canonicalVenueId] = parseVenueName(localized).name;
+    }
+    for (const v of venues.keys()) venueNames[v] ??= v;
+
+    const blocks: Record<string, BlockText> = {};
+    pass.items.forEach((it, i) => {
+      const d = pass.details[i];
+      blocks[it.blockId] = {
+        title: it.title,
+        category: it.category,
+        synopsis: d.synopsis,
+        url: it.url,
+        director: d.director,
+        country: d.country,
+        badges: d.badges,
+        films: d.films,
+      };
+    });
+
+    const pack: TextPack = {
+      lang,
+      scrapedAt,
+      source: ORIGIN + LISTING_PATH[lang],
+      venues: venueNames,
+      blocks,
+    };
+    const path = `data/fantoche-${YEAR}.${lang}.json`;
+    writeFileSync(path, JSON.stringify(pack, null, 2) + '\n');
+    written.push(`${lang} (${Object.keys(blocks).length} blocks)`);
+  }
 
   const bySource = { published: 0, runtime: 0, assumed: 0 };
   for (const s of showings) bySource[s.endSource]++;
-  console.log(`\nWrote ${out}`);
-  console.log(`  ${festival.places.length} places, ${festival.venues.length} venues`);
-  console.log(`  ${blocks.length} blocks, ${showings.length} showings, ${days.length} days (${days[0]} … ${days.at(-1)})`);
+
+  console.log(`\nWrote ${corePath}`);
+  console.log(`  ${core.places.length} places, ${core.venues.length} venues`);
+  console.log(`  ${blocksCore.length} blocks, ${showings.length} showings, ${days.length} days (${days[0]} … ${days.at(-1)})`);
   console.log(`  end times: ${bySource.published} published, ${bySource.runtime} from runtime, ${bySource.assumed} assumed (${DEFAULT_DURATION_MIN}′)`);
+  console.log(`  language packs: ${written.join(', ')}`);
 }
 
 await main();

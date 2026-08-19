@@ -9,7 +9,28 @@
  * All times are stored as epoch seconds. The festival lives in one timezone
  * (Europe/Zurich) and never crosses a DST boundary, so a plain epoch + the
  * edition's `tz` is enough — no date library.
+ *
+ * The festival half splits again, by language. Fantoche publishes the whole
+ * programme in German, English and French, and the *text* differs — section
+ * names, some titles, every synopsis, and, importantly, the venue names
+ * ("Orient Cinema" / "Kino Orient" / "Cinéma Orient"). What does **not** differ
+ * is the structure: identical block ids, identical screening ids, identical
+ * times. So the structure is scraped once from one canonical language
+ * (`FestivalCore`) and only the words are scraped per language (`TextPack`).
+ *
+ * That split is a correctness requirement, not a size optimisation. Scraping
+ * each language end to end would derive venue ids from translated names, so the
+ * travel matrix — and therefore the schedule itself — could come out different
+ * depending on which language you happened to be reading in.
  */
+
+/** The languages Fantoche publishes, and therefore the ones offered here. */
+export type Lang = 'en' | 'de' | 'fr';
+
+export const LANGS: Lang[] = ['en', 'de', 'fr'];
+
+/** The language the structure is scraped from; its ids are canonical. */
+export const CANONICAL_LANG: Lang = 'en';
 
 // ---------------------------------------------------------------- festival
 
@@ -24,16 +45,20 @@ export interface Place {
   lon: number;
 }
 
-/** A room you actually sit in. What a showing points at. */
-export interface Venue {
+/** A room you actually sit in, minus its (translated) display name. */
+export interface VenueCore {
   id: string;
-  name: string;
   placeId: string;
   /** Hall number within the place, when the venue is one of several. */
   hall?: string;
 }
 
-/** One film inside a block. */
+/** A venue with the name for the language currently being read. */
+export interface Venue extends VenueCore {
+  name: string;
+}
+
+/** One film inside a block. Entirely text, so it lives in the language pack. */
 export interface Film {
   title: string;
   /** The "Title, Director, CC Year" credit line as printed. */
@@ -47,36 +72,47 @@ export interface Film {
 }
 
 /**
- * A programme block — the unit you buy a ticket for and the unit the
- * optimizer picks. Either one feature or a curated set of shorts.
+ * The language-independent half of a programme block: numbers and the image.
  */
-export interface Block {
-  /** Festival id, e.g. `prg4327`. Stable across the edition. */
+export interface BlockCore {
+  /** Festival id, e.g. `prg4327`. Stable across the edition and all languages. */
   id: string;
-  title: string;
-  category: string;
   /** Total runtime in minutes as printed by the festival. */
   durationMin?: number;
-  synopsis?: string;
-  url: string;
+  /** Minimum age as printed, e.g. `12` for a `12+` badge. */
+  ageRating?: number;
+  year?: number;
   imageUrl?: string;
+}
+
+/** Everything about a block that is words, and therefore per language. */
+export interface BlockText {
+  title: string;
+  category: string;
+  synopsis?: string;
+  /** The detail page in this language. */
+  url: string;
   /**
    * Credits for a block that *is* one film (features carry these instead of a
    * film list). Empty for shorts programmes — read `films` there.
    */
   director?: string;
   country?: string;
-  year?: number;
-  /** Minimum age as printed, e.g. `12` for a `12+` badge. */
-  ageRating?: number;
   /**
    * The bordered badges the festival prints: language version (`OV/e`),
-   * subtitles (`german subtitles`), spoken language, age rating. Kept verbatim
-   * because their vocabulary is not worth modelling.
+   * subtitles (`german subtitles`), spoken language. Kept verbatim because
+   * their vocabulary is not worth modelling — and translated, hence here.
    */
   badges: string[];
   films: Film[];
 }
+
+/**
+ * A programme block — the unit you buy a ticket for and the unit the optimizer
+ * picks. Either one feature or a curated set of shorts. This is the merged
+ * shape everything above the data layer works with.
+ */
+export interface Block extends BlockCore, BlockText {}
 
 /** One screening of one block, at one time, in one venue. */
 export interface Showing {
@@ -101,18 +137,49 @@ export interface Showing {
   closed?: boolean;
 }
 
-/** The whole scraped festival. One JSON file, committed to the repo. */
-export interface Festival {
-  edition: {
-    year: number;
-    title: string;
-    /** ISO dates of the first and last festival day. */
-    firstDay: string;
-    lastDay: string;
-    tz: string;
-  };
+export interface Edition {
+  year: number;
+  title: string;
+  /** ISO dates of the first and last festival day. */
+  firstDay: string;
+  lastDay: string;
+  tz: string;
+}
+
+/**
+ * The structure, scraped once. `data/fantoche-<year>.json`.
+ */
+export interface FestivalCore {
+  edition: Edition;
   scrapedAt: string;
   source: string;
+  /** Coordinates and addresses — proper nouns, so not translated. */
+  places: Place[];
+  venues: VenueCore[];
+  blocks: BlockCore[];
+  showings: Showing[];
+}
+
+/** The words, per language. `data/fantoche-<year>.<lang>.json`. */
+export interface TextPack {
+  lang: Lang;
+  scrapedAt: string;
+  source: string;
+  /** Canonical venue id -> the name in this language. */
+  venues: Record<string, string>;
+  /** Block id -> its text in this language. */
+  blocks: Record<string, BlockText>;
+}
+
+/**
+ * Core plus one language pack: what the optimizer and the whole UI consume.
+ * Assembled in the store when the language changes.
+ */
+export interface Festival {
+  edition: Edition;
+  scrapedAt: string;
+  source: string;
+  lang: Lang;
   places: Place[];
   venues: Venue[];
   blocks: Block[];

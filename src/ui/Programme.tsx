@@ -6,27 +6,29 @@
  * attend. Showing the same film five times over as five rows would be exactly
  * the manual bookkeeping this app exists to remove.
  */
-import { useMemo, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import type { Block, Interest } from '../model/types.ts';
 import { isOpenWindow } from '../model/optimize.ts';
 import {
   activePerson, festival, interestedIn, plan, setInterest, showingsByBlock, venueById,
 } from '../store.ts';
 import { dayKey, duration, shortDay, time } from '../format.ts';
+import { t } from '../i18n/index.ts';
 import { PeopleBar } from './PeopleBar.tsx';
 
-const LEVELS: { level: Interest; label: string; hint: string }[] = [
-  { level: 'must', label: 'Must', hint: 'Do not miss this — outranks any number of maybes' },
-  { level: 'want', label: 'Want', hint: 'Would like to see it' },
-  { level: 'maybe', label: 'Maybe', hint: 'Only if it fits a gap' },
-];
-
 function InterestPicker({ blockId, blockTitle }: { blockId: string; blockTitle: string }) {
+  const s = t.value;
   const person = activePerson.value;
   const current = person.interest[blockId] ?? 'no';
+  const levels: { level: Interest; label: string; hint: string }[] = [
+    { level: 'must', label: s.interest.must, hint: s.interest.mustHint },
+    { level: 'want', label: s.interest.want, hint: s.interest.wantHint },
+    { level: 'maybe', label: s.interest.maybe, hint: s.interest.maybeHint },
+  ];
+
   return (
-    <div class="interest" role="group" aria-label={`How much ${person.name} wants to see ${blockTitle}`}>
-      {LEVELS.map(({ level, label, hint }) => (
+    <div class="interest" role="group" aria-label={s.interest.group(person.name, blockTitle)}>
+      {levels.map(({ level, label, hint }) => (
         <button
           key={level}
           data-level={level}
@@ -34,7 +36,7 @@ function InterestPicker({ blockId, blockTitle }: { blockId: string; blockTitle: 
           aria-pressed={current === level}
           // Read out of context — in a list of 91 rows, "Must, pressed" on its
           // own is useless without saying must-see *what*.
-          aria-label={`${label} — ${blockTitle}`}
+          aria-label={s.interest.label(label, blockTitle)}
           onClick={() => setInterest(person.id, blockId, current === level ? 'no' : level)}
         >
           <span aria-hidden="true">{label}</span>
@@ -45,9 +47,11 @@ function InterestPicker({ blockId, blockTitle }: { blockId: string; blockTitle: 
 }
 
 function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowingId?: string }) {
+  const s = t.value;
   const [open, setOpen] = useState(false);
   const showings = showingsByBlock.get(block.id) ?? [];
   const marks = interestedIn(block.id);
+  const venues = venueById.value;
 
   const credits = [block.director, [block.country, block.year].filter(Boolean).join(' ')]
     .filter(Boolean)
@@ -70,13 +74,13 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
             style="padding:0;min-height:auto;text-align:left"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
-            aria-label={`${block.title} — ${open ? 'hide' : 'show'} details`}
+            aria-label={s.programme.toggle(block.title, open)}
           >
             <h3 class="block-title">{block.title}</h3>
           </button>
         </div>
         <div class="block-meta">
-          {[block.category, runtime, credits, block.films.length > 1 ? `${block.films.length} films` : null]
+          {[block.category, runtime, credits, block.films.length > 1 ? s.programme.films(block.films.length) : null]
             .filter(Boolean)
             .join(' · ')}
           {block.ageRating ? ` · ${block.ageRating}+` : ''}
@@ -86,25 +90,25 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
       <InterestPicker blockId={block.id} blockTitle={block.title} />
 
       <div class="showing-list">
-        {showings.map((s) => {
-          const venue = venueById.get(s.venueId);
-          const isPlanned = s.id === scheduledShowingId;
-          const note = s.closed
-            ? 'closed school screening, not open to the public'
-            : isOpenWindow(s)
-              ? 'drop in any time inside this window'
+        {showings.map((showing) => {
+          const venue = venues.get(showing.venueId);
+          const isPlanned = showing.id === scheduledShowingId;
+          const note = showing.closed
+            ? s.programme.closedNote
+            : isOpenWindow(showing)
+              ? s.programme.windowNote
               : isPlanned
-                ? 'in your plan'
+                ? s.programme.plannedNote
                 : '';
           return (
             <span
-              key={s.id}
-              class={`pill tabular${isPlanned ? ' scheduled' : ''}${s.closed ? ' closed' : ''}`}
+              key={showing.id}
+              class={`pill tabular${isPlanned ? ' scheduled' : ''}${showing.closed ? ' closed' : ''}`}
               title={note}
             >
               {isPlanned && <span aria-hidden="true">✓ </span>}
-              {shortDay(s.start)} {time(s.start)}
-              {isOpenWindow(s) ? `–${time(s.end)}` : ''} · {venue?.name ?? s.venueId}
+              {shortDay(showing.start)} {time(showing.start)}
+              {isOpenWindow(showing) ? `–${time(showing.end)}` : ''} · {venue?.name ?? showing.venueId}
               {note && <span class="sr-only"> — {note}</span>}
             </span>
           );
@@ -132,7 +136,7 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
             </div>
           )}
           <a class="small" href={block.url} target="_blank" rel="noopener" style="display:inline-block;margin-top:8px">
-            On fantoche.ch ↗
+            {s.programme.onSite}
           </a>
         </div>
       )}
@@ -141,27 +145,23 @@ function BlockRow({ block, scheduledShowingId }: { block: Block; scheduledShowin
 }
 
 export function Programme() {
+  const s = t.value;
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
   const [day, setDay] = useState('');
   const [onlyMarked, setOnlyMarked] = useState(false);
 
-  const categories = useMemo(
-    () => [...new Set(festival.blocks.map((b) => b.category))].sort(),
-    [],
-  );
-  const days = useMemo(
-    () => [...new Set(festival.showings.map((s) => dayKey(s.start)))].sort(),
-    [],
-  );
+  const all = festival.value.blocks;
+  const categories = [...new Set(all.map((b) => b.category))].sort();
+  const days = [...new Set(festival.value.showings.map((x) => dayKey(x.start)))].sort();
 
   const scheduledByBlock = new Map(plan.value.items.map((it) => [it.block.id, it.showing.id]));
   const person = activePerson.value;
 
-  const visible = festival.blocks.filter((b) => {
+  const visible = all.filter((b) => {
     if (category && b.category !== category) return false;
     if (onlyMarked && !(b.id in person.interest)) return false;
-    if (day && !(showingsByBlock.get(b.id) ?? []).some((s) => dayKey(s.start) === day)) return false;
+    if (day && !(showingsByBlock.get(b.id) ?? []).some((x) => dayKey(x.start) === day)) return false;
     if (query) {
       const haystack = [b.title, b.category, b.director, b.synopsis, ...b.films.map((f) => `${f.title} ${f.director ?? ''}`)]
         .join(' ')
@@ -182,42 +182,44 @@ export function Programme() {
           <input
             type="search"
             class="grow"
-            aria-label="Search films, directors and sections"
-            placeholder="Search films, directors, sections…"
+            aria-label={s.programme.searchLabel}
+            placeholder={s.programme.search}
             value={query}
             onInput={(e) => setQuery((e.target as HTMLInputElement).value)}
           />
           <select
-            aria-label="Filter by section"
+            aria-label={s.programme.filterSection}
             value={category}
             onChange={(e) => setCategory((e.target as HTMLSelectElement).value)}
           >
-            <option value="">All sections</option>
+            <option value="">{s.programme.allSections}</option>
             {categories.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
           <select
-            aria-label="Filter by day"
+            aria-label={s.programme.filterDay}
             value={day}
             onChange={(e) => setDay((e.target as HTMLSelectElement).value)}
           >
-            <option value="">All days</option>
-            {days.map((d) => <option key={d} value={d}>{shortDay(new Date(`${d}T12:00:00Z`).getTime() / 1000)}</option>)}
+            <option value="">{s.programme.allDays}</option>
+            {days.map((d) => (
+              <option key={d} value={d}>{shortDay(new Date(`${d}T12:00:00Z`).getTime() / 1000)}</option>
+            ))}
           </select>
           <button class="chip" aria-pressed={onlyMarked} onClick={() => setOnlyMarked(!onlyMarked)}>
-            Marked {markedCount > 0 && <span class="tabular">({markedCount})</span>}
+            {s.programme.marked} {markedCount > 0 && <span class="tabular">({markedCount})</span>}
           </button>
         </div>
       </div>
 
       <h2 class="section-title" aria-live="polite">
-        {visible.length} of {festival.blocks.length} programmes
+        {s.programme.count(visible.length, all.length)}
       </h2>
 
       <div class="card">
         {visible.length === 0 ? (
           <div class="empty">
-            <h3>Nothing matches</h3>
-            <p class="small">Try a different section, day or search term.</p>
+            <h3>{s.programme.noMatch}</h3>
+            <p class="small">{s.programme.noMatchHint}</p>
           </div>
         ) : (
           visible.map((b) => (
