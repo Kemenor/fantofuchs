@@ -119,8 +119,13 @@ export function IncomingPlan() {
 export function Share() {
   const [onlyMe, setOnlyMe] = useState(false);
   const [linkState, setLinkState] = useState<string | null>(null);
+  // The link itself, shown when copying is not available — or on request.
+  const [visibleLink, setVisibleLink] = useState<string | null>(null);
   const [paste, setPaste] = useState('');
   const [message, setMessage] = useState<string | null>(null);
+  // Kept separate from the import error: a failure belongs next to the button
+  // that caused it, not in whichever card happens to render an error slot.
+  const [exportError, setExportError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPaste, setShowPaste] = useState(false);
 
@@ -140,10 +145,13 @@ export function Share() {
     URL.revokeObjectURL(url);
   };
 
+  const buildLink = () => shareLink(exportPayload({ onlyActive: onlyMe }));
+
   const copyLink = async () => {
-    setError(null);
+    setExportError(null);
+    setVisibleLink(null);
+    const link = await buildLink();
     try {
-      const link = await shareLink(exportPayload({ onlyActive: onlyMe }));
       await navigator.clipboard.writeText(link);
       setLinkState(
         link.length > 1800
@@ -151,8 +159,19 @@ export function Share() {
           : 'Link copied — paste it into a message.',
       );
     } catch {
-      setError('Could not copy to the clipboard. Use the file instead.');
+      // Some in-app browsers refuse clipboard access outright. Falling back to
+      // the file would be a dead end for anyone who just wants to paste a link,
+      // so show it instead and let them copy it by hand.
+      setLinkState(null);
+      setExportError('This browser would not let the page use the clipboard, so here is the link to copy yourself:');
+      setVisibleLink(link);
     }
+  };
+
+  const showLink = async () => {
+    setExportError(null);
+    setLinkState(null);
+    setVisibleLink(await buildLink());
   };
 
   const load = async (text: string, replace: boolean) => {
@@ -196,8 +215,19 @@ export function Share() {
         <div class="row wrap" style="gap:8px">
           <button class="btn primary" onClick={copyLink}>Copy share link</button>
           <button class="btn" onClick={() => download(false)}>Download file</button>
+          <button class="btn ghost" onClick={showLink}>Show link</button>
         </div>
         {linkState && <p class="small" style="margin:10px 0 0">{linkState}</p>}
+        {exportError && <p class="warn small" style="margin:10px 0 0">{exportError}</p>}
+        {visibleLink && (
+          <textarea
+            readOnly
+            class="tabular"
+            style="width:100%;min-height:76px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--surface-2);font-size:12px;word-break:break-all;resize:vertical"
+            value={visibleLink}
+            onFocus={(e) => (e.target as HTMLTextAreaElement).select()}
+          />
+        )}
         <p class="small faded" style="margin:10px 0 0">
           The link carries the plan in its own text — nothing is uploaded anywhere, and
           there is no server to lose it.
