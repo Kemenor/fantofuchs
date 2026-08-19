@@ -37,13 +37,23 @@ jobs:
             echo "Programme unchanged."
             exit 0
           fi
+
+          # Every run rewrites `scrapedAt`, so a diff of that line alone means
+          # nothing actually moved. Committing it anyway would put a commit and
+          # a deploy in the log every single day and bury the real changes.
+          substantive=$(git diff -U0 -- data/ \
+            | grep -E '^[+-]' | grep -Ev '^(\+\+\+|---)' \
+            | grep -v '"scrapedAt"' | wc -l)
+          if [ "$substantive" -eq 0 ]; then
+            echo "Only the scrape timestamp changed."
+            git checkout -- data/
+            exit 0
+          fi
+          summary=$(node -e "const f=require('./data/fantoche-2026.json');\
+            process.stdout.write(f.blocks.length+' programmes, '+f.showings.length+' screenings')")
+
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/
-          git commit -m "data: refresh Fantoche programme
-
-          $(node -e "
-            const f = require('./data/fantoche-2026.json');
-            console.log(\`\${f.blocks.length} programmes, \${f.showings.length} screenings.\`);
-          ")"
+          git commit -m "data: refresh Fantoche programme ($summary)"
           git push
