@@ -28,7 +28,7 @@ npm run build          # static output in dist/
 
 ```
 scraper/    scrape.ts (fantoche.ch -> data/), verify.ts (CI guard), fetch-cache.ts
-src/model/  types.ts, travel.ts, optimize.ts — pure, no DOM, no storage
+src/model/  types.ts, travel.ts, optimize.ts, suggest.ts — pure, no DOM, no storage
 src/store.ts  the only mutable state; everything else is a computed signal
 src/ui/     Programme · Availability · PlanView · Share · SettingsView · PeopleBar
 src/share.ts  export/import: validation, merge, deflate+base64url link encoding
@@ -67,6 +67,10 @@ data/       fantoche-<year>.json (structure) + .<lang>.json (words) — committe
   rather than trusting the shape.
 - **The scraper must fail loudly.** If a selector stops matching, `verify.ts` should catch
   it. When you add a field worth relying on, add a threshold there too.
+- **Suggestions must use the same feasibility test as the scheduler.** `suggest.ts` shares
+  the travel-and-buffer check; anything proposed must be reachable from the previous
+  screening *and* leave time for the next. A suggestion you cannot get to is worse than no
+  suggestion.
 - **Optimizer bounds must never undershoot.** Every bound in `optimize.ts` works by
   *dropping* a constraint. If you add one, add a case to the brute-force cross-check test —
   an unsound bound silently returns a worse schedule and nothing else will notice.

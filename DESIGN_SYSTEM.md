@@ -126,6 +126,14 @@ every language: French needed a wider `select` fix and a tighter tab bar, becaus
 "Réglages" and "Compétition des films pour enfants 2026" are considerably longer than
 their English equivalents.
 
+### Print
+
+One page per day (`break-before: page` on every day heading but the first), never
+splitting a screening across a break, all interactive chrome removed, and the palette
+forced to black on white regardless of the on-screen theme. Verified by flipping the
+media query on at runtime and measuring: `body` goes white, buttons and the tab bar
+disappear, the schedule and its alternatives survive.
+
 ### Known gaps
 
 - No typeface picker (OpenDyslexic / Atkinson Hyperlegible), unlike the Flutter apps.

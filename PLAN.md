@@ -18,7 +18,7 @@ optimal schedule, export it. Remaining work is polish and the items under *Ideas
 | 5 | Sharing: link/file/paste, merge-on-import, backup | ✅ |
 | 6 | Accessibility pass to WCAG 2.2 AA (see `DESIGN_SYSTEM.md`) | ✅ |
 | 7 | English / German / French, content included; light-dark toggle | ✅ |
-| 8 | Polish: keyboard, empty states, print view | ▫️ |
+| 8 | Gap filling, alternatives per slot, print view | ✅ |
 | 9 | Ideas below, as they earn their place | ▫️ |
 
 ## Architecture
@@ -116,17 +116,46 @@ subtly wrong looks exactly like one that is right.
   two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
   there for when it does not.
 
+## Suggestions and alternatives
+
+Both live in `src/model/suggest.ts` and are the optimizer's feasibility test asked about
+one hole at a time, so neither can ever propose something you could not walk to.
+
+**Gap filling** offers, inside each hole in the plan, films that would fit it — reachable
+from the previous screening and back in time for the next. Accepting one marks it and the
+schedule re-solves, so the answer stays optimal rather than being patched.
+
+There is a property worth stating, because it is what makes the feature honest: **a proven
+optimal plan can never leave a marked film sitting in a gap.** If one fitted, taking it
+would have scored higher, so the optimizer would have taken it. Suggestions are therefore
+things you did *not* mark — except when the search ran out of budget, which is precisely
+when a marked leftover appearing here is worth seeing. A property test asserts this over
+120 random festivals.
+
+**Alternatives per slot** answer the box-office question: this screening is sold out, when
+else does it run? Checked against **every** other film in the plan rather than just the two
+either side, so a screening sitting in an otherwise empty afternoon is offered instead of
+being discarded for not being adjacent.
+
+## Print
+
+`@media print` in `styles.css`: one page per day, never splitting a screening across a
+page break, everything interactive removed, and the palette forced to black on white —
+printing the dark theme would waste a cartridge and read badly. Alternatives are kept on
+paper, since a sold-out screening is exactly the moment you are holding the printout.
+
 ## Ideas
 
 Not committed to; each needs to earn its place.
 
-- **Gap filling** — after the optimal plan, offer unmarked blocks that fit the leftover
-  gaps. Cheap: re-run with the unmarked blocks at weight 1 and the plan pinned.
-- **Alternatives per slot** — "you could swap this for X" on each row.
-- **Split plans** — let the group separate and rejoin. Materially harder; only if wanted.
-- **Print view** — one page per day for a pocket.
-- **Other festivals** — the model is not Fantoche-specific; only the scraper is. Would
-  mean a source-per-festival plugin and a festival picker.
+- **Excluding a sold-out screening** — the natural next step from alternatives: mark one
+  as unavailable and let the optimizer route around it. Small and well-contained; worth
+  doing if ticket sales actually knock a hole in a plan.
+- **Split plans** — let the group separate and rejoin. Materially harder for a benefit
+  nobody has asked for; still deliberately unbuilt.
+- **Other festivals** — the model is not Fantoche-specific, only the scraper is. Would
+  mean a source-per-festival plugin and a festival picker. A rewrite of the data layer for
+  no benefit before 6 September.
 - **Italian** — the Flutter family does en/de/fr/it. Fantoche publishes only en/de/fr, so
   an Italian UI would sit on top of German content. Not worth it unless the festival adds
   it.

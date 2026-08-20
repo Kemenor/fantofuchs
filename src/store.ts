@@ -14,6 +14,7 @@ import type {
 import { INTEREST_WEIGHT, LANGS } from './model/types.ts';
 import { TravelMatrix } from './model/travel.ts';
 import { intersectSlots, mergeSlots, optimize, type Plan } from './model/optimize.ts';
+import { alternativesFor, suggestFillers, type SuggestInput } from './model/suggest.ts';
 import { buildPayload, mergePeople, type MergeResult, type SharePayload } from './share.ts';
 import { detectLang, lang } from './i18n/index.ts';
 import core from '../data/fantoche-2026.json';
@@ -415,6 +416,25 @@ export const plan = computed<Plan>(() =>
     timeLimitMs: 400,
   }),
 );
+
+/** Everything the gap-filler and the alternatives need, in one place. */
+export const suggestInput = computed<SuggestInput>(() => ({
+  blocks: festival.value.blocks,
+  showings: festival.value.showings,
+  items: plan.value.items,
+  slots: planSlots.value,
+  travel: travelMatrix.value,
+  bufferMin: state.value.settings.bufferMin,
+  excludeClosed: state.value.settings.excludeClosed,
+}));
+
+/** Unmarked films that would fit the holes in the plan. */
+export const gapSuggestions = computed(() => suggestFillers(suggestInput.value));
+
+/** Other screenings of a scheduled block that you could still move to. */
+export function alternativesAt(index: number) {
+  return alternativesFor(suggestInput.value, index);
+}
 
 // --------------------------------------------------------------- lookups
 

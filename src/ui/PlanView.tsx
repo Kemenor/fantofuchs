@@ -5,12 +5,57 @@
  * nothing to generate. Change a wish or a free hour and the schedule is already
  * different by the time you look back at it.
  */
-import { festival, people, plan, planSlots, planningFor, travelMatrix, venueById } from '../store.ts';
-import { dayDotMonth, dayKey, duration, minutesBetween, time, weekday } from '../format.ts';
+import {
+  activePerson, alternativesAt, festival, gapSuggestions, people, plan, planSlots,
+  planningFor, setInterest, travelMatrix, venueById,
+} from '../store.ts';
+import { dayDotMonth, dayKey, duration, minutesBetween, shortDay, time, weekday } from '../format.ts';
 import { t } from '../i18n/index.ts';
 import { downloadIcs, planToIcs } from '../ics.ts';
 import type { PlanItem } from '../model/optimize.ts';
+import type { Suggestion } from '../model/suggest.ts';
+import { useState } from 'preact/hooks';
 import { PeopleBar } from './PeopleBar.tsx';
+
+/** Films that would fit a hole, offered where the hole actually is. */
+function Fillers({ suggestions }: { suggestions: Suggestion[] }) {
+  const s = t.value;
+  const [open, setOpen] = useState(false);
+  const venues = venueById.value;
+  const person = activePerson.value;
+  if (suggestions.length === 0) return null;
+
+  return (
+    <div class="fillers">
+      <button class="btn ghost small" aria-expanded={open} onClick={() => setOpen(!open)}>
+        + {s.plan.fitsHere(suggestions.length)}
+      </button>
+      {open && (
+        <ul class="filler-list">
+          {suggestions.map(({ showing, block, travelInMin }) => (
+            <li key={showing.id} class="row wrap" style="gap:8px">
+              <span class="grow small">
+                <span class="tabular">{time(showing.start)}–{time(showing.end)}</span>{' '}
+                <strong>{block.title}</strong>{' '}
+                <span class="muted">
+                  {venues.get(showing.venueId)?.name ?? showing.venueId}
+                  {travelInMin > 0 ? ` · ${s.plan.gapWalk(travelInMin)}` : ''}
+                </span>
+              </span>
+              <button
+                class="btn small"
+                aria-label={s.plan.addFillerLabel(block.title)}
+                onClick={() => setInterest(person.id, block.id, 'want')}
+              >
+                {s.plan.addFiller}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function Gap({ previous, next }: { previous: PlanItem; next: PlanItem }) {
   const s = t.value;
@@ -31,9 +76,19 @@ function Gap({ previous, next }: { previous: PlanItem; next: PlanItem }) {
   );
 }
 
-function DaySection({ day, items }: { day: string; items: PlanItem[] }) {
+interface DayEntry {
+  item: PlanItem;
+  /** Position in the whole plan, which is what alternatives are asked about. */
+  index: number;
+}
+
+function DaySection(
+  { day, entries, fillersAfter, leadingFillers }:
+  { day: string; entries: DayEntry[]; fillersAfter: Map<string, Suggestion[]>; leadingFillers: Suggestion[] },
+) {
   const s = t.value;
   const venues = venueById.value;
+  const items = entries.map((e) => e.item);
   const first = items[0].showing.start;
   const last = items[items.length - 1].showing.end;
   const walking = items.reduce((sum, it) => sum + it.travelMin, 0);
@@ -49,8 +104,11 @@ function DaySection({ day, items }: { day: string; items: PlanItem[] }) {
       </h2>
       <div class="card">
         <div class="timeline">
-          {items.map((it, i) => {
+          {leadingFillers.length > 0 && <Fillers suggestions={leadingFillers} />}
+          {entries.map(({ item: it, index }, i) => {
             const venue = venues.get(it.showing.venueId);
+            const alternatives = alternativesAt(index);
+            const after = fillersAfter.get(it.showing.id) ?? [];
             return (
               <div key={it.showing.id}>
                 {i > 0 && <Gap previous={items[i - 1]} next={it} />}
@@ -69,8 +127,19 @@ function DaySection({ day, items }: { day: string; items: PlanItem[] }) {
                         <span class="faded"> · {s.plan.assumedEnd(duration(90))}</span>
                       )}
                     </div>
+                    {alternatives.length > 0 && (
+                      <div class="alternatives small faded" aria-label={s.plan.alsoAtLabel(it.block.title)}>
+                        {s.plan.alsoAt}:{' '}
+                        <span class="tabular">
+                          {alternatives
+                            .map((a) => `${shortDay(a.start)} ${time(a.start)} · ${venues.get(a.venueId)?.name ?? a.venueId}`)
+                            .join('  ·  ')}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
+                {after.length > 0 && <Fillers suggestions={after} />}
               </div>
             );
           })}
@@ -88,10 +157,19 @@ export function PlanView() {
   const hasSlots = planSlots.value.length > 0;
   const marked = group.some((p) => Object.keys(p.interest).length > 0);
 
-  const byDay = new Map<string, PlanItem[]>();
-  for (const item of current.items) {
+  const byDay = new Map<string, DayEntry[]>();
+  current.items.forEach((item, index) => {
     const key = dayKey(item.showing.start);
-    byDay.set(key, [...(byDay.get(key) ?? []), item]);
+    byDay.set(key, [...(byDay.get(key) ?? []), { item, index }]);
+  });
+
+  // Suggestions are placed by the item they follow rather than by index: a gap
+  // at the start of a window has no preceding item, and every window has one.
+  const fillersAfter = new Map<string, Suggestion[]>();
+  const leadingByDay = new Map<string, Suggestion[]>();
+  for (const { gap, suggestions } of gapSuggestions.value) {
+    if (gap.before) fillersAfter.set(gap.before.showing.id, suggestions);
+    else leadingByDay.set(dayKey(gap.from), suggestions);
   }
 
   const totalMinutes = current.items.reduce(
@@ -149,6 +227,7 @@ export function PlanView() {
               {' · '}{s.plan.forWhom(group.map((p) => p.name).join(' & '))}
             </div>
           </div>
+          <div class="row wrap" style="gap:8px">
           <button
             class="btn primary"
             disabled={current.items.length === 0}
@@ -161,6 +240,10 @@ export function PlanView() {
           >
             {s.plan.addToCalendar}
           </button>
+          <button class="btn" disabled={current.items.length === 0} onClick={() => print()}>
+            {s.plan.print}
+          </button>
+          </div>
         </div>
 
         {!current.optimal && (
@@ -168,8 +251,14 @@ export function PlanView() {
         )}
       </div>
 
-      {[...byDay.entries()].sort().map(([day, items]) => (
-        <DaySection key={day} day={day} items={items} />
+      {[...byDay.entries()].sort().map(([day, entries]) => (
+        <DaySection
+          key={day}
+          day={day}
+          entries={entries}
+          fillersAfter={fillersAfter}
+          leadingFillers={leadingByDay.get(day) ?? []}
+        />
       ))}
 
       {current.items.length === 0 && (

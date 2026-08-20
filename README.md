@@ -27,6 +27,12 @@ best possible plan — including the walk from the Trafo to the Orient.
 - 👥 **Plan together** — several people, each with their own wishlist and free hours. Plan
   for everyone (only shared hours count, and a film you both want counts double) or for
   one person alone.
+- 🕳️ **Fills the gaps** — an hour free between two films? It lists what you could actually
+  get to and back from, and adding one re-solves the whole schedule rather than patching it.
+- 🎟️ **Sold out? Here's when else it runs** — every scheduled film shows its other
+  screenings that would still fit the rest of your day.
+- 🖨️ **Prints** — one page per day, black on white, for a pocket at a festival where your
+  phone is dying.
 - 📨 **Pass the plan around** — send it as a link or a file, your brother fills in his half
   and sends the whole thing back. Loading **merges**: for anyone already there, the copy
   edited most recently wins, so a returning plan never overwrites what you did while it
