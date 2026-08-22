@@ -1,6 +1,6 @@
 {
   "lang": "fr",
-  "scrapedAt": "2026-08-19T21:15:20.443Z",
+  "scrapedAt": "2026-08-22T04:48:16.817Z",
   "source": "https://fantoche.ch/fr/festival/programme",
   "venues": {
     "tumbler": "Tumbler",
@@ -1679,7 +1679,7 @@
         },
         {
           "title": "Pile",
-          "credit": "Pile, Toby Auberg, UK 2019_01",
+          "credit": "Pile, Toby Auberg, UK 2019",
           "director": "Toby Auberg",
           "durationMin": 3,
           "country": "Royaume-Uni",
@@ -1688,7 +1688,7 @@
         },
         {
           "title": "The World's After",
-          "credit": "El after del mundo, Florentina Gonzalez, AR/FR 2022_01",
+          "credit": "El after del mundo, Florentina Gonzalez, AR/FR 2022",
           "director": "Florentina Gonzalez",
           "durationMin": 12,
           "language": "Spanish",
@@ -1707,7 +1707,7 @@
         },
         {
           "title": "La tête dans les orties",
-          "credit": "Nettle Head, Paul E. Cabon, FR 2019_01",
+          "credit": "La tête dans les orties, Paul E. Cabon, FR 2019",
           "director": "Paul E. Cabon",
           "durationMin": 14,
           "language": "French, English",
@@ -2837,7 +2837,7 @@
           "durationMin": 1,
           "country": "États-Unis",
           "year": 1973,
-          "synopsis": "An experiment to “explore thecontrol of video images through physiological signals”. This short was made using Bill’s Rutt/Etra video synthesiser, connected to a biomedical heart monitor which tracked Louise’s heartrate. A representation of Louise’s heart is created on screen using the synthesiser and modulated in real time, following her heartbeat as the film unfolds."
+          "synopsis": "An experiment to “explore the control of video images through physiological signals”. This short was made using Bill’s Rutt/Etra video synthesiser, connected to a biomedical heart monitor which tracked Louise’s heartrate. A representation of Louise’s heart is created on screen using the synthesiser and modulated in real time, following her heartbeat as the film unfolds."
         },
         {
           "title": "Mona Lisa",

@@ -1,6 +1,6 @@
 {
   "lang": "en",
-  "scrapedAt": "2026-08-19T21:15:20.443Z",
+  "scrapedAt": "2026-08-22T04:48:16.817Z",
   "source": "https://fantoche.ch/programme",
   "venues": {
     "tumbler": "Tumbler",
@@ -1679,7 +1679,7 @@
         },
         {
           "title": "Pile",
-          "credit": "Pile, Toby Auberg, UK 2019_01",
+          "credit": "Pile, Toby Auberg, UK 2019",
           "director": "Toby Auberg",
           "durationMin": 3,
           "country": "United Kingdom",
@@ -1688,7 +1688,7 @@
         },
         {
           "title": "The World's After",
-          "credit": "El after del mundo, Florentina Gonzalez, AR/FR 2022_01",
+          "credit": "El after del mundo, Florentina Gonzalez, AR/FR 2022",
           "director": "Florentina Gonzalez",
           "durationMin": 12,
           "language": "Spanish",
@@ -1707,7 +1707,7 @@
         },
         {
           "title": "La tête dans les orties",
-          "credit": "Nettle Head, Paul E. Cabon, FR 2019_01",
+          "credit": "La tête dans les orties, Paul E. Cabon, FR 2019",
           "director": "Paul E. Cabon",
           "durationMin": 14,
           "language": "French, English",
@@ -2837,7 +2837,7 @@
           "durationMin": 1,
           "country": "United States",
           "year": 1973,
-          "synopsis": "An experiment to “explore thecontrol of video images through physiological signals”. This short was made using Bill’s Rutt/Etra video synthesiser, connected to a biomedical heart monitor which tracked Louise’s heartrate. A representation of Louise’s heart is created on screen using the synthesiser and modulated in real time, following her heartbeat as the film unfolds."
+          "synopsis": "An experiment to “explore the control of video images through physiological signals”. This short was made using Bill’s Rutt/Etra video synthesiser, connected to a biomedical heart monitor which tracked Louise’s heartrate. A representation of Louise’s heart is created on screen using the synthesiser and modulated in real time, following her heartbeat as the film unfolds."
         },
         {
           "title": "Mona Lisa",
@@ -2855,7 +2855,7 @@
           "durationMin": 1,
           "country": "United States",
           "year": 1972,
-          "synopsis": "Originally intended as an anti-drug public service announcement for local television, this short, 60-second film instead takes us on a trippyride through Day-Glo colours and Pop-Art visuals, all melting into each other with the help of the Scanimate video synthesiser. Although one of her earliest films, it was also one of Lehman’s most successful, going on to be shown at the Cannes Film Festival."
+          "synopsis": "Originally intended as an anti-drug public service announcement for local television, this short, 60-second film instead takes us on a trippy ride through Day-Glo colours and Pop-Art visuals, all melting into each other with the help of the Scanimate video synthesiser. Although one of her earliest films, it was also one of Lehman’s most successful, going on to be shown at the Cannes Film Festival."
         },
         {
           "title": "Five-Minute Romp Through the IP",
@@ -2882,7 +2882,7 @@
           "durationMin": 4,
           "country": "United States",
           "year": 1973,
-          "synopsis": "A study on texture, amorphous forms and the body viaimage processing and video synthesis. Beginning as a simple exercise in contrast and keying effects, the electronic eye of the video camera begins to hallucinate more and more as it tracks the artist through a series of oblique experiments, before finally breaking down completely, recreating reality as a vibrating electronic mesh."
+          "synopsis": "A study on texture, amorphous forms and the body via image processing and video synthesis. Beginning as a simple exercise in contrast and keying effects, the electronic eye of the video camera begins to hallucinate more and more as it tracks the artist through a series of oblique experiments, before finally breaking down completely, recreating reality as a vibrating electronic mesh."
         },
         {
           "title": "Aquarelles",
