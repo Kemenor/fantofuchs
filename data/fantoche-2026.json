@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-08-22T04:48:16.817Z",
+  "scrapedAt": "2026-08-25T04:52:51.919Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -194,6 +194,10 @@
       "id": "cinema-trafo-3",
       "placeId": "cinema-trafo",
       "hall": "3"
+    },
+    {
+      "id": "fantoche-shop",
+      "placeId": "fantoche-shop"
     },
     {
       "id": "festival-centre",
@@ -740,6 +744,10 @@
       "id": "prg4327",
       "durationMin": 68,
       "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
+    },
+    {
+      "id": "prg4328",
+      "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
     }
   ],
   "showings": [
@@ -750,6 +758,14 @@
       "start": 1788246000,
       "end": 1788251400,
       "endSource": "assumed"
+    },
+    {
+      "id": "4328_1788256800",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788256800,
+      "end": 1788292800,
+      "endSource": "published"
     },
     {
       "id": "3412_1788283800",
@@ -768,15 +784,6 @@
       "endSource": "runtime"
     },
     {
-      "id": "3395_1788336000",
-      "blockId": "prg3395",
-      "venueId": "cinema-trafo-2",
-      "start": 1788336000,
-      "end": 1788339660,
-      "endSource": "runtime",
-      "closed": true
-    },
-    {
       "id": "3400_1788336000",
       "blockId": "prg3400",
       "venueId": "cinema-trafo-2",
@@ -786,12 +793,29 @@
       "closed": true
     },
     {
+      "id": "3395_1788336000",
+      "blockId": "prg3395",
+      "venueId": "cinema-trafo-2",
+      "start": 1788336000,
+      "end": 1788339660,
+      "endSource": "runtime",
+      "closed": true
+    },
+    {
       "id": "3399_1788336000",
       "blockId": "prg3399",
       "venueId": "cinema-trafo-3",
       "start": 1788336000,
       "end": 1788340320,
       "endSource": "runtime"
+    },
+    {
+      "id": "4328_1788343200",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788343200,
+      "end": 1788379200,
+      "endSource": "published"
     },
     {
       "id": "3527_1788343200",
@@ -1100,6 +1124,14 @@
       "endSource": "runtime"
     },
     {
+      "id": "4328_1788429600",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788429600,
+      "end": 1788465600,
+      "endSource": "published"
+    },
+    {
       "id": "3527_1788429600",
       "blockId": "prg3527",
       "venueId": "stanzerei",
@@ -1396,16 +1428,16 @@
       "endSource": "runtime"
     },
     {
-      "id": "3571_1788505200",
-      "blockId": "prg3571",
+      "id": "3570_1788505200",
+      "blockId": "prg3570",
       "venueId": "trafo-hall-36-2-hertz",
       "start": 1788505200,
       "end": 1788510600,
       "endSource": "assumed"
     },
     {
-      "id": "3570_1788505200",
-      "blockId": "prg3570",
+      "id": "3571_1788505200",
+      "blockId": "prg3571",
       "venueId": "trafo-hall-36-2-hertz",
       "start": 1788505200,
       "end": 1788510600,
@@ -1467,6 +1499,14 @@
       "start": 1788513300,
       "end": 1788520440,
       "endSource": "runtime"
+    },
+    {
+      "id": "4328_1788516000",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788516000,
+      "end": 1788552000,
+      "endSource": "published"
     },
     {
       "id": "3527_1788516000",
@@ -1819,6 +1859,14 @@
       "start": 1788602400,
       "end": 1788607800,
       "endSource": "runtime"
+    },
+    {
+      "id": "4328_1788602400",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788602400,
+      "end": 1788638400,
+      "endSource": "published"
     },
     {
       "id": "4323_1788602400",
@@ -2218,6 +2266,14 @@
       "venueId": "galerie-gluri-suter-huus",
       "start": 1788685200,
       "end": 1788706800,
+      "endSource": "published"
+    },
+    {
+      "id": "4328_1788688800",
+      "blockId": "prg4328",
+      "venueId": "fantoche-shop",
+      "start": 1788688800,
+      "end": 1788710400,
       "endSource": "published"
     },
     {
