@@ -1,6 +1,6 @@
 {
   "lang": "de",
-  "scrapedAt": "2026-08-25T04:52:51.919Z",
+  "scrapedAt": "2026-08-26T04:54:27.292Z",
   "source": "https://fantoche.ch/programm",
   "venues": {
     "tumbler": "Tumbler",
@@ -41,9 +41,9 @@
       "films": []
     },
     "prg4327": {
-      "title": "Eröffnungskurzfilmprogramm",
+      "title": "Eröffnung: Kurzfilmprogramm",
       "category": "Extras",
-      "url": "https://fantoche.ch/de/festival/programm/Eroffnungskurzfilmprogramm~prg4327",
+      "url": "https://fantoche.ch/de/festival/programm/Eroffnung--Kurzfilmprogramm~prg4327",
       "badges": [],
       "films": [
         {
@@ -1338,7 +1338,6 @@
       "country": "FR/LU",
       "badges": [
         "Deutsche Untertitel",
-        "French",
         "F/e"
       ],
       "films": []
@@ -2085,14 +2084,6 @@
       "badges": [],
       "films": [
         {
-          "title": "The Very Small Creatures (S01E20)",
-          "credit": "The Very Small Creatures (S01:E20) Aardman Animations, GB 2021",
-          "director": "Lucy Izzard",
-          "durationMin": 3,
-          "country": "Vereinigtes Königreich",
-          "year": 2021
-        },
-        {
           "title": "Star Wars: Visions: I Am Your Mother",
           "credit": "Star Wars Visions I Am Your Mother, Aardman Animations, GB 2023",
           "director": "Magdalena Osinska",
@@ -2101,12 +2092,21 @@
           "year": 2023
         },
         {
-          "title": "Arthur Christmas (Excerpt)",
-          "credit": "Arthur Christmas, Aardman Animations, GB/US 2011",
-          "director": "Sarah Smith",
+          "title": "The Very Small Creatures (S01E20)",
+          "credit": "The Very Small Creatures (S01:E20) Aardman Animations, GB 2021",
+          "director": "Lucy Izzard",
           "durationMin": 3,
-          "country": "Vereinigtes Königreich, Vereinigte Staaten",
-          "year": 2011
+          "country": "Vereinigtes Königreich",
+          "year": 2021
+        },
+        {
+          "title": "Wallace & Gromit: A Close Shave (Excerpt)",
+          "credit": "A Close Shave, Nick Park, UK 1995",
+          "director": "Nick Park",
+          "durationMin": 1,
+          "language": "English",
+          "country": "Vereinigtes Königreich",
+          "year": 1995
         },
         {
           "title": "Coldplay: Daddy",
@@ -2115,6 +2115,14 @@
           "durationMin": 5,
           "country": "Vereinigtes Königreich",
           "year": 2019
+        },
+        {
+          "title": "Jamb Stories (Advertisement)",
+          "credit": "Jamb Stories, Aardman Animations, UK 2025",
+          "director": "Suzy Parr",
+          "durationMin": 3,
+          "country": "Vereinigtes Königreich",
+          "year": 2025
         },
         {
           "title": "Shaun the Sheep Movie (Excerpt)",
@@ -2126,13 +2134,12 @@
           "year": 2015
         },
         {
-          "title": "Wallace & Gromit: The Curse of the Were-Rabbit (Excerpt)",
-          "credit": "Wallace & Gromit The Curse of the Were-Rabbit, Aardman Animations, UK 2005",
-          "director": "Steve Box, Nick Park",
-          "durationMin": 3,
-          "language": "English",
+          "title": "Brain Space",
+          "credit": "Brain Space, Aardman Animations, UK 2025",
+          "director": "Laura Tofarides",
+          "durationMin": 8,
           "country": "Vereinigtes Königreich",
-          "year": 2005
+          "year": 2025
         },
         {
           "title": "Rex the Runt (S02E08)",
@@ -2144,45 +2151,13 @@
           "synopsis": "Rex und seine Freund*innen erleben manchmal aufregende, manchmal surreale und manchmal ziemlich alltägliche Abenteuer. Die animierten Figuren sind fast zweidimensionale Plastilinfiguren, die auf Glas vor einem dreidimensionalen Hintergrund animiert werden."
         },
         {
-          "title": "The Staves: Winter Trees",
-          "credit": "The Staves Winter Trees, Aardman Animations, GB 2013",
-          "director": "Karni & Saul",
-          "durationMin": 4,
-          "country": "Vereinigtes Königreich",
-          "year": 2013
-        },
-        {
-          "title": "Shaun the Sheep (S07E17)",
-          "credit": "Shaun the Sheep (S07E17), GB 2025",
-          "director": "Seamus Malone",
-          "durationMin": 7,
-          "language": "English",
-          "country": "Vereinigtes Königreich, Deutschland",
-          "year": 2025
-        },
-        {
-          "title": "Shaun the Sheep: The Beast of Mossy Bottom (Excerpt)",
-          "credit": "Shaun the Sheep The Beast of Mossy Bottom, Aardman Animations, GB/FR 2026",
-          "director": "Steve Cox, Matthew Walker",
-          "durationMin": 2,
-          "country": "Vereinigtes Königreich, Frankreich",
-          "year": 2026
-        },
-        {
-          "title": "Brain Space",
-          "credit": "Brain Space, Aardman Animations, UK 2025",
-          "director": "Laura Tofarides",
-          "durationMin": 8,
-          "country": "Vereinigtes Königreich",
-          "year": 2025
-        },
-        {
-          "title": "Jamb Stories (Advertisement)",
-          "credit": "Jamb Stories, Aardman Animations, UK 2025",
-          "director": "Suzy Parr",
+          "title": "Wallace & Gromit: The Curse of the Were-Rabbit (Excerpt)",
+          "credit": "Wallace & Gromit The Curse of the Were-Rabbit, Aardman Animations, UK 2005",
+          "director": "Steve Box, Nick Park",
           "durationMin": 3,
+          "language": "English",
           "country": "Vereinigtes Königreich",
-          "year": 2025
+          "year": 2005
         },
         {
           "title": "Don't Let it All Unravel",
@@ -2193,12 +2168,12 @@
           "year": 2007
         },
         {
-          "title": "Guts",
-          "credit": "Guts, Aardman Animations, UK, AUS 2024",
-          "director": "Jane Abernethy",
-          "durationMin": 3,
-          "country": "Vereinigtes Königreich, Australien",
-          "year": 2024
+          "title": "NY Bear",
+          "credit": "Shaun the Sheep (S02E08), GB 2009",
+          "director": "Tanya Scott",
+          "durationMin": 2,
+          "country": "Vereinigtes Königreich",
+          "year": 2026
         },
         {
           "title": "Chicken Run: Dawn of the Nugget (Excerpt)",
@@ -2210,21 +2185,21 @@
           "year": 2023
         },
         {
-          "title": "Wallace & Gromit: A Close Shave (Excerpt)",
-          "credit": "A Close Shave, Aardman Animations, UK 1995",
-          "director": "Nick Park",
-          "durationMin": 1,
-          "language": "English",
-          "country": "Vereinigtes Königreich",
-          "year": 1995
+          "title": "Guts",
+          "credit": "Guts, Aardman Animations, UK, AUS 2024",
+          "director": "Jane Abernethy",
+          "durationMin": 3,
+          "country": "Vereinigtes Königreich, Australien",
+          "year": 2024
         },
         {
-          "title": "NY Bear",
-          "credit": "Shaun the Sheep (S02E08), GB 2009",
-          "director": "Tanya Scott",
-          "durationMin": 2,
-          "country": "Vereinigtes Königreich",
-          "year": 2026
+          "title": "Shaun the Sheep (S07E17)",
+          "credit": "Shaun the Sheep (S07E17), GB 2025",
+          "director": "Seamus Malone",
+          "durationMin": 7,
+          "language": "English",
+          "country": "Vereinigtes Königreich, Deutschland",
+          "year": 2025
         }
       ]
     },

@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-08-25T04:52:51.919Z",
+  "scrapedAt": "2026-08-26T04:54:27.292Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -475,7 +475,7 @@
     },
     {
       "id": "prg3532",
-      "durationMin": 71,
+      "durationMin": 62,
       "ageRating": 10,
       "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
     },
@@ -1344,7 +1344,7 @@
       "blockId": "prg3532",
       "venueId": "cinema-sterk-1",
       "start": 1788453900,
-      "end": 1788458160,
+      "end": 1788457620,
       "endSource": "runtime"
     },
     {
@@ -2225,7 +2225,7 @@
       "blockId": "prg3532",
       "venueId": "cinema-trafo-2",
       "start": 1788681600,
-      "end": 1788685860,
+      "end": 1788685320,
       "endSource": "runtime"
     },
     {
