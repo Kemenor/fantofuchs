@@ -1,19 +1,20 @@
 {
   "lang": "en",
-  "scrapedAt": "2026-08-26T04:54:27.292Z",
+  "scrapedAt": "2026-08-27T15:14:04.340Z",
   "source": "https://fantoche.ch/programme",
   "venues": {
+    "cinema-trafo": "Cinema Trafo",
+    "cinema-trafo-1": "Cinema Trafo 1",
+    "cinema-trafo-2": "Cinema Trafo 2",
     "tumbler": "Tumbler",
     "fantoche-shop": "Fantoche Shop",
-    "cinema-trafo-2": "Cinema Trafo 2",
-    "cinema-trafo-1": "Cinema Trafo 1",
     "cinema-trafo-3": "Cinema Trafo 3",
     "orient-cinema": "Orient Cinema",
     "stanzerei": "Stanzerei",
     "museum-langmatt": "Museum Langmatt",
     "cinema-sterk-1": "Cinema Sterk 1",
-    "galerie-gluri-suter-huus": "Galerie Gluri Suter Huus",
     "kunstraum-baden": "Kunstraum Baden",
+    "galerie-gluri-suter-huus": "Galerie Gluri Suter Huus",
     "jurte": "Jurte",
     "bagno-popolare": "Bagno Popolare",
     "royal-baden": "Royal Baden",
@@ -24,6 +25,86 @@
     "reformierte-kirche-baden": "Reformierte Kirche Baden"
   },
   "blocks": {
+    "prg3391": {
+      "title": "International Competition 01",
+      "category": "International Competition 2026",
+      "url": "https://fantoche.ch/en/festival/programme/International-Competition-01~prg3391",
+      "badges": [],
+      "films": [
+        {
+          "title": "Marble & Lemons",
+          "credit": "Marble & Lemons, Anna Katalin Lovrity FR/HR 2026",
+          "director": "Anna Katalin Lovrity",
+          "durationMin": 9,
+          "country": "France, Hungary",
+          "year": 2026,
+          "synopsis": "During a vacation on the Italian coast, a sophisticated lady and her free-spirited adult daughter struggle to connect. When the daughter discovers her mother’s vulnerability, she starts to see her in a new light. “Marble & Lemons” is an ode to physical changes, femininityand sorority."
+        },
+        {
+          "title": "My Brother, My Brother",
+          "credit": "My Brother, My Brother, Abdelrahman Dnewar, Saad Dnewar, EG 2025",
+          "director": "Abdelrahman Dnewar, Saad Dnewar",
+          "durationMin": 15,
+          "country": "Egypt, France, Germany",
+          "year": 2025,
+          "synopsis": "“My Brother, My Brother” is anautofictional story following identical twins Omar and Wesam as they navigate a childhood shaped by faith, science and loss. Through fragmented memories and shifting perspectives, the film explores grief, identity and the fragile bond that connects them."
+        },
+        {
+          "title": "« Ce n’est pas sale »",
+          "credit": "« Ce n’est pas sale », Ulysse Patrick Thevenot, FR 2025",
+          "director": "Ulysse Patrick Thevenot",
+          "durationMin": 4,
+          "country": "France",
+          "year": 2025,
+          "synopsis": "Didier remembers. In the intimacy of his daily life, he recounts his memories of love and loneliness, of what is hidden and whatremains. The film questions how memories build our identity, while raising awareness of the struggles and hardships that queer seniors face throughout their lives."
+        },
+        {
+          "title": "Uka-Uka",
+          "credit": "Uka-Uka, Henri Veermäe, EE 2026",
+          "director": "Henri Veermäe",
+          "durationMin": 12,
+          "country": "Estonia",
+          "year": 2026,
+          "synopsis": "Battling boredom, a little boy gets trapped in the boot of a car. When he gets out, he’s no longer the same."
+        },
+        {
+          "title": "School Show",
+          "credit": "School Show, Ana Horvat, HR 2026",
+          "director": "Ana Horvat",
+          "durationMin": 6,
+          "country": "Croatia",
+          "year": 2026,
+          "synopsis": "In mid-1980s Yugoslavia, a school performance is underway. As songs and recitations unfold on stage, a young Pioneer girl notices an unfamiliar man in the audience behaving in a strange and unsettling way – something she cannot fully understand."
+        },
+        {
+          "title": "A Taste of Beer",
+          "credit": "A Taste of Beer, Xie Li, CN 2026",
+          "director": "Xie Li",
+          "durationMin": 6,
+          "country": "China",
+          "year": 2025
+        },
+        {
+          "title": "If the Stars Were to Light Up",
+          "credit": "If the Stars Were to Light up, Andrea Odreman, Emiliano Campos, AR 2025",
+          "director": "Andrea Odreman, Emiliano Campos",
+          "durationMin": 7,
+          "country": "Argentina",
+          "year": 2025,
+          "synopsis": "In a hot, deserted neighbourhood on the outskirts of the city, three kids and a dog rest in the shade of a tree. Everything hums like a thick, drowsy tranquillity, but the calm is broken by small cracks in the everyday. Suddenly, astrange light floods everything and time seems to shatter. A visual poem about waiting and restlessness."
+        },
+        {
+          "title": "Im Auto Tapes und Butterbrot",
+          "credit": "With Tapes and Toasts in the Car, Kiana Naghshineh, DE 2025",
+          "director": "Kiana Naghshineh",
+          "durationMin": 14,
+          "language": "German",
+          "country": "Germany",
+          "year": 2025,
+          "synopsis": "During a visit to the doctor, Shari learns that an affliction is causing her body to fade into stardust. She begins to realise what truly matters to her."
+        }
+      ]
+    },
     "prg3565": {
       "title": "FOCAL-Workshop: Producing Low-Budget Feature Films in Europe",
       "category": "For professional audiences",
@@ -132,108 +213,9 @@
       "badges": [
         "Closed Captions",
         "German subtitles",
-        "Chinese",
         "OV/e"
       ],
       "films": []
-    },
-    "prg3400": {
-      "title": "Swiss Competition 01",
-      "category": "Swiss competition 2026",
-      "url": "https://fantoche.ch/en/festival/programme/Swiss-Competition-01~prg3400",
-      "badges": [],
-      "films": [
-        {
-          "title": "Sensual",
-          "credit": "Sensual, Tanja Nuijten, DE 2025",
-          "director": "Tanja Nuijten",
-          "durationMin": 4,
-          "country": "Germany",
-          "year": 2025,
-          "synopsis": "Soft snails glide lasciviously across moist lips, smooth snakes slip gently through fingers, a warm bear hug. Sensual touches on a body, stimulated by various claws, furs, scales and more. Tender, vulnerable, powerful and sexy."
-        },
-        {
-          "title": "Keko & Kiki",
-          "credit": "Keko & Kiki, Mauro Carraro, CH 2025",
-          "director": "Mauro Carraro",
-          "durationMin": 9,
-          "country": "Switzerland, Italy",
-          "year": 2025,
-          "synopsis": "The cheeky crow Keko and the well-behaved hunting dog Kiki are the pets of an elderly couple in a small village in north-eastern Italy. Apart from a few squabbles, they live together peacefully. Their world is shaken when a big argument breaks out."
-        },
-        {
-          "title": "Chaos Ex Machina",
-          "credit": "Chaos Ex Machina, Zoltan Horvath, CH 2025",
-          "director": "Zoltan Horvath",
-          "durationMin": 7,
-          "country": "Switzerland",
-          "year": 2025,
-          "synopsis": "“Where do we want to go?” This question does not come from an ancient Greek philosopher but from a dysfunctional, nihilistic GPS device. Switch on at your own risk. An attempt to follow a constantly changing route and not end up in the scenery."
-        },
-        {
-          "title": "My Peckham Experiment",
-          "credit": "My Peckham Experiment, Gerd Gockell, CH/DE 2026",
-          "director": "Gerd Gockell",
-          "durationMin": 4,
-          "country": "Germany, Switzerland",
-          "year": 2026,
-          "synopsis": "Everything trembles, everything vibrates, the rhythm runs through the neighbourhood. A visual experiment about shifting perspectives and a declaration of love for a London district."
-        },
-        {
-          "title": "Cartoon Physics",
-          "credit": "Cartoon Physics, Ru Kuwahata, Max Porter, CH/DE/NL 2026",
-          "director": "Ru Kuwahata, Max Porter",
-          "durationMin": 11,
-          "country": "France, Netherlands, Switzerland",
-          "year": 2026,
-          "synopsis": "A dead bird in the garden raises questions for a four-year-old. To protect her daughter from harsh reality, a mother invents an alternative world. Together, they escape into the logic of cartoons, where anything is possible."
-        },
-        {
-          "title": "What's Your Verdict ?",
-          "credit": "What's your verdict? Persephone Huynh Murphy, Anna Paziewska, Marija Gajic, CH 2026",
-          "director": "Persephone Huynh Murphy, Anna Paziewska, Marija Gajic",
-          "durationMin": 5,
-          "country": "Switzerland",
-          "year": 2026,
-          "synopsis": "A TV courtroom show: a man, a woman, one evening together, contradictory versions of what happened. Broadcast disruption –we’ll return to the programme shortly. Who is telling the truth and whom do you believe?"
-        },
-        {
-          "title": "Was glitzert",
-          "credit": "What Glitters, Anna Lena Spring, Lara Perren, CH 2026",
-          "director": "Anna Lena Spring, Lara Perren",
-          "durationMin": 10,
-          "country": "Switzerland",
-          "year": 2026,
-          "synopsis": "In a magical world full of strawberries, dreamer Glitzeri creates beautiful, sparkling water fountains. But his happiness is dampened by the other animals. If only they could recognise the beauty hidden beneath the surface."
-        },
-        {
-          "title": "Miserere Mei",
-          "credit": "Miserere Mei, Valentine Moser, CH 2025",
-          "director": "Valentine Moser",
-          "durationMin": 4,
-          "country": "Switzerland",
-          "year": 2025,
-          "synopsis": "The beguiling sound of a dystopian universe in which hope even shines through radioactive deers."
-        },
-        {
-          "title": "Stärneschii",
-          "credit": "Stärneschii, Jérémie Jayraj Itt, Inna Sorok, Julia Estrada Torre, Sammi Khuu, CH 2026",
-          "director": "Jérémie Jayraj Itty, Inna Soroka, Julia Estrada Torres, Sammi Khuu",
-          "durationMin": 7,
-          "country": "Switzerland",
-          "year": 2026,
-          "synopsis": "Joakim works with great dedication in the dementia ward. His care is appreciated. But the young man struggles with the emotional strain of his work and must learn to accept the limits to what he can give."
-        },
-        {
-          "title": "The Picture of Dorian Gray",
-          "credit": "The Picture of Dorian Gray, Georges Schwizgebel, CH 2026",
-          "director": "Georges Schwizgebel",
-          "durationMin": 7,
-          "country": "Switzerland",
-          "year": 2026,
-          "synopsis": "Through the magic of a wish, Dorian Gray retains the beauty of youth. Only his painted portrait will age. Now he is to enjoy life to the fullest. Based on the novel by Oscar Wilde."
-        }
-      ]
     },
     "prg3395": {
       "title": "Kids Film Competition 01",
@@ -404,6 +386,104 @@
         }
       ]
     },
+    "prg3400": {
+      "title": "Swiss Competition 01",
+      "category": "Swiss competition 2026",
+      "url": "https://fantoche.ch/en/festival/programme/Swiss-Competition-01~prg3400",
+      "badges": [],
+      "films": [
+        {
+          "title": "Sensual",
+          "credit": "Sensual, Tanja Nuijten, DE 2025",
+          "director": "Tanja Nuijten",
+          "durationMin": 4,
+          "country": "Germany",
+          "year": 2025,
+          "synopsis": "Soft snails glide lasciviously across moist lips, smooth snakes slip gently through fingers, a warm bear hug. Sensual touches on a body, stimulated by various claws, furs, scales and more. Tender, vulnerable, powerful and sexy."
+        },
+        {
+          "title": "Keko & Kiki",
+          "credit": "Keko & Kiki, Mauro Carraro, CH 2025",
+          "director": "Mauro Carraro",
+          "durationMin": 9,
+          "country": "Switzerland, Italy",
+          "year": 2025,
+          "synopsis": "The cheeky crow Keko and the well-behaved hunting dog Kiki are the pets of an elderly couple in a small village in north-eastern Italy. Apart from a few squabbles, they live together peacefully. Their world is shaken when a big argument breaks out."
+        },
+        {
+          "title": "Chaos Ex Machina",
+          "credit": "Chaos Ex Machina, Zoltan Horvath, CH 2025",
+          "director": "Zoltan Horvath",
+          "durationMin": 7,
+          "country": "Switzerland",
+          "year": 2025,
+          "synopsis": "“Where do we want to go?” This question does not come from an ancient Greek philosopher but from a dysfunctional, nihilistic GPS device. Switch on at your own risk. An attempt to follow a constantly changing route and not end up in the scenery."
+        },
+        {
+          "title": "My Peckham Experiment",
+          "credit": "My Peckham Experiment, Gerd Gockell, CH/DE 2026",
+          "director": "Gerd Gockell",
+          "durationMin": 4,
+          "country": "Germany, Switzerland",
+          "year": 2026,
+          "synopsis": "Everything trembles, everything vibrates, the rhythm runs through the neighbourhood. A visual experiment about shifting perspectives and a declaration of love for a London district."
+        },
+        {
+          "title": "Cartoon Physics",
+          "credit": "Cartoon Physics, Ru Kuwahata, Max Porter, CH/DE/NL 2026",
+          "director": "Ru Kuwahata, Max Porter",
+          "durationMin": 11,
+          "country": "France, Netherlands, Switzerland",
+          "year": 2026,
+          "synopsis": "A dead bird in the garden raises questions for a four-year-old. To protect her daughter from harsh reality, a mother invents an alternative world. Together, they escape into the logic of cartoons, where anything is possible."
+        },
+        {
+          "title": "What's Your Verdict ?",
+          "credit": "What's your verdict? Persephone Huynh Murphy, Anna Paziewska, Marija Gajic, CH 2026",
+          "director": "Persephone Huynh Murphy, Anna Paziewska, Marija Gajic",
+          "durationMin": 5,
+          "country": "Switzerland",
+          "year": 2026,
+          "synopsis": "A TV courtroom show: a man, a woman, one evening together, contradictory versions of what happened. Broadcast disruption –we’ll return to the programme shortly. Who is telling the truth and whom do you believe?"
+        },
+        {
+          "title": "Was glitzert",
+          "credit": "What Glitters, Anna Lena Spring, Lara Perren, CH 2026",
+          "director": "Anna Lena Spring, Lara Perren",
+          "durationMin": 10,
+          "country": "Switzerland",
+          "year": 2026,
+          "synopsis": "In a magical world full of strawberries, dreamer Glitzeri creates beautiful, sparkling water fountains. But his happiness is dampened by the other animals. If only they could recognise the beauty hidden beneath the surface."
+        },
+        {
+          "title": "Miserere Mei",
+          "credit": "Miserere Mei, Valentine Moser, CH 2025",
+          "director": "Valentine Moser",
+          "durationMin": 4,
+          "country": "Switzerland",
+          "year": 2025,
+          "synopsis": "The beguiling sound of a dystopian universe in which hope even shines through radioactive deers."
+        },
+        {
+          "title": "Stärneschii",
+          "credit": "Stärneschii, Jérémie Jayraj Itt, Inna Sorok, Julia Estrada Torre, Sammi Khuu, CH 2026",
+          "director": "Jérémie Jayraj Itty, Inna Soroka, Julia Estrada Torres, Sammi Khuu",
+          "durationMin": 7,
+          "country": "Switzerland",
+          "year": 2026,
+          "synopsis": "Joakim works with great dedication in the dementia ward. His care is appreciated. But the young man struggles with the emotional strain of his work and must learn to accept the limits to what he can give."
+        },
+        {
+          "title": "The Picture of Dorian Gray",
+          "credit": "The Picture of Dorian Gray, Georges Schwizgebel, CH 2026",
+          "director": "Georges Schwizgebel",
+          "durationMin": 7,
+          "country": "Switzerland",
+          "year": 2026,
+          "synopsis": "Through the magic of a wish, Dorian Gray retains the beauty of youth. Only his painted portrait will age. Now he is to enjoy life to the fullest. Based on the novel by Oscar Wilde."
+        }
+      ]
+    },
     "prg3527": {
       "title": "REFRESH x Fantoche #5",
       "category": "Animation goes multimedia",
@@ -419,6 +499,88 @@
       "url": "https://fantoche.ch/en/festival/programme/Museum-Langmatt--Sustainability-Tour~prg3577",
       "badges": [],
       "films": []
+    },
+    "prg3548": {
+      "title": "98’856 Frames of Bonding",
+      "category": "Calling Planet Earth",
+      "synopsis": "If only we could dance like a flower, draw nourishment from Mother Nature’s bosom, decipher the language of the birds and live in harmony with nature! In “Birdcalls”, an attempt is made to decode the songbirds’ message using an answering machine; in “Eager”, human bodies morph into floral patterns as part of a bizarre choreography and in “La saison pourpre”, childhood is poetically evoked as a place of naturalness.",
+      "url": "https://fantoche.ch/en/festival/programme/98856-Frames-of-Bonding~prg3548",
+      "badges": [],
+      "films": [
+        {
+          "title": "Abandoned Village",
+          "credit": "Abandoned Village, Mariam Kapanadze, GE 2020",
+          "director": "Mariam Kapanadze",
+          "durationMin": 14,
+          "language": "-",
+          "country": "Georgia",
+          "year": 2020,
+          "synopsis": "An archetypal portrait of every place that has been abandoned, where the village becomes a living being, first left alone by men and then illuminated by the light of a fire that evokes a possible return, in the eternal repetition of the before and after of life and death."
+        },
+        {
+          "title": "Weval – Someday",
+          "credit": "Weval – Someday, IE 2019",
+          "director": "Páraic Mc Gloughlin",
+          "durationMin": 4,
+          "country": "Ireland",
+          "year": 2019,
+          "synopsis": "The fragility of Earth's future, the uncertainty of life are among the core concepts director Páraic McGloughlin explores in this music video for Weval, a duo from the Kompakt label."
+        },
+        {
+          "title": "In a Dumpster",
+          "credit": "In a Dumpster, Daria Kashcheeva, CZ 2017",
+          "director": "Daria Kashcheeva",
+          "durationMin": 2,
+          "country": "Czechia",
+          "year": 2017,
+          "synopsis": "What happens in the dustbin when no one’s watching? What if, unknowingly, we’re creating new life with our waste? And will that life be peaceful, or will it try to destroy us?"
+        },
+        {
+          "title": "Birdcalls",
+          "credit": "Birdcalls, Malcolm Sutherland, CA 2005",
+          "director": "Malcolm Sutherland",
+          "durationMin": 5,
+          "country": "Canada",
+          "year": 2005,
+          "synopsis": "A telephone answering machine is activated and all the messages it contains are played. We hear the sounds of twelve different birds and see a hand trying to find signs, symbols, letters to contain what has been uttered. The symbols evolve to a language of far more than just the sounds of birds."
+        },
+        {
+          "title": "The Flood is Coming",
+          "credit": "The Flood is Coming, Gabriel Böhmer, GB/CH 2018_02",
+          "director": "Gabriel Böhmer",
+          "durationMin": 9,
+          "country": "United Kingdom, Switzerland",
+          "year": 2018,
+          "synopsis": "A forest hermit tries to prepare for a flood, but he becomes distracted by his noisy neighbour – who happens to be the hermit's left eye. The film explores the growing anxiety about the state of nature, and our place in it."
+        },
+        {
+          "title": "Eager",
+          "credit": "Eager, Allison Schulnik, UK 2014",
+          "director": "Allison Schulnik",
+          "durationMin": 9,
+          "country": "United States",
+          "year": 2014,
+          "synopsis": "A Claymation dance film by Allison Schulnik, who makes beautiful, eerie work. In Eager, fairy-like clay beings perform a discomforting choreography. First in the dark, then in a field of flowers. There the violets and roses join in and they are creepier than you can imagine."
+        },
+        {
+          "title": "La saison pourpre",
+          "credit": "The Purple Season, Clémence Bouchereau, FR 2023",
+          "director": "Clémence Bouchereau",
+          "durationMin": 9,
+          "country": "France",
+          "year": 2023,
+          "synopsis": "On an island at the edge of the mangrove, a group of girlslives to the rhythm of the climate. Heloise, the youngest, is timidly discovering her new environment. Lucia, who is entering puberty, hunts wild geese to feed the group. Sarah, who is younger than Lucia, seems more and more ready to succeed her."
+        },
+        {
+          "title": "Oh Willy…",
+          "credit": "Oh Willy…, Emma DeSwaef, Marc James Roels, BE 2012",
+          "director": "Emma De Swaef, Marc James Roels",
+          "durationMin": 17,
+          "country": "Belgium, France, Netherlands",
+          "year": 2012,
+          "synopsis": "Fifty-something Willy returns to the naturist community of his youth to visit his dying mother. When she dies shortly after he arrives, Willy flees in confused sadness into the forest. After a rough start he finds the motherly protection of a big gentle hairy beast."
+        }
+      ]
     },
     "prg3539": {
       "title": "90 Years of Egyptian Animation: The Pioneers",
@@ -564,167 +726,13 @@
         }
       ]
     },
-    "prg3391": {
-      "title": "International Competition 01",
-      "category": "International Competition 2026",
-      "url": "https://fantoche.ch/en/festival/programme/International-Competition-01~prg3391",
+    "prg3536": {
+      "title": "Meet the Artist: Cheng-Hsu Chung",
+      "category": "Artists Present",
+      "synopsis": "Cheng-Hsu Chung is a Taiwanese animation artist and director currently based in Berlin, Germany. Chung’s artistic practice focuses on using surreal imagery and character performances in animation to articulate the changing nature of emotions, modern romantic relationships and the experiences of queer bodies in today’s queer culture. Working across artistic and commercial contexts, Chung has merged both worlds and created his playful, surreal visual style. As an animation artist and illustrator, his work adds artistry and originality to commercial projects while maintaining a distinctive signature style. His clients include Spotify, Adidas, Nike, Adult Swim, BBC, Warp Records, Bayer, Berliner Zeitung, among many others.",
+      "url": "https://fantoche.ch/en/festival/programme/Meet-the-Artist--Cheng-Hsu-Chung~prg3536",
       "badges": [],
-      "films": [
-        {
-          "title": "Marble & Lemons",
-          "credit": "Marble & Lemons, Anna Katalin Lovrity FR/HR 2026",
-          "director": "Anna Katalin Lovrity",
-          "durationMin": 9,
-          "country": "France, Hungary",
-          "year": 2026,
-          "synopsis": "During a vacation on the Italian coast, a sophisticated lady and her free-spirited adult daughter struggle to connect. When the daughter discovers her mother’s vulnerability, she starts to see her in a new light. “Marble & Lemons” is an ode to physical changes, femininityand sorority."
-        },
-        {
-          "title": "My Brother, My Brother",
-          "credit": "My Brother, My Brother, Abdelrahman Dnewar, Saad Dnewar, EG 2025",
-          "director": "Abdelrahman Dnewar, Saad Dnewar",
-          "durationMin": 15,
-          "country": "Egypt, France, Germany",
-          "year": 2025,
-          "synopsis": "“My Brother, My Brother” is anautofictional story following identical twins Omar and Wesam as they navigate a childhood shaped by faith, science and loss. Through fragmented memories and shifting perspectives, the film explores grief, identity and the fragile bond that connects them."
-        },
-        {
-          "title": "« Ce n’est pas sale »",
-          "credit": "« Ce n’est pas sale », Ulysse Patrick Thevenot, FR 2025",
-          "director": "Ulysse Patrick Thevenot",
-          "durationMin": 4,
-          "country": "France",
-          "year": 2025,
-          "synopsis": "Didier remembers. In the intimacy of his daily life, he recounts his memories of love and loneliness, of what is hidden and whatremains. The film questions how memories build our identity, while raising awareness of the struggles and hardships that queer seniors face throughout their lives."
-        },
-        {
-          "title": "Uka-Uka",
-          "credit": "Uka-Uka, Henri Veermäe, EE 2026",
-          "director": "Henri Veermäe",
-          "durationMin": 12,
-          "country": "Estonia",
-          "year": 2026,
-          "synopsis": "Battling boredom, a little boy gets trapped in the boot of a car. When he gets out, he’s no longer the same."
-        },
-        {
-          "title": "School Show",
-          "credit": "School Show, Ana Horvat, HR 2026",
-          "director": "Ana Horvat",
-          "durationMin": 6,
-          "country": "Croatia",
-          "year": 2026,
-          "synopsis": "In mid-1980s Yugoslavia, a school performance is underway. As songs and recitations unfold on stage, a young Pioneer girl notices an unfamiliar man in the audience behaving in a strange and unsettling way – something she cannot fully understand."
-        },
-        {
-          "title": "A Taste of Beer",
-          "credit": "A Taste of Beer, Xie Li, CN 2026",
-          "director": "Xie Li",
-          "durationMin": 6,
-          "country": "China",
-          "year": 2025
-        },
-        {
-          "title": "If the Stars Were to Light Up",
-          "credit": "If the Stars Were to Light up, Andrea Odreman, Emiliano Campos, AR 2025",
-          "director": "Andrea Odreman, Emiliano Campos",
-          "durationMin": 7,
-          "country": "Argentina",
-          "year": 2025,
-          "synopsis": "In a hot, deserted neighbourhood on the outskirts of the city, three kids and a dog rest in the shade of a tree. Everything hums like a thick, drowsy tranquillity, but the calm is broken by small cracks in the everyday. Suddenly, astrange light floods everything and time seems to shatter. A visual poem about waiting and restlessness."
-        },
-        {
-          "title": "Im Auto Tapes und Butterbrot",
-          "credit": "With Tapes and Toasts in the Car, Kiana Naghshineh, DE 2025",
-          "director": "Kiana Naghshineh",
-          "durationMin": 14,
-          "language": "German",
-          "country": "Germany",
-          "year": 2025,
-          "synopsis": "During a visit to the doctor, Shari learns that an affliction is causing her body to fade into stardust. She begins to realise what truly matters to her."
-        }
-      ]
-    },
-    "prg3548": {
-      "title": "98’856 Frames of Bonding",
-      "category": "Calling Planet Earth",
-      "synopsis": "If only we could dance like a flower, draw nourishment from Mother Nature’s bosom, decipher the language of the birds and live in harmony with nature! In “Birdcalls”, an attempt is made to decode the songbirds’ message using an answering machine; in “Eager”, human bodies morph into floral patterns as part of a bizarre choreography and in “La saison pourpre”, childhood is poetically evoked as a place of naturalness.",
-      "url": "https://fantoche.ch/en/festival/programme/98856-Frames-of-Bonding~prg3548",
-      "badges": [],
-      "films": [
-        {
-          "title": "Abandoned Village",
-          "credit": "Abandoned Village, Mariam Kapanadze, GE 2020",
-          "director": "Mariam Kapanadze",
-          "durationMin": 14,
-          "language": "-",
-          "country": "Georgia",
-          "year": 2020,
-          "synopsis": "An archetypal portrait of every place that has been abandoned, where the village becomes a living being, first left alone by men and then illuminated by the light of a fire that evokes a possible return, in the eternal repetition of the before and after of life and death."
-        },
-        {
-          "title": "Weval – Someday",
-          "credit": "Weval – Someday, IE 2019",
-          "director": "Páraic Mc Gloughlin",
-          "durationMin": 4,
-          "country": "Ireland",
-          "year": 2019,
-          "synopsis": "The fragility of Earth's future, the uncertainty of life are among the core concepts director Páraic McGloughlin explores in this music video for Weval, a duo from the Kompakt label."
-        },
-        {
-          "title": "In a Dumpster",
-          "credit": "In a Dumpster, Daria Kashcheeva, CZ 2017",
-          "director": "Daria Kashcheeva",
-          "durationMin": 2,
-          "country": "Czechia",
-          "year": 2017,
-          "synopsis": "What happens in the dustbin when no one’s watching? What if, unknowingly, we’re creating new life with our waste? And will that life be peaceful, or will it try to destroy us?"
-        },
-        {
-          "title": "Birdcalls",
-          "credit": "Birdcalls, Malcolm Sutherland, CA 2005",
-          "director": "Malcolm Sutherland",
-          "durationMin": 5,
-          "country": "Canada",
-          "year": 2005,
-          "synopsis": "A telephone answering machine is activated and all the messages it contains are played. We hear the sounds of twelve different birds and see a hand trying to find signs, symbols, letters to contain what has been uttered. The symbols evolve to a language of far more than just the sounds of birds."
-        },
-        {
-          "title": "The Flood is Coming",
-          "credit": "The Flood is Coming, Gabriel Böhmer, GB/CH 2018_02",
-          "director": "Gabriel Böhmer",
-          "durationMin": 9,
-          "country": "United Kingdom, Switzerland",
-          "year": 2018,
-          "synopsis": "A forest hermit tries to prepare for a flood, but he becomes distracted by his noisy neighbour – who happens to be the hermit's left eye. The film explores the growing anxiety about the state of nature, and our place in it."
-        },
-        {
-          "title": "Eager",
-          "credit": "Eager, Allison Schulnik, UK 2014",
-          "director": "Allison Schulnik",
-          "durationMin": 9,
-          "country": "United States",
-          "year": 2014,
-          "synopsis": "A Claymation dance film by Allison Schulnik, who makes beautiful, eerie work. In Eager, fairy-like clay beings perform a discomforting choreography. First in the dark, then in a field of flowers. There the violets and roses join in and they are creepier than you can imagine."
-        },
-        {
-          "title": "La saison pourpre",
-          "credit": "The Purple Season, Clémence Bouchereau, FR 2023",
-          "director": "Clémence Bouchereau",
-          "durationMin": 9,
-          "country": "France",
-          "year": 2023,
-          "synopsis": "On an island at the edge of the mangrove, a group of girlslives to the rhythm of the climate. Heloise, the youngest, is timidly discovering her new environment. Lucia, who is entering puberty, hunts wild geese to feed the group. Sarah, who is younger than Lucia, seems more and more ready to succeed her."
-        },
-        {
-          "title": "Oh Willy…",
-          "credit": "Oh Willy…, Emma DeSwaef, Marc James Roels, BE 2012",
-          "director": "Emma De Swaef, Marc James Roels",
-          "durationMin": 17,
-          "country": "Belgium, France, Netherlands",
-          "year": 2012,
-          "synopsis": "Fifty-something Willy returns to the naturist community of his youth to visit his dying mother. When she dies shortly after he arrives, Willy flees in confused sadness into the forest. After a rough start he finds the motherly protection of a big gentle hairy beast."
-        }
-      ]
+      "films": []
     },
     "prg3393": {
       "title": "International Competition 02",
@@ -812,14 +820,6 @@
         }
       ]
     },
-    "prg3568": {
-      "title": "Guetnachtgschichtli: Nussbaumbandi",
-      "category": "Kids & Family",
-      "synopsis": "“Nussbaumbandi” is the latest Swiss bedtime story series comprising 26 episodes, each of which are 5 minutes long. The first episodes will celebrate their world premiere with a screening at Fantoche. High up in an old walnut tree is Yoko, Vikram and Silóe’s treehouse – the place where they meet to start their adventures. Together with the animals who share this overgrown, green space, they roam a small urban wilderness full of streams, meadows and hidden places. In their small, enchanted world, curiosity, solidarity and friendship matter more than anything else.",
-      "url": "https://fantoche.ch/en/festival/programme/Guetnachtgschichtli--Nussbaumbandi~prg3568",
-      "badges": [],
-      "films": []
-    },
     "prg3562": {
       "title": "Born in the Jungle",
       "category": "Latest feature Films",
@@ -833,11 +833,19 @@
       ],
       "films": []
     },
-    "prg3536": {
-      "title": "Meet the Artist: Cheng-Hsu Chung",
-      "category": "Artists Present",
-      "synopsis": "Cheng-Hsu Chung is a Taiwanese animation artist and director currently based in Berlin, Germany. Chung’s artistic practice focuses on using surreal imagery and character performances in animation to articulate the changing nature of emotions, modern romantic relationships and the experiences of queer bodies in today’s queer culture. Working across artistic and commercial contexts, Chung has merged both worlds and created his playful, surreal visual style. As an animation artist and illustrator, his work adds artistry and originality to commercial projects while maintaining a distinctive signature style. His clients include Spotify, Adidas, Nike, Adult Swim, BBC, Warp Records, Bayer, Berliner Zeitung, among many others.",
-      "url": "https://fantoche.ch/en/festival/programme/Meet-the-Artist--Cheng-Hsu-Chung~prg3536",
+    "prg3568": {
+      "title": "Guetnachtgschichtli: Nussbaumbandi",
+      "category": "Kids & Family",
+      "synopsis": "“Nussbaumbandi” is the latest Swiss bedtime story series comprising 26 episodes, each of which are 5 minutes long. The first episodes will celebrate their world premiere with a screening at Fantoche. High up in an old walnut tree is Yoko, Vikram and Silóe’s treehouse – the place where they meet to start their adventures. Together with the animals who share this overgrown, green space, they roam a small urban wilderness full of streams, meadows and hidden places. In their small, enchanted world, curiosity, solidarity and friendship matter more than anything else.",
+      "url": "https://fantoche.ch/en/festival/programme/Guetnachtgschichtli--Nussbaumbandi~prg3568",
+      "badges": [],
+      "films": []
+    },
+    "prg3586": {
+      "title": "Kunstraum Baden: Animation Artefacts #2",
+      "category": "Extras",
+      "synopsis": "For the second time, we are presenting sketches, figures and other objects from the filmmakers participating in the competition programmes. The exhibited works at Kunstraum Baden will change daily – a unique opportunity to look behind the scenes of animated film productions!",
+      "url": "https://fantoche.ch/en/festival/programme/Kunstraum-Baden--Animation-Artefacts-%25232~prg3586",
       "badges": [],
       "films": []
     },
@@ -888,33 +896,12 @@
         }
       ]
     },
-    "prg3586": {
-      "title": "Kunstraum Baden: Animation Artefacts #2",
-      "category": "Extras",
-      "synopsis": "For the second time, we are presenting sketches, figures and other objects from the filmmakers participating in the competition programmes. The exhibited works at Kunstraum Baden will change daily – a unique opportunity to look behind the scenes of animated film productions!",
-      "url": "https://fantoche.ch/en/festival/programme/Kunstraum-Baden--Animation-Artefacts-%25232~prg3586",
-      "badges": [],
-      "films": []
-    },
     "prg3575": {
       "title": "Kinder-Walk-in-Workshop: Calling Planet Earth",
       "category": "Kids & Family",
       "synopsis": "Do you want to create your own animated film? With the stop motion technique and colourful playdough you can make the importance of our planet for humanity and nature visible. Come along and let's be creative together. Whether you have previous experience or not. Everyone is welcome.",
       "url": "https://fantoche.ch/en/festival/programme/Kinder-Walk-in-Workshop--Calling-Planet-Earth~prg3575",
       "badges": [],
-      "films": []
-    },
-    "prg3414": {
-      "title": "Mu-Yi, la légende du village des femmes",
-      "category": "Latest feature Films",
-      "synopsis": "Mu-Yi lives in a remote village inhabited only by women. As she uncovers the secrets of her community, everything she believes is challenged. Torn between tradition, freedom and self-determination, she sets out to find her own path.",
-      "url": "https://fantoche.ch/en/festival/programme/Mu-Yi--la-legende-du-village-des-femmes~prg3414",
-      "director": "Julien Chheng",
-      "country": "FR",
-      "badges": [
-        "Live voiceover in German (via headphones)",
-        "F/e"
-      ],
       "films": []
     },
     "prg3397": {
@@ -1006,6 +993,31 @@
         }
       ]
     },
+    "prg3414": {
+      "title": "Mu-Yi, la légende du village des femmes",
+      "category": "Latest feature Films",
+      "synopsis": "Mu-Yi lives in a remote village inhabited only by women. As she uncovers the secrets of her community, everything she believes is challenged. Torn between tradition, freedom and self-determination, she sets out to find her own path.",
+      "url": "https://fantoche.ch/en/festival/programme/Mu-Yi--la-legende-du-village-des-femmes~prg3414",
+      "director": "Julien Chheng",
+      "country": "FR",
+      "badges": [
+        "Live voiceover in German (via headphones)",
+        "F/e"
+      ],
+      "films": []
+    },
+    "prg3413": {
+      "title": "Miss Moxy",
+      "category": "Latest feature Films",
+      "synopsis": "Moxy is a terribly spoiled house cat. Suddenly left to her own devices, she has no choice but to team up with a well-trained dog and an ageing swallow. With a knack for local details, this Dutch- Belgian children’s film tells a story of empowerment, friendship and respect.",
+      "url": "https://fantoche.ch/en/festival/programme/Miss-Moxy~prg3413",
+      "director": "Vincent Bal, Wip Vernooij",
+      "country": "NL/BE",
+      "badges": [
+        "D"
+      ],
+      "films": []
+    },
     "prg3394": {
       "title": "International Competition 05",
       "category": "International Competition 2026",
@@ -1092,18 +1104,6 @@
         }
       ]
     },
-    "prg3413": {
-      "title": "Miss Moxy",
-      "category": "Latest feature Films",
-      "synopsis": "Moxy is a terribly spoiled house cat. Suddenly left to her own devices, she has no choice but to team up with a well-trained dog and an ageing swallow. With a knack for local details, this Dutch- Belgian children’s film tells a story of empowerment, friendship and respect.",
-      "url": "https://fantoche.ch/en/festival/programme/Miss-Moxy~prg3413",
-      "director": "Vincent Bal, Wip Vernooij",
-      "country": "NL/BE",
-      "badges": [
-        "D"
-      ],
-      "films": []
-    },
     "prg3561": {
       "title": "Bagno Popolare",
       "category": "Extras",
@@ -1121,7 +1121,104 @@
       "country": "IT/MA/US",
       "badges": [
         "German subtitles",
-        "English, French, Arabic",
+        "OV/e"
+      ],
+      "films": []
+    },
+    "prg3392": {
+      "title": "International Competition 03",
+      "category": "International Competition 2026",
+      "url": "https://fantoche.ch/en/festival/programme/International-Competition-03~prg3392",
+      "badges": [],
+      "films": [
+        {
+          "title": "Nonna Lucia",
+          "credit": "Nonna Lucia, Marcel Barelli, CH 2026",
+          "director": "Marcel Barelli",
+          "durationMin": 7,
+          "language": "Italian",
+          "country": "Switzerland",
+          "year": 2026,
+          "synopsis": "My grandmother Lucia died and left behind many objects. Many, many objects."
+        },
+        {
+          "title": "Pajarito",
+          "credit": "Pajarito, Pilar Garcia-Fernandezsesma, ES/US 2026",
+          "director": "Pilar Garcia-Fernandezsesma",
+          "durationMin": 15,
+          "language": "Spanish",
+          "country": "Spain, United States",
+          "year": 2026,
+          "synopsis": "In 1980s Spain, two sisters confront their complicated feelings about motherhood when the eldest gives birth to her first child."
+        },
+        {
+          "title": "Mother of Dawn",
+          "credit": "Mother of Dawn, Clara Trevisan, BR 2025",
+          "director": "Clara Trevisan",
+          "durationMin": 8,
+          "country": "Brazil",
+          "year": 2025,
+          "synopsis": "In the void of night, a hungry creature looks for food and perpetuates an everyday cycle."
+        },
+        {
+          "title": "Papertowel Maxipad",
+          "credit": "Papertowel Maxipad, Madeline Babuka Black, US 2026",
+          "director": "Madeline Babuka Black",
+          "durationMin": 5,
+          "language": "English",
+          "country": "United States",
+          "year": 2026,
+          "synopsis": "In this animated horror-meets-farce comedy, Claire wakes up in a compromising position. Will she be able to survive without bruising her ego?"
+        },
+        {
+          "title": "Like a Fairy Tale",
+          "credit": "Like A Fairy Tale, Kirill Khachaturov, FR/LU 2025",
+          "director": "Kirill Khachaturov",
+          "durationMin": 16,
+          "language": "Russian",
+          "country": "France, Luxembourg",
+          "year": 2025,
+          "synopsis": "After missing her father’s funeral, Stasya returns to her hometown after a long absence and is confronted by her elder sister. While sorting out her family’s issues, Stasya meets a series of local strangers who take her on a strange nocturnal trip."
+        },
+        {
+          "title": "Tiɣrist: Threads of Exile",
+          "credit": "Tighrist - Threads of Exile, Samia Dzaïr, DZ/SA 2025",
+          "director": "Samia Dzaïr",
+          "durationMin": 3,
+          "country": "Algeria, Saudi Arabia",
+          "year": 2025,
+          "synopsis": "Drawing inspiration from traditional weaving techniques, oral storytelling and contemporary modes of production, “Tiɣrist: Threads of Exile” invites reflection on textile as a language of resistance and a vessel of memory – a sensitive archive."
+        },
+        {
+          "title": "Superlover",
+          "credit": "Superlover, Kushagra Kishore, Nivea Choudhary, Ryan Hmar, IN 2025",
+          "director": "Kushagra Kishore, Nivea Choudhary, Ryan Hmar",
+          "durationMin": 12,
+          "language": "English",
+          "country": "India",
+          "year": 2025,
+          "synopsis": "A young man deals with love and loneliness, finding comfort in the online ASMR (Autonomous Sensory Meridian Response) roleplay community."
+        },
+        {
+          "title": "Please",
+          "credit": "Please, Anna Mantzaris, CZ/FI/FR/NO/SW 2026",
+          "director": "Anna Mantzaris",
+          "durationMin": 9,
+          "language": "English",
+          "country": "Czechia, Finland, France, Norway, Sweden",
+          "year": 2026,
+          "synopsis": "A dark comedy about mankind’s desire to love and be loved. An animated short centred around neediness, intimacy and romance."
+        }
+      ]
+    },
+    "prg3402": {
+      "title": "All You Need Is Kill",
+      "category": "Latest feature Films",
+      "synopsis": "During an alien invasion, Rita finds herself trapped in a time loop that feels like a computer game. In stark contrast to the live-action film starring Tom Cruise, the anime version of “All You Need Is Kill” focuses on the female protagonist and captivates audiences with its expressive aesthetics and bold colours.",
+      "url": "https://fantoche.ch/en/festival/programme/All-You-Need-Is-Kill~prg3402",
+      "director": "Ken'ichirô Akimoto",
+      "country": "JP",
+      "badges": [
         "OV/e"
       ],
       "films": []
@@ -1215,105 +1312,6 @@
         }
       ]
     },
-    "prg3402": {
-      "title": "All You Need Is Kill",
-      "category": "Latest feature Films",
-      "synopsis": "During an alien invasion, Rita finds herself trapped in a time loop that feels like a computer game. In stark contrast to the live-action film starring Tom Cruise, the anime version of “All You Need Is Kill” focuses on the female protagonist and captivates audiences with its expressive aesthetics and bold colours.",
-      "url": "https://fantoche.ch/en/festival/programme/All-You-Need-Is-Kill~prg3402",
-      "director": "Ken'ichirô Akimoto",
-      "country": "JP",
-      "badges": [
-        "Japanese",
-        "OV/e"
-      ],
-      "films": []
-    },
-    "prg3392": {
-      "title": "International Competition 03",
-      "category": "International Competition 2026",
-      "url": "https://fantoche.ch/en/festival/programme/International-Competition-03~prg3392",
-      "badges": [],
-      "films": [
-        {
-          "title": "Nonna Lucia",
-          "credit": "Nonna Lucia, Marcel Barelli, CH 2026",
-          "director": "Marcel Barelli",
-          "durationMin": 7,
-          "language": "Italian",
-          "country": "Switzerland",
-          "year": 2026,
-          "synopsis": "My grandmother Lucia died and left behind many objects. Many, many objects."
-        },
-        {
-          "title": "Pajarito",
-          "credit": "Pajarito, Pilar Garcia-Fernandezsesma, ES/US 2026",
-          "director": "Pilar Garcia-Fernandezsesma",
-          "durationMin": 15,
-          "language": "Spanish",
-          "country": "Spain, United States",
-          "year": 2026,
-          "synopsis": "In 1980s Spain, two sisters confront their complicated feelings about motherhood when the eldest gives birth to her first child."
-        },
-        {
-          "title": "Mother of Dawn",
-          "credit": "Mother of Dawn, Clara Trevisan, BR 2025",
-          "director": "Clara Trevisan",
-          "durationMin": 8,
-          "country": "Brazil",
-          "year": 2025,
-          "synopsis": "In the void of night, a hungry creature looks for food and perpetuates an everyday cycle."
-        },
-        {
-          "title": "Papertowel Maxipad",
-          "credit": "Papertowel Maxipad, Madeline Babuka Black, US 2026",
-          "director": "Madeline Babuka Black",
-          "durationMin": 5,
-          "language": "English",
-          "country": "United States",
-          "year": 2026,
-          "synopsis": "In this animated horror-meets-farce comedy, Claire wakes up in a compromising position. Will she be able to survive without bruising her ego?"
-        },
-        {
-          "title": "Like a Fairy Tale",
-          "credit": "Like A Fairy Tale, Kirill Khachaturov, FR/LU 2025",
-          "director": "Kirill Khachaturov",
-          "durationMin": 16,
-          "language": "Russian",
-          "country": "France, Luxembourg",
-          "year": 2025,
-          "synopsis": "After missing her father’s funeral, Stasya returns to her hometown after a long absence and is confronted by her elder sister. While sorting out her family’s issues, Stasya meets a series of local strangers who take her on a strange nocturnal trip."
-        },
-        {
-          "title": "Tiɣrist: Threads of Exile",
-          "credit": "Tighrist - Threads of Exile, Samia Dzaïr, DZ/SA 2025",
-          "director": "Samia Dzaïr",
-          "durationMin": 3,
-          "country": "Algeria, Saudi Arabia",
-          "year": 2025,
-          "synopsis": "Drawing inspiration from traditional weaving techniques, oral storytelling and contemporary modes of production, “Tiɣrist: Threads of Exile” invites reflection on textile as a language of resistance and a vessel of memory – a sensitive archive."
-        },
-        {
-          "title": "Superlover",
-          "credit": "Superlover, Kushagra Kishore, Nivea Choudhary, Ryan Hmar, IN 2025",
-          "director": "Kushagra Kishore, Nivea Choudhary, Ryan Hmar",
-          "durationMin": 12,
-          "language": "English",
-          "country": "India",
-          "year": 2025,
-          "synopsis": "A young man deals with love and loneliness, finding comfort in the online ASMR (Autonomous Sensory Meridian Response) roleplay community."
-        },
-        {
-          "title": "Please",
-          "credit": "Please, Anna Mantzaris, CZ/FI/FR/NO/SW 2026",
-          "director": "Anna Mantzaris",
-          "durationMin": 9,
-          "language": "English",
-          "country": "Czechia, Finland, France, Norway, Sweden",
-          "year": 2026,
-          "synopsis": "A dark comedy about mankind’s desire to love and be loved. An animated short centred around neediness, intimacy and romance."
-        }
-      ]
-    },
     "prg3578": {
       "title": "Royal Fish: Fantoche Late Night",
       "category": "Extras",
@@ -1329,33 +1327,6 @@
       "badges": [],
       "films": []
     },
-    "prg3406": {
-      "title": "Carmen, l'oiseau rebelle",
-      "category": "Latest feature Films",
-      "synopsis": "In 1840 Seville, a street boy and a pickpocket try to save the charismatic Carmen from her foretold fate. Sébastien Laudenbach translates the plot of Bizet’s opera into a contemporary, visually stunning plea for solidarity and resistance.",
-      "url": "https://fantoche.ch/en/festival/programme/Carmen--loiseau-rebelle~prg3406",
-      "director": "Sébastien Laudenbach",
-      "country": "FR/LU",
-      "badges": [
-        "German subtitles",
-        "French",
-        "F/e"
-      ],
-      "films": []
-    },
-    "prg3403": {
-      "title": "Blaise",
-      "category": "Latest feature Films",
-      "synopsis": "When his parents air their own problems in front of the school psychologist, 16-year-old Blaise would rather vanish into the floor. Gradually, such laconic scenes build into a revealing satire on insecurity, miscommunication and botched rebellions.",
-      "url": "https://fantoche.ch/en/festival/programme/Blaise~prg3403",
-      "director": "Jean-Paul Guigue, Dimitri Planchon",
-      "country": "FR",
-      "badges": [
-        "French",
-        "F/e"
-      ],
-      "films": []
-    },
     "prg3408": {
       "title": "Forgotten Island",
       "category": "Latest feature Films",
@@ -1365,7 +1336,6 @@
       "country": "US",
       "badges": [
         "German subtitles",
-        "English",
         "E/d"
       ],
       "films": []
@@ -1498,6 +1468,32 @@
           "synopsis": "The story unfolds in a distant future, a time when machines have risen to claim dominion over the planet. A world drowned in darkness where artificial intelligence rules with an iron fist and humanity survives only in its shadow."
         }
       ]
+    },
+    "prg3406": {
+      "title": "Carmen, l'oiseau rebelle",
+      "category": "Latest feature Films",
+      "synopsis": "In 1840 Seville, a street boy and a pickpocket try to save the charismatic Carmen from her foretold fate. Sébastien Laudenbach translates the plot of Bizet’s opera into a contemporary, visually stunning plea for solidarity and resistance.",
+      "url": "https://fantoche.ch/en/festival/programme/Carmen--loiseau-rebelle~prg3406",
+      "director": "Sébastien Laudenbach",
+      "country": "FR/LU",
+      "badges": [
+        "German subtitles",
+        "French",
+        "F/e"
+      ],
+      "films": []
+    },
+    "prg3403": {
+      "title": "Blaise",
+      "category": "Latest feature Films",
+      "synopsis": "When his parents air their own problems in front of the school psychologist, 16-year-old Blaise would rather vanish into the floor. Gradually, such laconic scenes build into a revealing satire on insecurity, miscommunication and botched rebellions.",
+      "url": "https://fantoche.ch/en/festival/programme/Blaise~prg3403",
+      "director": "Jean-Paul Guigue, Dimitri Planchon",
+      "country": "FR",
+      "badges": [
+        "F/e"
+      ],
+      "films": []
     },
     "prg3390": {
       "title": "International Competition 04",
@@ -1649,18 +1645,6 @@
         }
       ]
     },
-    "prg3407": {
-      "title": "Decorado",
-      "category": "Latest feature Films",
-      "synopsis": "Arnold, an unemployed mouse, increasingly suspects his entire world is nothing more than a stage set. Based on his short film of the same name, Alberto Velázquez has created quirky, damaged characters who are plotting their escape from this controlling, capitalist-driven construct of reality.",
-      "url": "https://fantoche.ch/en/festival/programme/Decorado~prg3407",
-      "director": "Alberto Vázquez",
-      "country": "ES/PT",
-      "badges": [
-        "OV/e"
-      ],
-      "films": []
-    },
     "prg3542": {
       "title": "105’600 Frames of Splitting",
       "category": "Calling Planet Earth",
@@ -1735,6 +1719,18 @@
           "synopsis": "Svetlana stares into the salt desert with her only eye. Sergei drives tourists across its bare, glittering seabed. Few people of Mo’ynoq remember the original shore of drying Aral Sea. Their days are intertwined with memories of the glorious past and dreams of the return of the great water."
         }
       ]
+    },
+    "prg3407": {
+      "title": "Decorado",
+      "category": "Latest feature Films",
+      "synopsis": "Arnold, an unemployed mouse, increasingly suspects his entire world is nothing more than a stage set. Based on his short film of the same name, Alberto Velázquez has created quirky, damaged characters who are plotting their escape from this controlling, capitalist-driven construct of reality.",
+      "url": "https://fantoche.ch/en/festival/programme/Decorado~prg3407",
+      "director": "Alberto Vázquez",
+      "country": "ES/PT",
+      "badges": [
+        "OV/e"
+      ],
+      "films": []
     },
     "prg3396": {
       "title": "Panorama Festival Gems",
@@ -1818,6 +1814,18 @@
       "badges": [],
       "films": []
     },
+    "prg3417": {
+      "title": "The Last Blossom",
+      "category": "Latest feature Films",
+      "synopsis": "Akutsu, a former yakuza, recounts his life story to a plant from his deathbed in prison. Baku Kinoshita unfolds a web of choices and questions of conscience that gives his idiosyncratically drawn characters unexpected depth.",
+      "url": "https://fantoche.ch/en/festival/programme/The-Last-Blossom~prg3417",
+      "director": "Baku Kinoshita",
+      "country": "JP",
+      "badges": [
+        "OV/e"
+      ],
+      "films": []
+    },
     "prg3540": {
       "title": "Key Frames: Animation in the Archive",
       "category": "Focus Egypt",
@@ -1854,18 +1862,6 @@
         }
       ]
     },
-    "prg3417": {
-      "title": "The Last Blossom",
-      "category": "Latest feature Films",
-      "synopsis": "Akutsu, a former yakuza, recounts his life story to a plant from his deathbed in prison. Baku Kinoshita unfolds a web of choices and questions of conscience that gives his idiosyncratically drawn characters unexpected depth.",
-      "url": "https://fantoche.ch/en/festival/programme/The-Last-Blossom~prg3417",
-      "director": "Baku Kinoshita",
-      "country": "JP",
-      "badges": [
-        "OV/e"
-      ],
-      "films": []
-    },
     "prg3564": {
       "title": "Find a Producer",
       "category": "For professional audiences",
@@ -1879,6 +1875,14 @@
       "category": "Extras",
       "synopsis": "Get yourself a – weird, slightly trashy, but still classy – souvenir, one that you will have to last forever. There will be a selection of smaller, eye-catching designs that are perfect for easy placement on arms or legs. See you at the tattoo booth!",
       "url": "https://fantoche.ch/en/festival/programme/Tattoos-by-Bianca-Caderas~prg4323",
+      "badges": [],
+      "films": []
+    },
+    "prg3535": {
+      "title": "Meet the Aard(wo)man: Sarah Cox",
+      "category": "Artists Present",
+      "synopsis": "Chief Creative Director Sarah Cox sheds light on her involvement with the studio’s creative and production processes, discussing recent productions and focusing on female creativity. As an Aard(wo)man, she plays a key role in the development and direction of the successful creative output of Aardman Studios. Aardman became one of the first successful European alternatives to the American animation industry, with its distinctly British approach to stop-motion animation. The studio is celebrating its 50th anniversary and remains a key figure in high-quality, award-winning commercial and auteur work in both short and long formats. With clips from recent award-winning works – and maybe a few sneak peeks.",
+      "url": "https://fantoche.ch/en/festival/programme/Meet-the-Aardwoman--Sarah-Cox~prg3535",
       "badges": [],
       "films": []
     },
@@ -1908,35 +1912,11 @@
       ],
       "films": []
     },
-    "prg3535": {
-      "title": "Meet the Aard(wo)man: Sarah Cox",
-      "category": "Artists Present",
-      "synopsis": "Chief Creative Director Sarah Cox sheds light on her involvement with the studio’s creative and production processes, discussing recent productions and focusing on female creativity. As an Aard(wo)man, she plays a key role in the development and direction of the successful creative output of Aardman Studios. Aardman became one of the first successful European alternatives to the American animation industry, with its distinctly British approach to stop-motion animation. The studio is celebrating its 50th anniversary and remains a key figure in high-quality, award-winning commercial and auteur work in both short and long formats. With clips from recent award-winning works – and maybe a few sneak peeks.",
-      "url": "https://fantoche.ch/en/festival/programme/Meet-the-Aardwoman--Sarah-Cox~prg3535",
-      "badges": [],
-      "films": []
-    },
     "prg3528": {
       "title": "Animation x Game Design",
       "category": "Animation goes multimedia",
       "synopsis": "In this workshop, students of animation (HSLU) and game design (ZHdK) will come together to collectively develop games or gaming experiences. They will explore how both disciplines overlap and experiment with ways in which to collaborate during this brief but intensive exchange. The guided tour offers a behind-the-scenes look at the creative process ahead of the final presentation on Saturday as part of Game Pop-up #3.",
       "url": "https://fantoche.ch/en/festival/programme/Animation-x-Game-Design~prg3528",
-      "badges": [],
-      "films": []
-    },
-    "prg3541": {
-      "title": "Let's Talk: Animated Films on the Egyptian Scene",
-      "category": "Focus Egypt",
-      "synopsis": "“Let’s Talk” invites you to discover the Egyptian animation scene – a space for exploring the interplay between a longstanding media history, popular childhood imagery, cultural memory and new creative voices.",
-      "url": "https://fantoche.ch/en/festival/programme/Lets-Talk--Animated-Films-on-the-Egyptian-Scene~prg3541",
-      "badges": [],
-      "films": []
-    },
-    "prg3560": {
-      "title": "Artists’ Coffee & Cake",
-      "category": "For professional audiences",
-      "synopsis": "As a counterpart to our Artists’ Brunch, we are launching the new Artists’ Coffee & Cake series, in which our feature-film guests have their say and a chance to talk about their films. Fantoche invites you to join us for this round of talks over fresh coffee, tea and cake.",
-      "url": "https://fantoche.ch/en/festival/programme/Artists-Coffee--Cake~prg3560",
       "badges": [],
       "films": []
     },
@@ -1951,6 +1931,22 @@
         "German subtitles",
         "OV/e"
       ],
+      "films": []
+    },
+    "prg3560": {
+      "title": "Artists’ Coffee & Cake",
+      "category": "For professional audiences",
+      "synopsis": "As a counterpart to our Artists’ Brunch, we are launching the new Artists’ Coffee & Cake series, in which our feature-film guests have their say and a chance to talk about their films. Fantoche invites you to join us for this round of talks over fresh coffee, tea and cake.",
+      "url": "https://fantoche.ch/en/festival/programme/Artists-Coffee--Cake~prg3560",
+      "badges": [],
+      "films": []
+    },
+    "prg3541": {
+      "title": "Let's Talk: Animated Films on the Egyptian Scene",
+      "category": "Focus Egypt",
+      "synopsis": "“Let’s Talk” invites you to discover the Egyptian animation scene – a space for exploring the interplay between a longstanding media history, popular childhood imagery, cultural memory and new creative voices.",
+      "url": "https://fantoche.ch/en/festival/programme/Lets-Talk--Animated-Films-on-the-Egyptian-Scene~prg3541",
+      "badges": [],
       "films": []
     },
     "prg3398": {
@@ -2052,19 +2048,6 @@
         }
       ]
     },
-    "prg3556": {
-      "title": "Allegro non troppo",
-      "category": "Extras",
-      "synopsis": "As Italy’s answer to Disney’s “Fantasia”, six animated short films have been set to classical music. Bruno Bozzetto’s magnum opus, which celebrates its 50th anniversary this year, is brimming with delightful humour, creative ideas and satirical digs at modern consumer society.",
-      "url": "https://fantoche.ch/en/festival/programme/Allegro-non-troppo~prg3556",
-      "director": "Bruno Bozzetto",
-      "country": "IT",
-      "badges": [
-        "Italian",
-        "OV/d"
-      ],
-      "films": []
-    },
     "prg3409": {
       "title": "Jim Queen",
       "category": "Latest feature Films",
@@ -2073,8 +2056,19 @@
       "director": "Nicolas Athané, Marco Nguyen",
       "country": "FR/BE",
       "badges": [
-        "French",
         "F/e"
+      ],
+      "films": []
+    },
+    "prg3556": {
+      "title": "Allegro non troppo",
+      "category": "Extras",
+      "synopsis": "As Italy’s answer to Disney’s “Fantasia”, six animated short films have been set to classical music. Bruno Bozzetto’s magnum opus, which celebrates its 50th anniversary this year, is brimming with delightful humour, creative ideas and satirical digs at modern consumer society.",
+      "url": "https://fantoche.ch/en/festival/programme/Allegro-non-troppo~prg3556",
+      "director": "Bruno Bozzetto",
+      "country": "IT",
+      "badges": [
+        "OV/d"
       ],
       "films": []
     },
@@ -2170,7 +2164,7 @@
         },
         {
           "title": "NY Bear",
-          "credit": "Shaun the Sheep (S02E08), GB 2009",
+          "credit": "NY Bear, Tanya Scott, UK unrelased",
           "director": "Tanya Scott",
           "durationMin": 2,
           "country": "United Kingdom",
@@ -2195,7 +2189,7 @@
         },
         {
           "title": "Shaun the Sheep (S07E17)",
-          "credit": "Shaun the Sheep (S07E17), GB 2025",
+          "credit": "Shaun the Sheep (S07E17), Seamus Malone UK/DE 2025",
           "director": "Seamus Malone",
           "durationMin": 7,
           "language": "English",
@@ -2214,19 +2208,6 @@
       ],
       "films": []
     },
-    "prg3410": {
-      "title": "Junk World",
-      "category": "Latest feature Films",
-      "synopsis": "In a dystopian world, robots and humans must jointly investigate an anomaly in the space-time continuum. For this sprawling prequel to “Junk Head”, Takahide Hori and a tiny team have created a stop-motion grotesque film full of time loops, absurd ideas and eccentric figures.",
-      "url": "https://fantoche.ch/en/festival/programme/Junk-World~prg3410",
-      "director": "Takahide Hori",
-      "country": "JP",
-      "badges": [
-        "Japanese",
-        "OV/e"
-      ],
-      "films": []
-    },
     "prg3415": {
       "title": "Nobody",
       "category": "Latest feature Films",
@@ -2236,6 +2217,18 @@
       "country": "CN",
       "badges": [
         "OV/en"
+      ],
+      "films": []
+    },
+    "prg3410": {
+      "title": "Junk World",
+      "category": "Latest feature Films",
+      "synopsis": "In a dystopian world, robots and humans must jointly investigate an anomaly in the space-time continuum. For this sprawling prequel to “Junk Head”, Takahide Hori and a tiny team have created a stop-motion grotesque film full of time loops, absurd ideas and eccentric figures.",
+      "url": "https://fantoche.ch/en/festival/programme/Junk-World~prg3410",
+      "director": "Takahide Hori",
+      "country": "JP",
+      "badges": [
+        "OV/e"
       ],
       "films": []
     },
@@ -2602,8 +2595,7 @@
       "badges": [
         "OV/e",
         "OV/d",
-        "German subtitles",
-        "Japanese"
+        "German subtitles"
       ],
       "films": []
     },
@@ -2743,8 +2735,7 @@
       "director": "Momoko Seto",
       "country": "FR/BE",
       "badges": [
-        "Ohne Worte / Ohne Dialog",
-        "French"
+        "Ohne Worte / Ohne Dialog"
       ],
       "films": []
     },
@@ -2889,19 +2880,19 @@
         }
       ]
     },
-    "prg3525": {
-      "title": "Playful Animation Talk: «Ground of Aces» – Animating an Indie Game",
-      "category": "Animation goes multimedia",
-      "synopsis": "Eating, drinking, sleeping, talking, getting carried around dead … The characters in “Ground of Aces” have their hands full whilst fighting the Nazis and supporting the Allies. But how do you animate a large number of characters without blowing the budget? Frédéric Hein, lead 3D artist at Blindflug Studios, demonstrates how animation for “Ground of Aces” is created and integrated using a wide range of tools.",
-      "url": "https://fantoche.ch/en/festival/programme/Playful-Animation-Talk--%253C%253CGround-of-Aces%253E%253E---Animating-an-Indie-Game~prg3525",
-      "badges": [],
-      "films": []
-    },
     "prg3588": {
       "title": "Next Gen Ani – Input: Stop Motion: Von der Idee zum Film",
       "category": "Extras",
       "synopsis": "How are stop-motion films made? Stop-motion animator, director and cinematographer Marco Jöger offers insights into the broad spectrum of his work – including scenes from “Sauvages” (2024), “Double or Nothing” (2025) and “Vers la forêt” (2026).",
       "url": "https://fantoche.ch/en/festival/programme/Next-Gen-Ani---Input--Stop-Motion--Von-der-Idee-zum-Film~prg3588",
+      "badges": [],
+      "films": []
+    },
+    "prg3525": {
+      "title": "Playful Animation Talk: «Ground of Aces» – Animating an Indie Game",
+      "category": "Animation goes multimedia",
+      "synopsis": "Eating, drinking, sleeping, talking, getting carried around dead … The characters in “Ground of Aces” have their hands full whilst fighting the Nazis and supporting the Allies. But how do you animate a large number of characters without blowing the budget? Frédéric Hein, lead 3D artist at Blindflug Studios, demonstrates how animation for “Ground of Aces” is created and integrated using a wide range of tools.",
+      "url": "https://fantoche.ch/en/festival/programme/Playful-Animation-Talk--%253C%253CGround-of-Aces%253E%253E---Animating-an-Indie-Game~prg3525",
       "badges": [],
       "films": []
     },

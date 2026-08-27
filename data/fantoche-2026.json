@@ -2,11 +2,11 @@
   "edition": {
     "year": 2026,
     "title": "Fantoche 2026",
-    "firstDay": "2026-09-01",
+    "firstDay": "2026-08-26",
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-08-26T04:54:27.292Z",
+  "scrapedAt": "2026-08-27T15:14:04.340Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -179,6 +179,10 @@
       "id": "cinema-sterk-1",
       "placeId": "cinema-sterk",
       "hall": "1"
+    },
+    {
+      "id": "cinema-trafo",
+      "placeId": "cinema-trafo"
     },
     {
       "id": "cinema-trafo-1",
@@ -391,7 +395,7 @@
     {
       "id": "prg3411",
       "durationMin": 89,
-      "ageRating": 10,
+      "ageRating": 8,
       "year": 2025,
       "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
     },
@@ -752,6 +756,14 @@
   ],
   "showings": [
     {
+      "id": "3391_1787767200",
+      "blockId": "prg3391",
+      "venueId": "cinema-trafo",
+      "start": 1787767200,
+      "end": 1787770800,
+      "endSource": "published"
+    },
+    {
       "id": "3565_1788246000",
       "blockId": "prg3565",
       "venueId": "tumbler",
@@ -784,21 +796,21 @@
       "endSource": "runtime"
     },
     {
-      "id": "3400_1788336000",
-      "blockId": "prg3400",
-      "venueId": "cinema-trafo-2",
-      "start": 1788336000,
-      "end": 1788341400,
-      "endSource": "published",
-      "closed": true
-    },
-    {
       "id": "3395_1788336000",
       "blockId": "prg3395",
       "venueId": "cinema-trafo-2",
       "start": 1788336000,
       "end": 1788339660,
       "endSource": "runtime",
+      "closed": true
+    },
+    {
+      "id": "3400_1788336000",
+      "blockId": "prg3400",
+      "venueId": "cinema-trafo-2",
+      "start": 1788336000,
+      "end": 1788341400,
+      "endSource": "published",
       "closed": true
     },
     {
