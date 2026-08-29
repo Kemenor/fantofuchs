@@ -6,16 +6,23 @@
  * different by the time you look back at it.
  */
 import {
-  activePerson, alternativesAt, festival, gapSuggestions, people, plan, planSlots,
+  activePerson, alternativesAt, festival, gapSuggestions, people, placeById, plan, planSlots,
   planningFor, setInterest, travelMatrix, venueById,
 } from '../store.ts';
 import { dayDotMonth, dayKey, duration, minutesBetween, shortDay, time, weekday } from '../format.ts';
 import { t } from '../i18n/index.ts';
 import { downloadIcs, planToIcs } from '../ics.ts';
+import { mapsPlaceUrl, mapsWalkToUrl, mapsWalkUrl } from '../maps.ts';
 import type { PlanItem } from '../model/optimize.ts';
 import type { Suggestion } from '../model/suggest.ts';
 import { useState } from 'preact/hooks';
 import { PeopleBar } from './PeopleBar.tsx';
+
+/** The building a showing happens in, for the maps hand-off links. */
+function placeOf(venueId: string) {
+  const venue = venueById.value.get(venueId);
+  return venue ? placeById.get(venue.placeId) : undefined;
+}
 
 /** Films that would fit a hole, offered where the hole actually is. */
 function Fillers({ suggestions }: { suggestions: Suggestion[] }) {
@@ -59,6 +66,7 @@ function Fillers({ suggestions }: { suggestions: Suggestion[] }) {
 
 function Gap({ previous, next }: { previous: PlanItem; next: PlanItem }) {
   const s = t.value;
+  const venues = venueById.value;
   const idle = minutesBetween(previous.showing.end, next.showing.start);
   const walk = next.travelMin;
   const samePlace = travelMatrix.value.samePlace(previous.showing.venueId, next.showing.venueId);
@@ -68,10 +76,32 @@ function Gap({ previous, next }: { previous: PlanItem; next: PlanItem }) {
     next.waitMin > 0 ? s.plan.gapSpare(duration(next.waitMin)) : s.plan.gapStraightOn,
   ].filter(Boolean);
 
+  const from = placeOf(previous.showing.venueId);
+  const to = placeOf(next.showing.venueId);
+
   return (
     <div class="gap">
       <div />
-      <div class="bar tabular">{s.plan.gap(idle, parts.join(' · '))}</div>
+      <div class="bar tabular">
+        {s.plan.gap(idle, parts.join(' · '))}
+        {walk > 0 && from && to && (
+          <span class="map-route">
+            {' · '}
+            <a
+              class="map-link"
+              href={mapsWalkUrl(from, to)}
+              target="_blank"
+              rel="noopener"
+              aria-label={s.plan.routeLabel(
+                venues.get(previous.showing.venueId)?.name ?? previous.showing.venueId,
+                venues.get(next.showing.venueId)?.name ?? next.showing.venueId,
+              )}
+            >
+              {s.plan.route}
+            </a>
+          </span>
+        )}
+      </div>
     </div>
   );
 }
@@ -107,6 +137,12 @@ function DaySection(
           {leadingFillers.length > 0 && <Fillers suggestions={leadingFillers} />}
           {entries.map(({ item: it, index }, i) => {
             const venue = venues.get(it.showing.venueId);
+            const venueName = venue?.name ?? it.showing.venueId;
+            const place = placeOf(it.showing.venueId);
+            const others = people.value
+              .filter((p) => p.id !== activePerson.value.id)
+              .map((p) => p.name)
+              .join(' & ');
             const alternatives = alternativesAt(index);
             const after = fillersAfter.get(it.showing.id) ?? [];
             return (
@@ -120,11 +156,36 @@ function DaySection(
                   <div class="grow">
                     <h3 class="block-title">{it.block.title}</h3>
                     <div class="block-meta">
-                      {venue?.name ?? it.showing.venueId}
+                      {place ? (
+                        <a
+                          class="map-link"
+                          href={mapsPlaceUrl(place)}
+                          target="_blank"
+                          rel="noopener"
+                          aria-label={s.plan.mapLink(venueName)}
+                        >
+                          {venueName}<span class="map-route" aria-hidden="true"> ↗</span>
+                        </a>
+                      ) : venueName}
                       {it.block.durationMin ? ` · ${duration(it.block.durationMin)}` : ''}
                       {it.block.films.length > 1 ? ` · ${s.programme.films(it.block.films.length)}` : ''}
+                      {it.pinned && others && <span> · {s.plan.jointWith(others)}</span>}
                       {it.showing.endSource === 'assumed' && (
                         <span class="faded"> · {s.plan.assumedEnd(duration(90))}</span>
+                      )}
+                      {i === 0 && place && (
+                        <span class="map-route">
+                          {' · '}
+                          <a
+                            class="map-link"
+                            href={mapsWalkToUrl(place)}
+                            target="_blank"
+                            rel="noopener"
+                            aria-label={s.plan.routeFromHereLabel(venueName)}
+                          >
+                            {s.plan.route}
+                          </a>
+                        </span>
                       )}
                     </div>
                     {alternatives.length > 0 && (

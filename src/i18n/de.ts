@@ -21,7 +21,7 @@ export const de: Catalogue = {
     addPrompt: 'Wer kommt noch mit?',
     planFor: 'Planen für',
     everyone: 'Alle',
-    alone: (name) => `nur ${name}`,
+    alone: (name) => `Plan von ${name}`,
     remove: 'Entfernen',
     removeConfirm: (name) => `${name} samt Wunschliste entfernen?`,
     nameOf: (name) => `Name der Person ${name}`,
@@ -104,6 +104,11 @@ export const de: Catalogue = {
     reasonUnavailable: 'Läuft nie, während du frei bist',
     reasonClash: 'Kollidiert mit etwas, das dir wichtiger war',
     assumedEnd: (d) => `Ende nicht veröffentlicht, ${d} angenommen`,
+    jointWith: (names) => `gemeinsam mit ${names}`,
+    mapLink: (venue) => `${venue} in Google Maps öffnen`,
+    route: 'Route ↗',
+    routeLabel: (from, to) => `Fussweg von ${from} nach ${to} in Google Maps`,
+    routeFromHereLabel: (venue) => `Fussweg zu ${venue} von deinem Standort, in Google Maps`,
     gapWalk: (m) => `${m}′ Fussweg`,
     gapSamePlace: 'gleiches Gebäude',
     gapSpare: (d) => `${d} Puffer`,
@@ -118,7 +123,7 @@ export const de: Catalogue = {
     print: 'Drucken',
     printedFor: (names) => `Plan für ${names}`,
     switchHint:
-      'Der Gemeinsam-Modus nutzt nur Stunden, die alle frei haben, und zählt einen Film doppelt, wenn ihr ihn beide wollt.',
+      'Der Gemeinsam-Modus nutzt nur Stunden, die alle frei haben, und zählt einen Film doppelt, wenn ihr ihn beide wollt. Der Plan einer einzelnen Person behält jede gemeinsame Vorstellung und füllt ihre übrige freie Zeit mit ihren eigenen Filmen.',
   },
 
   share: {

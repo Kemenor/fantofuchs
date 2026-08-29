@@ -293,6 +293,155 @@ test('the returned schedule is internally consistent', () => {
   }
 });
 
+// ---------------------------------------------------------------- pinning
+
+test('a pinned showing is kept even when a personal must-see clashes with it', () => {
+  const f = festivalOf([
+    ['joint', 'trafo-1', 10, 60],
+    ['mine', 'trafo-1', 10.5, 60],
+  ]);
+  const settings = SETTINGS;
+  const travel = new TravelMatrix(f, settings);
+  const plan = optimize({
+    festival: f, slots: allDay, weights: w(['mine', 1000]), travel,
+    bufferMin: settings.bufferMin, excludeClosed: true,
+    pinned: [f.showings[0]],
+  });
+  assert.deepEqual(titles(plan), ['joint']);
+  assert.equal(plan.items[0].pinned, true);
+  assert.deepEqual(plan.missed.map((m) => [m.block.id, m.reason]), [['mine', 'clash']]);
+  // The reported weight is the caller's own, not the artificial pin weight.
+  assert.equal(plan.weight, 0);
+});
+
+test('a pinned block cannot be watched at any other of its screenings', () => {
+  // `joint` also screens at 10:00, which would let `mine` fit at 14:00 — but
+  // the group is going at 14:00, so the 10:00 screening is off the table.
+  const f = festivalOf([
+    ['joint', 'trafo-1', 10, 60],
+    ['mine', 'trafo-1', 14, 60],
+    ['joint', 'trafo-1', 14.5, 60],
+  ]);
+  const settings = SETTINGS;
+  const travel = new TravelMatrix(f, settings);
+  const plan = optimize({
+    festival: f, slots: allDay, weights: w(['joint', 1000], ['mine', 50]), travel,
+    bufferMin: settings.bufferMin, excludeClosed: true,
+    pinned: [f.showings[2]],
+  });
+  assert.deepEqual(titles(plan), ['joint']);
+  assert.equal(plan.items[0].showing.id, f.showings[2].id);
+  // The personal weight of a pinned block still counts once it is scheduled.
+  assert.equal(plan.weight, 1000);
+});
+
+/**
+ * Exhaustive reference for the pinned case: the best personal weight over all
+ * feasible schedules that contain every pinned showing — with the pinned
+ * blocks' other screenings off the table, exactly as `optimize` promises.
+ * Returns -1 when no such schedule exists.
+ */
+function bruteForcePinned(
+  festival: ReturnType<typeof festivalOf>,
+  weights: Map<string, number>,
+  slots: typeof allDay,
+  travelMin: (a: string, b: string) => number,
+  bufferMin: number,
+  pinned: typeof festival.showings,
+): number {
+  const pinnedIds = new Set(pinned.map((s) => s.id));
+  const pinnedBlocks = new Set(pinned.map((s) => s.blockId));
+  const cand = festival.showings
+    .filter((s) => pinnedIds.has(s.id)
+      || ((weights.get(s.blockId) ?? 0) > 0 && !pinnedBlocks.has(s.blockId)))
+    .filter((s) => slots.some((w) => s.start >= w.from && s.end <= w.to))
+    .sort((a, b) => a.start - b.start);
+
+  let best = -1;
+  const walk = (i: number, lastEnd: number, lastVenue: string | null, used: Set<string>, weight: number, taken: number): void => {
+    if (i >= cand.length) {
+      if (taken === pinned.length && weight > best) best = weight;
+      return;
+    }
+    const s = cand[i];
+    if (!used.has(s.blockId)) {
+      const t = lastVenue === null ? 0 : travelMin(lastVenue, s.venueId);
+      if (lastVenue === null || s.start >= lastEnd + (t + bufferMin) * 60) {
+        used.add(s.blockId);
+        walk(i + 1, s.end, s.venueId, used, weight + (weights.get(s.blockId) ?? 0), taken + (pinnedIds.has(s.id) ? 1 : 0));
+        used.delete(s.blockId);
+      }
+    }
+    // Skipping a pinned showing is not allowed — that branch just dies.
+    if (!pinnedIds.has(s.id)) walk(i + 1, lastEnd, lastVenue, used, weight, taken);
+  };
+  walk(0, -Infinity, null, new Set(), 0, 0);
+  return best;
+}
+
+test('a person view keeps the whole joint plan and fills around it optimally', () => {
+  let seed = 4242;
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  const venues = ['trafo-1', 'trafo-2', 'orient'];
+
+  for (let iter = 0; iter < 120; iter++) {
+    const nBlocks = 3 + Math.floor(rnd() * 4);
+    const rows: [string, string, number, number][] = [];
+    for (let b = 0; b < nBlocks; b++) {
+      for (let s = 0; s < 1 + Math.floor(rnd() * 3); s++) {
+        rows.push([`b${b}`, venues[Math.floor(rnd() * 3)], 9 + rnd() * 12, 30 + Math.floor(rnd() * 4) * 30]);
+      }
+    }
+    const f = festivalOf(rows);
+    const travel = new TravelMatrix(f, SETTINGS);
+
+    // The group shares only the evening; this person is free all day.
+    const shared = [{ from: at(15), to: at(24) }];
+    const groupWeights = new Map(
+      Array.from({ length: nBlocks }, (_, b) => [`b${b}`, [0, 8, 50, 1000][Math.floor(rnd() * 4)]] as [string, number]),
+    );
+    const personWeights = new Map(
+      Array.from({ length: nBlocks }, (_, b) => [`b${b}`, [0, 8, 50, 1000][Math.floor(rnd() * 4)]] as [string, number]),
+    );
+
+    const together = optimize({
+      festival: f, slots: shared, weights: groupWeights, travel,
+      bufferMin: SETTINGS.bufferMin, excludeClosed: true,
+    });
+    const pinned = together.items.map((it) => it.showing);
+
+    const personal = optimize({
+      festival: f, slots: allDay, weights: personWeights, travel,
+      bufferMin: SETTINGS.bufferMin, excludeClosed: true,
+      pinned,
+    });
+
+    // Every joint screening survives, at exactly the joint time.
+    const ids = new Set(personal.items.map((it) => it.showing.id));
+    for (const s of pinned) {
+      assert.ok(ids.has(s.id), `iteration ${iter}: pinned showing ${s.id} was dropped`);
+    }
+
+    // The whole thing is still walkable.
+    for (let k = 1; k < personal.items.length; k++) {
+      const prev = personal.items[k - 1].showing;
+      const cur = personal.items[k].showing;
+      const need = travel.between(prev.venueId, cur.venueId) + SETTINGS.bufferMin;
+      assert.ok(cur.start >= prev.end + need * 60, `iteration ${iter}: not enough time to get there`);
+    }
+
+    // And the fill is the best possible one, by exhaustive search.
+    const reference = bruteForcePinned(
+      f, personWeights, allDay, (a, b) => travel.between(a, b), SETTINGS.bufferMin, pinned,
+    );
+    assert.equal(
+      personal.weight, reference,
+      `iteration ${iter}: pinned B&B ${personal.weight} != brute force ${reference}`,
+    );
+    assert.ok(personal.optimal);
+  }
+});
+
 test('an opening window is only offered on days you are actually there', () => {
   const f = festivalOf([['expo', 'trafo-1', 12, 480]], { endSource: 'published' });
   const free = run(f, w(['expo', 50]), [{ from: at(9), to: at(23) }]);

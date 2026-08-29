@@ -61,6 +61,16 @@ export interface OptimizeInput {
   nodeBudget?: number;
   /** Abort after this much wall-clock time. Keeps the UI responsive. */
   timeLimitMs?: number;
+  /**
+   * Showings that are already committed — the group's joint plan, when solving
+   * one person's own view around it. Each pinned showing is forced into the
+   * schedule (its block cannot be watched at any other time either), and the
+   * personal wishes are fitted around them with the same travel-and-buffer
+   * feasibility as everything else. The pinned set must itself be feasible
+   * inside `slots`, which it is by construction when it came out of this same
+   * optimizer over a subset of the free time.
+   */
+  pinned?: Showing[];
 }
 
 export interface PlanItem {
@@ -70,6 +80,9 @@ export interface PlanItem {
   travelMin: number;
   /** Idle minutes between arriving and the start. */
   waitMin: number;
+  /** True when this item was pinned in — part of the joint plan being kept,
+   *  rather than one of this person's own additions. */
+  pinned?: boolean;
 }
 
 export interface MissedBlock {
@@ -136,7 +149,20 @@ export function optimize(input: OptimizeInput): Plan {
   const slots = mergeSlots(input.slots);
   const blocks = new Map(festival.blocks.map((b) => [b.id, b]));
 
-  const wanted = festival.showings.filter((s) => (weights.get(s.blockId) ?? 0) > 0);
+  // Pinning works by restriction plus weight, so the search itself — and every
+  // bound in it — is untouched: a pinned block's only remaining showing is the
+  // pinned one, and it carries a weight larger than every personal mark put
+  // together (at most 2000 marks × 1000 ≪ PIN_WEIGHT). An exact search can
+  // therefore never profit from dropping a pinned showing, and since the pinned
+  // set is feasible, it always appears in full.
+  const PIN_WEIGHT = 10_000_000;
+  const pinnedIdByBlock = new Map((input.pinned ?? []).map((s) => [s.blockId, s.id]));
+  const weightOf = (blockId: string): number =>
+    pinnedIdByBlock.has(blockId) ? PIN_WEIGHT : weights.get(blockId) ?? 0;
+
+  const wanted = festival.showings
+    .filter((s) => weightOf(s.blockId) > 0)
+    .filter((s) => (pinnedIdByBlock.get(s.blockId) ?? s.id) === s.id);
 
   // An opening window only needs to *overlap* your free time — you drop in for
   // twenty minutes, you do not sit through it — but a window on a day you are
@@ -155,7 +181,7 @@ export function optimize(input: OptimizeInput): Plan {
     .sort((a, b) => a.start - b.start || a.end - b.end);
 
   const n = candidates.length;
-  const weightAt = candidates.map((s) => weights.get(s.blockId) ?? 0);
+  const weightAt = candidates.map((s) => weightOf(s.blockId));
 
   // lastIndex[block] — the last candidate position where the block appears.
   // A block is still reachable from position i exactly when lastIndex >= i.
@@ -227,7 +253,6 @@ export function optimize(input: OptimizeInput): Plan {
   const SCALE = 10_000;
 
   let bestScore = -1;
-  let bestWeight = 0;
   let bestChoice: number[] = [];
   let nodes = 0;
   let aborted = false;
@@ -248,7 +273,6 @@ export function optimize(input: OptimizeInput): Plan {
     const score = weight * SCALE - travelMin;
     if (score > bestScore) {
       bestScore = score;
-      bestWeight = weight;
       bestChoice = chosen.slice();
     }
 
@@ -308,6 +332,7 @@ export function optimize(input: OptimizeInput): Plan {
       block: blocks.get(showing.blockId)!,
       travelMin: walk,
       waitMin: prev ? Math.max(0, gapMin - walk) : 0,
+      ...(pinnedIdByBlock.get(showing.blockId) === showing.id ? { pinned: true } : {}),
     });
     totalTravelMin += walk;
     prev = showing;
@@ -324,9 +349,13 @@ export function optimize(input: OptimizeInput): Plan {
   }
   missed.sort((a, b) => b.weight - a.weight || a.block.title.localeCompare(b.block.title));
 
+  // Reported in the caller's own weights: the artificial pin weight would say
+  // nothing about how interesting the plan actually is.
+  const planWeight = items.reduce((sum, it) => sum + (weights.get(it.showing.blockId) ?? 0), 0);
+
   return {
     items,
-    weight: Math.max(0, bestWeight),
+    weight: planWeight,
     totalTravelMin,
     missed,
     openWindows,

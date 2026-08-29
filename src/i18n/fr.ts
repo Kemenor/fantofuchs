@@ -21,7 +21,7 @@ export const fr: Catalogue = {
     addPrompt: 'Qui vient encore ?',
     planFor: 'Planifier pour',
     everyone: 'Tout le monde',
-    alone: (name) => `${name} seul·e`,
+    alone: (name) => `plan de ${name}`,
     remove: 'Retirer',
     removeConfirm: (name) => `Retirer ${name} et sa liste de souhaits ?`,
     nameOf: (name) => `Nom de la personne ${name}`,
@@ -103,6 +103,11 @@ export const fr: Catalogue = {
     reasonUnavailable: 'Ne passe jamais pendant tes heures libres',
     reasonClash: 'Entre en conflit avec quelque chose que tu voulais davantage',
     assumedEnd: (d) => `fin non publiée, ${d} supposées`,
+    jointWith: (names) => `ensemble avec ${names}`,
+    mapLink: (venue) => `Ouvrir ${venue} dans Google Maps`,
+    route: 'Itinéraire ↗',
+    routeLabel: (from, to) => `Trajet à pied de ${from} à ${to} dans Google Maps`,
+    routeFromHereLabel: (venue) => `Trajet à pied vers ${venue} depuis ta position, dans Google Maps`,
     gapWalk: (m) => `${m}′ de marche`,
     gapSamePlace: 'même bâtiment',
     gapSpare: (d) => `${d} de marge`,
@@ -117,7 +122,7 @@ export const fr: Catalogue = {
     print: 'Imprimer',
     printedFor: (names) => `Plan pour ${names}`,
     switchHint:
-      "Le mode commun n'utilise que les heures libres de tout le monde, et compte un film double quand vous le voulez tous les deux.",
+      "Le mode commun n'utilise que les heures libres de tout le monde, et compte un film double quand vous le voulez tous les deux. Le plan d'une personne garde chaque séance commune et remplit le reste de son temps libre avec ses propres films.",
   },
 
   share: {

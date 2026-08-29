@@ -409,6 +409,10 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   margin: 0;
 }
 .block-meta { color: var(--muted); font-size: 13px; }
+
+/* Hand-offs to the maps app. Inherit the surrounding muted colour; the
+   underline is what marks them as links, so colour carries nothing. */
+.map-link { text-decoration: underline; text-underline-offset: 2px; }
 .showing-list { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
 
 .pill {
@@ -560,7 +564,11 @@ input:focus-visible, select:focus-visible, button:focus-visible {
   .fillers,
   .icon-btn,
   .lang-select,
+  .map-route,
   .empty { display: none !important; }
+
+  /* A venue name that is a maps link on screen is just the venue on paper. */
+  .map-link { text-decoration: none; }
 
   .app { max-width: none; padding: 0; }
   .card { border: 0; border-radius: 0; padding: 0; }

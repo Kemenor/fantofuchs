@@ -43,7 +43,7 @@ const en = {
     addPrompt: 'Who else is coming?',
     planFor: 'Plan for',
     everyone: 'Everyone',
-    alone: (name: string) => `${name} alone`,
+    alone: (name: string) => `${name}'s plan`,
     remove: 'Remove',
     removeConfirm: (name: string) => `Remove ${name} and their wishlist?`,
     nameOf: (name: string) => `Name of person ${name}`,
@@ -126,6 +126,11 @@ const en = {
     reasonUnavailable: 'Never screens while you are free',
     reasonClash: 'Clashes with something you wanted more',
     assumedEnd: (d: string) => `end time not published, ${d} assumed`,
+    jointWith: (names: string) => `together with ${names}`,
+    mapLink: (venue: string) => `Open ${venue} in Google Maps`,
+    route: 'Route ↗',
+    routeLabel: (from: string, to: string) => `Walking route from ${from} to ${to} in Google Maps`,
+    routeFromHereLabel: (venue: string) => `Walking route to ${venue} from where you are, in Google Maps`,
     gapWalk: (m: number) => `${m}′ walk`,
     gapSamePlace: 'same building',
     gapSpare: (d: string) => `${d} to spare`,
@@ -140,7 +145,7 @@ const en = {
     print: 'Print',
     printedFor: (names: string) => `Plan for ${names}`,
     switchHint:
-      'Together mode only uses hours everyone has free, and counts a film twice when you both want it.',
+      "Together mode only uses hours everyone has free, and counts a film twice when you both want it. A person's own plan keeps every joint screening and fills their remaining free time with their own films.",
   },
 
   share: {

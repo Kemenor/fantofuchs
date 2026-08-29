@@ -374,6 +374,14 @@ export const planningFor = computed(() =>
   state.value.mode === 'together' ? state.value.people : [activePerson.value],
 );
 
+/**
+ * True when the plan on screen is one person's own view rather than the joint
+ * one. With a single person there is nothing to differ from, so it stays false.
+ */
+export const personView = computed(
+  () => state.value.mode === 'solo' && state.value.people.length > 1,
+);
+
 /** Free time everyone in `planningFor` shares. */
 export const planSlots = computed<Slot[]>(() => {
   const group = planningFor.value.filter((p) => p.slots.length > 0);
@@ -395,9 +403,46 @@ export const planWeights = computed(() => {
   return weights;
 });
 
+/** Free time the whole group shares, whatever view is on screen. */
+const togetherSlots = computed<Slot[]>(() => {
+  const group = state.value.people.filter((p) => p.slots.length > 0);
+  if (group.length === 0) return [];
+  return group.map((p) => mergeSlots(p.slots)).reduce(intersectSlots);
+});
+
+const togetherWeights = computed(() => {
+  const weights = new Map<string, number>();
+  for (const person of state.value.people) {
+    for (const [blockId, interest] of Object.entries(person.interest)) {
+      weights.set(blockId, (weights.get(blockId) ?? 0) + INTEREST_WEIGHT[interest]);
+    }
+  }
+  return weights;
+});
+
+/**
+ * The joint schedule — what everyone attends together. Computed regardless of
+ * the view on screen, because each person's own view is built around it.
+ */
+export const togetherPlan = computed<Plan>(() =>
+  optimize({
+    festival: festival.value,
+    slots: togetherSlots.value,
+    weights: togetherWeights.value,
+    travel: travelMatrix.value,
+    bufferMin: state.value.settings.bufferMin,
+    excludeClosed: state.value.settings.excludeClosed,
+    timeLimitMs: 400,
+  }),
+);
+
 /**
  * The schedule. Derived, so there is no "optimize" button and nothing to
  * invalidate — mark one more film and this has already changed.
+ *
+ * A person's view keeps every joint screening (pinned, so it stays at the time
+ * the others are coming) and fills that person's remaining free time with their
+ * own wishes — the days or hours the group does not share.
  *
  * It runs synchronously on the main thread, which is fine because it is fast:
  * a normal wishlist is proven optimal in about 20 ms. The budget only matters
@@ -405,17 +450,19 @@ export const planWeights = computed(() => {
  * was measured to give exactly the same plan as 2 s — so the longer budget would
  * buy a five-times-worse hitch and nothing else.
  */
-export const plan = computed<Plan>(() =>
-  optimize({
+export const plan = computed<Plan>(() => {
+  if (!personView.value) return togetherPlan.value;
+  return optimize({
     festival: festival.value,
     slots: planSlots.value,
     weights: planWeights.value,
+    pinned: togetherPlan.value.items.map((it) => it.showing),
     travel: travelMatrix.value,
     bufferMin: state.value.settings.bufferMin,
     excludeClosed: state.value.settings.excludeClosed,
     timeLimitMs: 400,
-  }),
-);
+  });
+});
 
 /** Everything the gap-filler and the alternatives need, in one place. */
 export const suggestInput = computed<SuggestInput>(() => ({

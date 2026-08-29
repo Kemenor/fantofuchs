@@ -115,6 +115,11 @@ subtly wrong looks exactly like one that is right.
 - **Share payload in the URL fragment.** Never reaches a server, never lands in a log. A
   two-person plan deflates to ~300 characters, so a link survives a chat app; the file is
   there for when it does not.
+- **Maps are a hand-off, not an integration.** The plan links venues and walks to Google
+  Maps with the documented universal URLs (`maps/search`, `maps/dir` with
+  `travelmode=walking`) built from the festival's own coordinates — no API key, no script,
+  no quota, and nothing loads until a link is actually tapped, so the app stays
+  local-first. `src/maps.ts` is the whole feature.
 
 ## Suggestions and alternatives
 
@@ -151,8 +156,15 @@ Not committed to; each needs to earn its place.
 - **Excluding a sold-out screening** — the natural next step from alternatives: mark one
   as unavailable and let the optimizer route around it. Small and well-contained; worth
   doing if ticket sales actually knock a hole in a plan.
-- **Split plans** — let the group separate and rejoin. Materially harder for a benefit
-  nobody has asked for; still deliberately unbuilt.
+- **Split plans** — ✅ built as *person views* (2026-08-29), once somebody did ask: the
+  brothers do not share every day, and films only one of them wants should land on the
+  days only he is there. "Plan for *X*" now means X's whole festival: every joint
+  screening is **pinned** — kept at exactly the time the group is going — and X's
+  remaining free time is filled with X's own wishes, travel-checked against the pinned
+  items like everything else. Pinning is done by restriction plus weight (the pinned
+  showing is its block's only remaining screening, and it outweighs every personal mark
+  put together), so the search and all three bounds are untouched; a brute-force
+  cross-check over 120 random festivals proves the fill optimal and the joint plan intact.
 - **Other festivals** — the model is not Fantoche-specific, only the scraper is. Would
   mean a source-per-festival plugin and a festival picker. A rewrite of the data layer for
   no benefit before 6 September.
