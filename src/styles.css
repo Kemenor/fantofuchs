@@ -279,11 +279,16 @@ button, input, select { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .tabs button[aria-current='true'] { background: var(--fox); color: var(--on-fox); }
+/* A solid, already-measured pair rather than a currentColor tint: mixing the
+   text colour into the backdrop drags the two together, which measured 4.19:1
+   for muted-on-page (an inactive tab) and left the active fox tab balanced
+   exactly on 4.50:1 — under AA once the browser rounds the blend. */
 .tabs .badge {
   margin-left: 6px;
   padding: 1px 7px;
   border-radius: 999px;
-  background: color-mix(in srgb, currentColor 18%, transparent);
+  background: var(--surface-2);
+  color: var(--text);
   font-size: 12px;
 }
 

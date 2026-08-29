@@ -61,6 +61,17 @@ Fuchsbau asks for hairline `outlineVariant` borders. A hairline is fine as a *di
 - `--line-strong` — the outline of buttons, chips, inputs and selects. 3.14:1 light /
   3.40:1 dark.
 
+## Deviation: no currentColor tints under text
+
+The tab-bar count badge originally sat on `color-mix(in srgb, currentColor 18%,
+transparent)` — an elegant one-liner that adapts to whatever the tab's colour is, and
+exactly the kind of thing the contrast test cannot see. Measured (2026-08-29): 4.19:1 for
+an inactive tab and precisely 4.50:1 on the active fox tab, which browser rounding tips
+under AA — axe flags it. Mixing the text colour into its own backdrop *always* drags the
+two together, so the badge now uses the solid `--text` on `--surface-2` pair instead
+(15.33:1 light / 12.82:1 dark), which the contrast test covers. The rule to carry
+forward: anything that sits under text must be a token the test can measure, not a mix.
+
 ## Theme switching
 
 Three states, not two: no `data-theme` attribute means follow the system, and an explicit

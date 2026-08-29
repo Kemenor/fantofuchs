@@ -47,7 +47,7 @@ function contrast(a: string, b: string): number {
 const PAIRS: [string, string, string, number][] = [
   ['text', 'bg', 'body text', 4.5],
   ['text', 'surface', 'text on a card', 4.5],
-  ['text', 'surface-2', 'text on an inset surface', 4.5],
+  ['text', 'surface-2', 'text on an inset surface, and the tab-bar count badge', 4.5],
   ['muted', 'bg', 'secondary text on the page', 4.5],
   ['muted', 'surface', 'secondary text on a card', 4.5],
   ['muted', 'surface-2', 'secondary text on an inset surface', 4.5],
