@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-08-28T16:36:50.018Z",
+  "scrapedAt": "2026-09-01T09:23:50.372Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -575,7 +575,7 @@
       "id": "prg3557",
       "durationMin": 71,
       "ageRating": 12,
-      "year": 1996,
+      "year": 1986,
       "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
     },
     {
@@ -788,7 +788,7 @@
       "blockId": "prg3400",
       "venueId": "cinema-trafo-2",
       "start": 1788336000,
-      "end": 1788341400,
+      "end": 1788343200,
       "endSource": "published",
       "closed": true
     },
@@ -830,8 +830,8 @@
       "blockId": "prg3391",
       "venueId": "cinema-trafo-1",
       "start": 1788344100,
-      "end": 1788348480,
-      "endSource": "runtime"
+      "end": 1788351300,
+      "endSource": "published"
     },
     {
       "id": "3548_1788344100",
@@ -870,8 +870,8 @@
       "blockId": "prg3393",
       "venueId": "cinema-trafo-1",
       "start": 1788351300,
-      "end": 1788355440,
-      "endSource": "runtime"
+      "end": 1788358500,
+      "endSource": "published"
     },
     {
       "id": "3562_1788351300",
@@ -934,15 +934,15 @@
       "blockId": "prg3394",
       "venueId": "cinema-trafo-1",
       "start": 1788358500,
-      "end": 1788363180,
-      "endSource": "runtime"
+      "end": 1788365700,
+      "endSource": "published"
     },
     {
       "id": "3400_1788358500",
       "blockId": "prg3400",
       "venueId": "cinema-trafo-2",
       "start": 1788358500,
-      "end": 1788363900,
+      "end": 1788365700,
       "endSource": "published"
     },
     {
@@ -982,16 +982,16 @@
       "blockId": "prg3392",
       "venueId": "cinema-trafo-1",
       "start": 1788366600,
-      "end": 1788371040,
-      "endSource": "runtime"
+      "end": 1788373800,
+      "endSource": "published"
     },
     {
       "id": "3401_1788366600",
       "blockId": "prg3401",
       "venueId": "cinema-trafo-2",
       "start": 1788366600,
-      "end": 1788371100,
-      "endSource": "runtime"
+      "end": 1788373800,
+      "endSource": "published"
     },
     {
       "id": "3402_1788366600",
@@ -1030,8 +1030,8 @@
       "blockId": "prg3390",
       "venueId": "cinema-trafo-1",
       "start": 1788374700,
-      "end": 1788379260,
-      "endSource": "runtime"
+      "end": 1788381900,
+      "endSource": "published"
     },
     {
       "id": "3406_1788374700",
@@ -1095,7 +1095,7 @@
       "blockId": "prg3401",
       "venueId": "cinema-trafo-2",
       "start": 1788422400,
-      "end": 1788427800,
+      "end": 1788429600,
       "endSource": "published",
       "closed": true
     },
@@ -1120,8 +1120,8 @@
       "blockId": "prg3394",
       "venueId": "cinema-trafo-1",
       "start": 1788429600,
-      "end": 1788434280,
-      "endSource": "runtime"
+      "end": 1788436800,
+      "endSource": "published"
     },
     {
       "id": "4328_1788429600",
@@ -1152,7 +1152,7 @@
       "blockId": "prg3401",
       "venueId": "cinema-trafo-2",
       "start": 1788430500,
-      "end": 1788435900,
+      "end": 1788437700,
       "endSource": "published"
     },
     {
@@ -1184,8 +1184,8 @@
       "blockId": "prg3390",
       "venueId": "cinema-trafo-1",
       "start": 1788436800,
-      "end": 1788441360,
-      "endSource": "runtime"
+      "end": 1788444000,
+      "endSource": "published"
     },
     {
       "id": "3535_1788437700",
@@ -1272,8 +1272,8 @@
       "blockId": "prg3391",
       "venueId": "cinema-trafo-1",
       "start": 1788444900,
-      "end": 1788449280,
-      "endSource": "runtime"
+      "end": 1788448500,
+      "endSource": "published"
     },
     {
       "id": "3542_1788444900",
@@ -1312,8 +1312,8 @@
       "blockId": "prg3393",
       "venueId": "cinema-trafo-1",
       "start": 1788453000,
-      "end": 1788457140,
-      "endSource": "runtime"
+      "end": 1788460200,
+      "endSource": "published"
     },
     {
       "id": "3409_1788453000",
@@ -1376,15 +1376,15 @@
       "blockId": "prg3392",
       "venueId": "cinema-trafo-1",
       "start": 1788461100,
-      "end": 1788465540,
-      "endSource": "runtime"
+      "end": 1788468300,
+      "endSource": "published"
     },
     {
       "id": "3400_1788461100",
       "blockId": "prg3400",
       "venueId": "cinema-trafo-2",
       "start": 1788461100,
-      "end": 1788466500,
+      "end": 1788468300,
       "endSource": "published"
     },
     {
@@ -1521,8 +1521,8 @@
       "blockId": "prg3392",
       "venueId": "cinema-trafo-2",
       "start": 1788516900,
-      "end": 1788521340,
-      "endSource": "runtime"
+      "end": 1788524100,
+      "endSource": "published"
     },
     {
       "id": "3539_1788516900",
@@ -1569,8 +1569,8 @@
       "blockId": "prg3391",
       "venueId": "cinema-trafo-2",
       "start": 1788524100,
-      "end": 1788528480,
-      "endSource": "runtime"
+      "end": 1788531300,
+      "endSource": "published"
     },
     {
       "id": "3579_1788524100",
@@ -1633,7 +1633,7 @@
       "blockId": "prg3401",
       "venueId": "cinema-trafo-1",
       "start": 1788531300,
-      "end": 1788536700,
+      "end": 1788538500,
       "endSource": "published"
     },
     {
@@ -1641,8 +1641,8 @@
       "blockId": "prg3390",
       "venueId": "cinema-trafo-2",
       "start": 1788531300,
-      "end": 1788535860,
-      "endSource": "runtime"
+      "end": 1788538500,
+      "endSource": "published"
     },
     {
       "id": "3417_1788531300",
@@ -1705,8 +1705,8 @@
       "blockId": "prg3394",
       "venueId": "cinema-trafo-2",
       "start": 1788539400,
-      "end": 1788544080,
-      "endSource": "runtime"
+      "end": 1788546600,
+      "endSource": "published"
     },
     {
       "id": "3406_1788539400",
@@ -1729,8 +1729,8 @@
       "blockId": "prg3393",
       "venueId": "cinema-trafo-2",
       "start": 1788547500,
-      "end": 1788551640,
-      "endSource": "runtime"
+      "end": 1788554700,
+      "endSource": "published"
     },
     {
       "id": "3402_1788547500",
@@ -1761,7 +1761,7 @@
       "blockId": "prg3400",
       "venueId": "cinema-trafo-1",
       "start": 1788548400,
-      "end": 1788553800,
+      "end": 1788555600,
       "endSource": "published"
     },
     {
@@ -1905,15 +1905,15 @@
       "blockId": "prg3393",
       "venueId": "cinema-trafo-1",
       "start": 1788603300,
-      "end": 1788607440,
-      "endSource": "runtime"
+      "end": 1788610500,
+      "endSource": "published"
     },
     {
       "id": "3400_1788603300",
       "blockId": "prg3400",
       "venueId": "cinema-trafo-2",
       "start": 1788603300,
-      "end": 1788608700,
+      "end": 1788610500,
       "endSource": "published"
     },
     {
@@ -1985,8 +1985,8 @@
       "blockId": "prg3394",
       "venueId": "cinema-trafo-1",
       "start": 1788610500,
-      "end": 1788615180,
-      "endSource": "runtime"
+      "end": 1788696900,
+      "endSource": "published"
     },
     {
       "id": "3395_1788610500",
@@ -2057,8 +2057,8 @@
       "blockId": "prg3392",
       "venueId": "cinema-trafo-1",
       "start": 1788617700,
-      "end": 1788622140,
-      "endSource": "runtime"
+      "end": 1788624900,
+      "endSource": "published"
     },
     {
       "id": "3397_1788617700",
@@ -2097,8 +2097,8 @@
       "blockId": "prg3390",
       "venueId": "cinema-trafo-1",
       "start": 1788625800,
-      "end": 1788630360,
-      "endSource": "runtime"
+      "end": 1788633000,
+      "endSource": "published"
     },
     {
       "id": "3409_1788625800",
@@ -2129,15 +2129,15 @@
       "blockId": "prg3391",
       "venueId": "cinema-trafo-1",
       "start": 1788633900,
-      "end": 1788638280,
-      "endSource": "runtime"
+      "end": 1788641100,
+      "endSource": "published"
     },
     {
       "id": "3401_1788633900",
       "blockId": "prg3401",
       "venueId": "cinema-trafo-2",
       "start": 1788633900,
-      "end": 1788639300,
+      "end": 1788641100,
       "endSource": "published"
     },
     {
