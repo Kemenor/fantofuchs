@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-09-01T09:23:50.372Z",
+  "scrapedAt": "2026-09-02T08:46:07.076Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -2337,8 +2337,8 @@
       "blockId": "prg3591",
       "venueId": "tumbler",
       "start": 1788696000,
-      "end": 1788701400,
-      "endSource": "assumed"
+      "end": 1788706800,
+      "endSource": "published"
     },
     {
       "id": "3398_1788696900",
