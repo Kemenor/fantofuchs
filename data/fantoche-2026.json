@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-09-03T08:55:31.346Z",
+  "scrapedAt": "2026-09-04T08:53:24.608Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -356,7 +356,7 @@
     {
       "id": "prg3406",
       "durationMin": 90,
-      "ageRating": 8,
+      "ageRating": 12,
       "year": 2026,
       "imageUrl": "https://fantoche.ch/Sponsoren/938/image-thumb__938__footerPartnerImage/Sterk.png"
     },
