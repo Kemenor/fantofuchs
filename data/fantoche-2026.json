@@ -6,7 +6,7 @@
     "lastDay": "2026-09-06",
     "tz": "Europe/Zurich"
   },
-  "scrapedAt": "2026-09-05T08:20:37.861Z",
+  "scrapedAt": "2026-09-06T08:39:00.613Z",
   "source": "https://fantoche.ch/programme",
   "places": [
     {
@@ -1985,7 +1985,7 @@
       "blockId": "prg3394",
       "venueId": "cinema-trafo-1",
       "start": 1788610500,
-      "end": 1788696900,
+      "end": 1788617700,
       "endSource": "published"
     },
     {
